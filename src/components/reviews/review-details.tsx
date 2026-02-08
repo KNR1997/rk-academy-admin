@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { ProductType, Review } from '@/types';
+// import { ProductType, Review } from '@/types';
 import Link from '@/components/ui/link';
 import { StarIcon } from '@/components/icons/star-icon';
 import { CheckedIcon } from '@/components/icons/checked';
@@ -21,7 +21,7 @@ import isEmpty from 'lodash/isEmpty';
 import { NoDataFound } from '@/components/icons/no-data-found';
 
 type IProps = {
-  review: Review | undefined | null;
+  review: any | undefined | null;
 };
 
 const ReviewDetailsView = ({ review }: IProps) => {
@@ -150,7 +150,7 @@ const ReviewDetailsView = ({ review }: IProps) => {
             {name}
           </Link>
 
-          {product_type === ProductType.Variable ? (
+          {/* {product_type === ProductType.Variable ? (
             <div className="flex items-center">
               <span className="text-sm font-semibold text-heading md:text-base">
                 {minPrice}
@@ -171,7 +171,7 @@ const ReviewDetailsView = ({ review }: IProps) => {
                 </del>
               )}
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="!ml-auto inline-flex shrink-0 items-center rounded-full border border-accent px-3 py-0.5 text-base text-accent">

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import ColumnChart from '@/components/widgets/column-chart';
 import StickerCard from '@/components/widgets/sticker-card';
-import {
-  useAnalyticsQuery,
-  useProductByCategoryQuery,
-  useTopRatedProductsQuery,
-} from '@/data/dashboard';
+// import {
+//   useAnalyticsQuery,
+//   useProductByCategoryQuery,
+//   useTopRatedProductsQuery,
+// } from '@/data/dashboard';
 import {
   adminOnly,
   adminAndOwnerOnly,
@@ -54,40 +54,40 @@ const OwnerShopLayout = () => {
   const { locale } = useRouter();
   const router = useRouter();
   const { permissions } = getAuthCredentials();
-  const { data, isLoading: loading } = useAnalyticsQuery();
+  // const { data, isLoading: loading } = useAnalyticsQuery();
   const [activeTimeFrame, setActiveTimeFrame] = useState(1);
-  const [orderDataRange, setOrderDataRange] = useState(
-    data?.todayTotalOrderByStatus,
-  );
+  // const [orderDataRange, setOrderDataRange] = useState(
+  //   data?.todayTotalOrderByStatus,
+  // );
 
-  const {
-    data: productByCategory,
-    isLoading: productByCategoryLoading,
-    error: productByCategoryError,
-  } = useProductByCategoryQuery({ limit: 10, language: locale });
+  // const {
+  //   data: productByCategory,
+  //   isLoading: productByCategoryLoading,
+  //   error: productByCategoryError,
+  // } = useProductByCategoryQuery({ limit: 10, language: locale });
 
-  const {
-    data: topRatedProducts,
-    isLoading: topRatedProductsLoading,
-    error: topRatedProductsError,
-  } = useTopRatedProductsQuery({ limit: 10, language: locale });
+  // const {
+  //   data: topRatedProducts,
+  //   isLoading: topRatedProductsLoading,
+  //   error: topRatedProductsError,
+  // } = useTopRatedProductsQuery({ limit: 10, language: locale });
 
-  const { price: total_revenue } = usePrice(
-    data && {
-      amount: data?.totalRevenue!,
-    },
-  );
-  const { price: total_refund } = usePrice(
-    data && {
-      amount: data?.totalRefunds!,
-    },
-  );
+  // const { price: total_revenue } = usePrice(
+  //   data && {
+  //     amount: data?.totalRevenue!,
+  //   },
+  // );
+  // const { price: total_refund } = usePrice(
+  //   data && {
+  //     amount: data?.totalRefunds!,
+  //   },
+  // );
 
-  const { price: todays_revenue } = usePrice(
-    data && {
-      amount: data?.todaysRevenue!,
-    },
-  );
+  // const { price: todays_revenue } = usePrice(
+  //   data && {
+  //     amount: data?.todaysRevenue!,
+  //   },
+  // );
   const { query } = router;
 
   const classNames = {
@@ -97,11 +97,11 @@ const OwnerShopLayout = () => {
     normal: 'hover:text-black/80',
   };
   let salesByYear: number[] = Array.from({ length: 12 }, (_) => 0);
-  if (!!data?.totalYearSaleByMonth?.length) {
-    salesByYear = data.totalYearSaleByMonth.map((item: any) =>
-      item.total.toFixed(2),
-    );
-  }
+  // if (!!data?.totalYearSaleByMonth?.length) {
+  //   salesByYear = data.totalYearSaleByMonth.map((item: any) =>
+  //     item.total.toFixed(2),
+  //   );
+  // }
 
   const timeFrame = [
     { name: t('text-today'), day: 1 },
@@ -110,26 +110,26 @@ const OwnerShopLayout = () => {
     { name: t('text-yearly'), day: 365 },
   ];
 
-  useEffect(() => {
-    switch (activeTimeFrame) {
-      case 1:
-        setOrderDataRange(data?.todayTotalOrderByStatus);
-        break;
-      case 7:
-        setOrderDataRange(data?.weeklyTotalOrderByStatus);
-        break;
-      case 30:
-        setOrderDataRange(data?.todayTotalOrderByStatus);
-        break;
-      case 365:
-        setOrderDataRange(data?.yearlyTotalOrderByStatus);
-        break;
+  // useEffect(() => {
+  //   switch (activeTimeFrame) {
+  //     case 1:
+  //       setOrderDataRange(data?.todayTotalOrderByStatus);
+  //       break;
+  //     case 7:
+  //       setOrderDataRange(data?.weeklyTotalOrderByStatus);
+  //       break;
+  //     case 30:
+  //       setOrderDataRange(data?.todayTotalOrderByStatus);
+  //       break;
+  //     case 365:
+  //       setOrderDataRange(data?.yearlyTotalOrderByStatus);
+  //       break;
 
-      default:
-        setOrderDataRange(orderDataRange);
-        break;
-    }
-  });
+  //     default:
+  //       setOrderDataRange(orderDataRange);
+  //       break;
+  //   }
+  // });
 
   return (
     <>
@@ -137,7 +137,7 @@ const OwnerShopLayout = () => {
         <div className="mb-7 flex items-center justify-between">
           <PageHeading title={t('text-summary')} />
         </div>
-        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        {/* <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           <StickerCard
             titleTransKey="sticker-card-title-rev"
             // subtitleTransKey="sticker-card-subtitle-rev"
@@ -164,7 +164,7 @@ const OwnerShopLayout = () => {
             color="#D74EFF"
             price={todays_revenue}
           />
-        </div>
+        </div> */}
       </div>
 
       <div className="mb-8 rounded-lg bg-light p-5 md:p-8">
@@ -193,11 +193,11 @@ const OwnerShopLayout = () => {
               : null}
           </div>
         </div>
-        <OrderStatusWidget
+        {/* <OrderStatusWidget
           order={orderDataRange}
           timeFrame={activeTimeFrame}
           allowedStatus={['pending', 'processing', 'complete', 'cancel']}
-        />
+        /> */}
       </div>
 
       {hasAccess(adminAndOwnerOnly, permissions) && (
@@ -224,7 +224,7 @@ const OwnerShopLayout = () => {
         </div>
       )}
 
-      <div className="grid gap-8 xl:grid-cols-12">
+      {/* <div className="grid gap-8 xl:grid-cols-12">
         <TopRatedProducts
           products={topRatedProducts}
           title={'text-most-rated-products'}
@@ -235,7 +235,7 @@ const OwnerShopLayout = () => {
           title={'text-most-category-products'}
           className="xl:col-span-7 2xl:ltr:-ml-20 2xl:rtl:-mr-20"
         />
-      </div>
+      </div> */}
     </>
   );
 };
