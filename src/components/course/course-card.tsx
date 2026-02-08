@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from '@/components/ui/link';
 import { Enrollment, EnrollmentStatusType } from '@/types';
 import classNames from 'classnames';
-import ShopAvatar from '@/components/shop/shop-avatar';
+// import ShopAvatar from '@/components/shop/shop-avatar';
 import { MapPinIcon } from '@/components/icons/map-pin';
 import { PhoneOutlineIcon } from '@/components/icons/phone';
 import { Routes } from '@/config/routes';
@@ -43,7 +43,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ enrollment }) => {
         />
       </div>
       <div className="relative z-10 -mt-[4.25rem] ml-6 flex flex-wrap items-center gap-3">
-        <ShopAvatar is_active={true} name={course?.name} logo={course?.logo} />
+        {/* <ShopAvatar is_active={true} name={course?.name} logo={course?.logo} /> */}
         <div className="relative max-w-[calc(100%-104px)] flex-auto pr-4 pt-2">
           {course?.name && (
             <h3 className="text-base font-medium leading-none text-muted-black">

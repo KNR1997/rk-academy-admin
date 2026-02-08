@@ -10,7 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { adminOnly, getAuthCredentials } from '@/utils/auth-utils';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
-import { useOrderQuery } from '@/data/order';
+// import { useOrderQuery } from '@/data/order';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -39,11 +39,11 @@ const NotifyLogItem = ({ item }: any) => {
   const { mutate: seenNotifyLog, isLoading: creating } =
     useNotifyLogReadMutation();
 
-  const { order } = useOrderQuery({
-    // id: item?.notify_type === 'order' ? item?.notify_tracker : '',
-    id: item?.notify_tracker,
-    language: locale!,
-  });
+  // const { order } = useOrderQuery({
+  //   // id: item?.notify_type === 'order' ? item?.notify_tracker : '',
+  //   id: item?.notify_tracker,
+  //   language: locale!,
+  // });
 
   let notifyLogText = '';
   switch (item?.notify_type) {
@@ -56,30 +56,30 @@ const NotifyLogItem = ({ item }: any) => {
       break;
   }
 
-  const handleClickOnNotification = (value: any) => {
-    seenNotifyLog({ input: value });
+  // const handleClickOnNotification = (value: any) => {
+  //   seenNotifyLog({ input: value });
 
-    // prepare url for admin & vendor
-    let redirectTo;
-    switch (value?.notify_type) {
-      case 'order':
-        //@ts-ignore
-        const shopURL = order?.shop?.slug;
-        redirectTo = permissions?.includes('super_admin')
-          ? Routes?.order?.details(value?.notify_tracker)
-          : shopURL + Routes?.order?.details(value?.notify_tracker);
+  //   // prepare url for admin & vendor
+  //   let redirectTo;
+  //   switch (value?.notify_type) {
+  //     case 'order':
+  //       //@ts-ignore
+  //       const shopURL = order?.shop?.slug;
+  //       redirectTo = permissions?.includes('super_admin')
+  //         ? Routes?.order?.details(value?.notify_tracker)
+  //         : shopURL + Routes?.order?.details(value?.notify_tracker);
 
-        router.push('/' + redirectTo);
-        break;
+  //       router.push('/' + redirectTo);
+  //       break;
 
-      case 'message':
-        //@ts-ignore
-        redirectTo = Routes?.message?.details(value?.notify_tracker);
+  //     case 'message':
+  //       //@ts-ignore
+  //       redirectTo = Routes?.message?.details(value?.notify_tracker);
 
-        router.push('/' + redirectTo);
-        break;
-    }
-  };
+  //       router.push('/' + redirectTo);
+  //       break;
+  //   }
+  // };
 
   return (
     <>
@@ -88,7 +88,7 @@ const NotifyLogItem = ({ item }: any) => {
           "relative flex cursor-pointer rounded-lg bg-white p-4 border-s-4 before:absolute before:top-1/2 before:h-2.5 before:w-2.5 before:-translate-y-1/2 before:rounded-full before:bg-accent before:opacity-0 before:content-[''] before:end-4 md:before:end-7 xl:p-7",
           item?.is_read ? 'border-gray-300' : 'border-accent before:opacity-100'
         )}
-        onClick={() => handleClickOnNotification(item)}
+        // onClick={() => handleClickOnNotification(item)}
       >
         <Avatar
           name={item?.user?.name}
@@ -233,7 +233,7 @@ export default function NotifyLogsPage() {
     notify_type: target,
     language: locale,
     limit: 30,
-    orderBy: 'created_at',
+    // orderBy: 'created_at',
     sortedBy: SortOrder.Desc,
     page,
   });

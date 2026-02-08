@@ -10,7 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { adminAndOwnerOnly, getAuthCredentials } from '@/utils/auth-utils';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
-import { useOrderQuery } from '@/data/order';
+// import { useOrderQuery } from '@/data/order';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -42,10 +42,10 @@ const NotifyLogItem = ({ item }: any) => {
 
   const orderID = item?.notify_type === 'order' ? item?.notify_tracker : '';
 
-  const { order } = useOrderQuery({
-    id: orderID,
-    language: locale!,
-  });
+  // const { order } = useOrderQuery({
+  //   id: orderID,
+  //   language: locale!,
+  // });
 
   let notifyLogText = '';
   switch (item?.notify_type) {
@@ -62,35 +62,35 @@ const NotifyLogItem = ({ item }: any) => {
       break;
   }
 
-  const handleClickOnNotification = (value: any) => {
-    seenNotifyLog({ input: value });
+  // const handleClickOnNotification = (value: any) => {
+  //   seenNotifyLog({ input: value });
 
-    // prepare url for admin & vendor
-    let redirectTo;
-    switch (value?.notify_type) {
-      case 'order':
-        //@ts-ignore
-        const shopURL = order?.shop?.slug;
-        redirectTo = permissions?.includes('super_admin')
-          ? Routes?.order?.details(value?.notify_tracker)
-          : shopURL + Routes?.order?.details(value?.notify_tracker);
-        break;
+  //   // prepare url for admin & vendor
+  //   let redirectTo;
+  //   switch (value?.notify_type) {
+  //     case 'order':
+  //       //@ts-ignore
+  //       const shopURL = order?.shop?.slug;
+  //       redirectTo = permissions?.includes('super_admin')
+  //         ? Routes?.order?.details(value?.notify_tracker)
+  //         : shopURL + Routes?.order?.details(value?.notify_tracker);
+  //       break;
 
-      case 'message':
-        //@ts-ignore
-        redirectTo = Routes?.shopMessage?.details(value?.notify_tracker);
-        break;
+  //     case 'message':
+  //       //@ts-ignore
+  //       redirectTo = Routes?.shopMessage?.details(value?.notify_tracker);
+  //       break;
 
-      case 'store_notice':
-        //@ts-ignore
-        redirectTo =
-          '/shops/' + Routes?.storeNotice?.details(value?.notify_tracker);
+  //     case 'store_notice':
+  //       //@ts-ignore
+  //       redirectTo =
+  //         '/shops/' + Routes?.storeNotice?.details(value?.notify_tracker);
 
-        break;
-    }
+  //       break;
+  //   }
 
-    router.push('/' + redirectTo);
-  };
+  //   router.push('/' + redirectTo);
+  // };
 
   return (
     <>
@@ -101,7 +101,7 @@ const NotifyLogItem = ({ item }: any) => {
             ? 'border-gray-300'
             : 'border-accent before:opacity-100',
         )}
-        onClick={() => handleClickOnNotification(item)}
+        // onClick={() => handleClickOnNotification(item)}
       >
         <Avatar
           name={item?.sender_user?.name}
@@ -202,7 +202,7 @@ export default function NotifyLogsPageForVendor() {
     notify_type: target,
     language: locale,
     limit: 30,
-    orderBy: 'created_at',
+    // orderBy: 'created_at',
     sortedBy: SortOrder.Desc,
     page,
   });

@@ -1,7 +1,7 @@
 import Card from '@/components/common/card';
 import Search from '@/components/common/search';
 import Layout from '@/components/layouts/admin';
-import StaffList from '@/components/shop/staff-list';
+// import StaffList from '@/components/shop/staff-list';
 import ErrorMessage from '@/components/ui/error-message';
 import Loader from '@/components/ui/loader/loader';
 import { useAllStaffsQuery } from '@/data/user';
@@ -25,7 +25,7 @@ export default function VendorStaffsPage() {
     page,
     name: searchTerm,
     is_active: true,
-    orderBy,
+    // orderBy,
     sortedBy,
   });
 
@@ -56,13 +56,13 @@ export default function VendorStaffsPage() {
         </div>
       </Card>
 
-      <StaffList
+      {/* <StaffList
         staffs={allStaffs}
         onPagination={handlePagination}
         paginatorInfo={paginatorInfo}
         onOrder={setOrder}
         onSort={setColumn}
-      />
+      /> */}
     </>
   );
 }
