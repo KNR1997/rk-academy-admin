@@ -1,8 +1,10 @@
 import {
   CreateEnrollmentPaymentInput,
+  EnrollmentPaginator,
   EnrollmentPayment,
   EnrollmentPaymentPaginator,
   EnrollmentPaymentQueryOptions,
+  EnrollmentPendingPaymentQueryOptions,
   QueryOptions,
 } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
@@ -16,6 +18,20 @@ export const enrollmentPaymentClient = {
   paginated: ({ name, ...params }: Partial<EnrollmentPaymentQueryOptions>) => {
     return HttpClient.get<EnrollmentPaymentPaginator>(
       API_ENDPOINTS.ENROLLMENT_PAYMENTS,
+      {
+        searchJoin: 'and',
+        self,
+        ...params,
+        search: HttpClient.formatSearchParams({ name }),
+      },
+    );
+  },
+  pendingPayments: ({
+    name,
+    ...params
+  }: Partial<EnrollmentPendingPaymentQueryOptions>) => {
+    return HttpClient.get<EnrollmentPaginator>(
+      `${API_ENDPOINTS.ENROLLMENT_PAYMENTS}/pending-payments`,
       {
         searchJoin: 'and',
         self,

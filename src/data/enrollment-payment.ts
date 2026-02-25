@@ -9,6 +9,8 @@ import {
   EnrollmentPaymentPaginator,
   EnrollmentPaymentQueryOptions,
   EnrollmentPayment,
+  EnrollmentPendingPaymentQueryOptions,
+  EnrollmentPaginator,
 } from '@/types';
 import { mapPaginatorData } from '@/utils/data-mappers';
 import { enrollmentPaymentClient } from './client/enrollment-payment';
@@ -103,6 +105,24 @@ export const useEnrollmentPaymentsQuery = (options: Partial<EnrollmentPaymentQue
 
   return {
     enrollmentPayments: data?.data ?? [],
+    paginatorInfo: mapPaginatorData(data),
+    error,
+    loading: isLoading,
+  };
+};
+
+export const useEnrollmentPendingPaymentsQuery = (options: Partial<EnrollmentPendingPaymentQueryOptions>) => {
+  const { data, error, isLoading } = useQuery<EnrollmentPaginator, Error>(
+    [`${API_ENDPOINTS.ENROLLMENT_PAYMENTS}/pending-payments`, options],
+    ({ queryKey, pageParam }) =>
+      enrollmentPaymentClient.pendingPayments(Object.assign({}, queryKey[1], pageParam)),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  return {
+    enrollmentPendingPayments: data?.data ?? [],
     paginatorInfo: mapPaginatorData(data),
     error,
     loading: isLoading,

@@ -1287,6 +1287,12 @@ export interface EnrollmentPaymentQueryOptions extends QueryOptions {
   name: string;
 }
 
+export interface EnrollmentPendingPaymentQueryOptions extends QueryOptions {
+  name: string;
+  last_payment_month: number | null,
+  last_payment_year: number | null,
+}
+
 export interface ConversationQueryOptions extends QueryOptions {
   search?: string;
 }
