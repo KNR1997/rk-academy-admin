@@ -18,8 +18,8 @@ export default function SelectGradeLevel({
   const { gradeLevels, loading } = useGradeLevelsQuery({ language: locale });
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-grade-level')}</Label>
       <SelectInput
+        label={t('form:input-label-grade-level')}
         name="grade_level"
         control={control}
         getOptionLabel={(option: any) => option.name}

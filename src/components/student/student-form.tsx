@@ -37,8 +37,8 @@ function SelectAcademicYear({
   });
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-academic-year')}</Label>
       <SelectInput
+        label={t('form:input-label-academic-year')}
         name="academic_year"
         control={control}
         getOptionLabel={(option: any) => option.name}
