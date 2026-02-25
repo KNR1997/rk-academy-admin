@@ -240,6 +240,7 @@ export interface Student {
   user: User;
   current_grade: GradeLevel;
   current_academic_year: AcademicYear;
+  parent_guardian_phone: string;
 }
 
 export interface Teacher {
