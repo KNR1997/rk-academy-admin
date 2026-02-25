@@ -124,28 +124,54 @@ const EnrollmentPendingPaymentList = ({
       align: alignLeft,
       width: 150,
       render: (last_payment_month: number, record: Enrollment) => (
-        <div
-          className="overflow-hidden truncate whitespace-nowrap"
-        >
+        <div className="overflow-hidden truncate whitespace-nowrap">
           {record.last_payment_year}-{last_payment_month}
         </div>
       ),
     },
-    // {
-    //   title: t('table:table-item-actions'),
-    //   dataIndex: 'id',
-    //   key: 'actions',
-    //   align: alignRight,
-    //   width: 120,
-    //   render: (id: string, record: Enrollment) => (
-    //     <LanguageSwitcher
-    //       slug={id}
-    //       record={record}
-    //       // deleteModalView="DELETE_ENROLLMENT"
-    //       routes={Routes?.enrollment}
-    //     />
-    //   ),
-    // },
+    {
+      title: (
+        <TitleWithSort
+          title={t('table:table-item-status')}
+          ascending={
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'is_active'
+          }
+          isActive={sortingObj.column === 'is_active'}
+        />
+      ),
+      width: 150,
+      className: 'cursor-pointer',
+      dataIndex: 'is_active',
+      key: 'is_active',
+      align: 'center',
+      onHeaderCell: () => onHeaderClick('is_active'),
+      render: (is_active: boolean) => (
+        <Badge
+          textKey={is_active ? 'common:text-active' : 'common:text-inactive'}
+          color={
+            is_active
+              ? 'bg-accent/10 !text-accent'
+              : 'bg-status-failed/10 text-status-failed'
+          }
+        />
+      ),
+    },
+    {
+      title: t('table:table-item-actions'),
+      dataIndex: 'id',
+      key: 'actions',
+      align: alignRight,
+      width: 120,
+      render: (id: string, record: Enrollment) => (
+        <LanguageSwitcher
+          slug={id}
+          record={record}
+          // deleteModalView="DELETE_ENROLLMENT"
+          routes={Routes?.enrollment}
+        />
+      ),
+    },
   ];
 
   return (
