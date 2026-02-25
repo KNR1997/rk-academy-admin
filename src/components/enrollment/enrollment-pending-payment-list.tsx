@@ -1,24 +1,18 @@
-import Pagination from '@/components/ui/pagination';
-import { Table } from '@/components/ui/table';
-import {
-  Course,
-  CourseOffering,
-  Enrollment,
-  EnrollmentStatusType,
-  SortOrder,
-  Student,
-} from '@/types';
-import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@/utils/locals';
 import { useState } from 'react';
-import TitleWithSort from '@/components/ui/title-with-sort';
-import { MappedPaginatorInfo } from '@/types';
 import { Routes } from '@/config/routes';
-import LanguageSwitcher from '@/components/ui/lang-action/action';
-import { NoDataFound } from '@/components/icons/no-data-found';
+import { useIsRTL } from '@/utils/locals';
+import { useTranslation } from 'next-i18next';
+// types
+import { CourseOffering, Enrollment, SortOrder, Student } from '@/types';
+import { MappedPaginatorInfo } from '@/types';
+// components
+import { Table } from '@/components/ui/table';
 import Avatar from '@/components/common/avatar';
 import Badge from '@/components/ui/badge/badge';
-import StatusColor from '@/utils/status-color';
+import Pagination from '@/components/ui/pagination';
+import TitleWithSort from '@/components/ui/title-with-sort';
+import { NoDataFound } from '@/components/icons/no-data-found';
+import LanguageSwitcher from '@/components/ui/lang-action/action';
 
 export type IProps = {
   enrollments: Enrollment[] | undefined;
@@ -158,6 +152,18 @@ const EnrollmentPendingPaymentList = ({
       ),
     },
     {
+      title: t('table:table-item-contact-number'),
+      dataIndex: 'student',
+      key: 'student',
+      align: alignLeft,
+      width: 150,
+      render: (student: Student, record: Enrollment) => (
+        <div className="overflow-hidden truncate whitespace-nowrap">
+          {record?.student?.parent_guardian_phone}
+        </div>
+      ),
+    },
+    {
       title: t('table:table-item-actions'),
       dataIndex: 'id',
       key: 'actions',
@@ -167,8 +173,8 @@ const EnrollmentPendingPaymentList = ({
         <LanguageSwitcher
           slug={id}
           record={record}
-          // deleteModalView="DELETE_ENROLLMENT"
           routes={Routes?.enrollment}
+          whatsappMessage={record?.student?.parent_guardian_phone}
         />
       ),
     },
