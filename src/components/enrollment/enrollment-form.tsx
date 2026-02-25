@@ -94,10 +94,7 @@ type FormValues = {
   is_active: { label: string; value: boolean };
 };
 
-const defaultValues = {
-  student: '',
-  course_offering: '',
-};
+const defaultValues = {};
 
 type IProps = {
   initialValues?: Enrollment | undefined;
