@@ -18,6 +18,7 @@ import { useModalAction } from '@/components/ui/modal/modal.context';
 // components
 import { Table } from '@/components/ui/table';
 import Avatar from '@/components/common/avatar';
+import Badge from '@/components/ui/badge/badge';
 import Pagination from '@/components/ui/pagination';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
@@ -177,7 +178,34 @@ const EnrollmentMonthList = ({
         </div>
       ),
     },
-
+    {
+      title: (
+        <TitleWithSort
+          title={t('table:table-item-status')}
+          ascending={
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'is_active'
+          }
+          isActive={sortingObj.column === 'is_active'}
+        />
+      ),
+      width: 100,
+      className: 'cursor-pointer',
+      dataIndex: 'is_active',
+      key: 'is_active',
+      align: 'center',
+      onHeaderCell: () => onHeaderClick('is_active'),
+      render: (is_active: boolean) => (
+        <Badge
+          textKey={is_active ? 'common:text-active' : 'common:text-inactive'}
+          color={
+            is_active
+              ? 'bg-accent/10 !text-accent'
+              : 'bg-status-failed/10 text-status-failed'
+          }
+        />
+      ),
+    },
     // 🔹 12 MONTH COLUMNS HERE
     ...monthColumns,
 
