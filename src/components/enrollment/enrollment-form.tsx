@@ -5,6 +5,8 @@ import { Control, FieldErrors, useForm } from 'react-hook-form';
 // types
 import { CourseOffering, Enrollment, Student } from '@/types';
 import { yupResolver } from '@hookform/resolvers/yup';
+// constants
+import { activeInactiveStatusOptions } from '@/constants';
 // hooks
 import { useSettingsQuery } from '@/data/settings';
 import {
@@ -89,6 +91,7 @@ function SelectStudent({
 type FormValues = {
   student: Student;
   course_offering: CourseOffering;
+  is_active: { label: string; value: boolean };
 };
 
 const defaultValues = {
@@ -118,6 +121,9 @@ export default function CreateOrUpdateEnrollmentForm({
     defaultValues: initialValues
       ? {
           ...initialValues,
+          is_active: activeInactiveStatusOptions.find(
+            (option) => option.value == initialValues.is_active,
+          ),
           // ...(isNewTranslation && {
           //   type: null,
           // }),
@@ -156,6 +162,7 @@ export default function CreateOrUpdateEnrollmentForm({
     const input = {
       student: values.student.id,
       course_offering: values.course_offering.id,
+      is_active: values.is_active.value,
     };
     const mutationOptions = { onError: handleMutationError };
 
@@ -164,7 +171,7 @@ export default function CreateOrUpdateEnrollmentForm({
     } else {
       updateEnrollment(
         {
-          ...input,
+          is_active: values.is_active.value,
           id: initialValues.id!,
         },
         mutationOptions,
@@ -192,6 +199,15 @@ export default function CreateOrUpdateEnrollmentForm({
             errors={errors}
             gradeLevel={student?.current_grade?.name}
           />
+          <div className="mb-5">
+            <SelectInput
+              label={t('form:input-label-status')}
+              name="is_active"
+              control={control}
+              options={activeInactiveStatusOptions}
+              isClearable={true}
+            />
+          </div>
         </Card>
       </div>
       <StickyFooterPanel className="z-0">
