@@ -57,6 +57,7 @@ const EnrollmentPaymentView = () => {
       amount: amount,
       payment_month: data.month,
       payment_year: currentYear,
+      enrollment_id: data.enrollmentId,
     };
     const mutationOptions = { onError: handleMutationError };
 

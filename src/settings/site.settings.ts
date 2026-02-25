@@ -167,6 +167,11 @@ export const siteSettings = {
                 label: 'text-add-payments',
                 icon: 'TaxesIcon',
               },
+              {
+                href: Routes.enrollmentPayment.pendingPayments,
+                label: 'text-pending-payments',
+                icon: 'TaxesIcon',
+              },
             ],
           },
         ],

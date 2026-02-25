@@ -84,11 +84,13 @@ const EnrollmentMonthList = ({
     month: number,
     courseOfferingId: string,
     studentId: string,
+    enrollmentId: string,
   ) => {
     openModal('ENROLLMENT_PAYMENT_VIEW', {
       month,
       courseOfferingId,
       studentId,
+      enrollmentId,
     });
   };
 
@@ -109,6 +111,7 @@ const EnrollmentMonthList = ({
                 m.number,
                 record.course_offering.id,
                 record.student.id,
+                record.id,
               )
             }
             className="text-gray-500 hover:text-blue-600"
