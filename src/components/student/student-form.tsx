@@ -1,27 +1,30 @@
-import Input from '@/components/ui/input';
-import { Control, FieldErrors, useForm } from 'react-hook-form';
-import Button from '@/components/ui/button';
-import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { AcademicYear, GradeLevel, Student } from '@/types';
+import { animateScroll } from 'react-scroll';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSettingsQuery } from '@/data/settings';
-import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
+import { Control, FieldErrors, useForm } from 'react-hook-form';
 import { studentValidationSchema } from './student-validation-schema';
-import Label from '../ui/label';
-import SelectInput from '../ui/select-input';
-import ValidationError from '@/components/ui/form-validation-error';
-import { useAcademicYearsQuery } from '@/data/academic-year';
-import { useState } from 'react';
-import Alert from '@/components/ui/alert';
-import { animateScroll } from 'react-scroll';
-import SelectGradeLevel from '@/components/grade-level/select-grade-level';
+// types
+import { AcademicYear, GradeLevel, Student } from '@/types';
+// hooks
 import {
   useCreateStudentMutation,
   useUpdateStudentMutation,
 } from '@/data/student';
+import { useSettingsQuery } from '@/data/settings';
+import { useAcademicYearsQuery } from '@/data/academic-year';
+// components
+import Alert from '@/components/ui/alert';
+import Input from '@/components/ui/input';
+import Button from '@/components/ui/button';
+import Card from '@/components/common/card';
+import SelectInput from '../ui/select-input';
+import Description from '@/components/ui/description';
+import PhoneNumberInput from '@/components/ui/phone-input';
+import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
+import ValidationError from '@/components/ui/form-validation-error';
+import SelectGradeLevel from '@/components/grade-level/select-grade-level';
 
 function SelectAcademicYear({
   control,
@@ -37,8 +40,8 @@ function SelectAcademicYear({
   });
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-academic-year')}</Label>
       <SelectInput
+        label={t('form:input-label-academic-year')}
         name="academic_year"
         control={control}
         getOptionLabel={(option: any) => option.name}
@@ -143,7 +146,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
       email: values.email,
       date_of_birth: values.date_of_birth == '' ? null : values.date_of_birth,
       // parent_guardian_name: values.parent_guardian_name,
-      // parent_guardian_phone: values.parent_guardian_phone,
+      parent_guardian_phone: values.parent_guardian_phone,
       current_grade: values.grade_level.id,
       current_academic_year: values.academic_year.id,
     };
@@ -235,6 +238,12 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
               error={t(errors.date_of_birth?.message!)}
               variant="outline"
               className="mb-5"
+            />
+            <PhoneNumberInput
+              label={t('form:input-label-contact')}
+              {...register('parent_guardian_phone')}
+              control={control}
+              error={t(errors.parent_guardian_phone?.message!)}
             />
           </Card>
         </div>

@@ -22,6 +22,8 @@ import { useModalAction } from '@/components/ui/modal/modal.context';
 import { STAFF, SUPER_ADMIN } from '@/utils/constants';
 import { getAuthCredentials } from '@/utils/auth-utils';
 import { approveModalInitialValues } from '@/utils/constants';
+import { EyeOff } from '../icons/eye-off-icon';
+import { Whatsapp } from '../icons/whatsapp-icon';
 
 type Props = {
   id: string;
@@ -52,6 +54,7 @@ type Props = {
   };
   disabled?: boolean;
   deleteBySlug?: string;
+  whatsappMessage?: string;
 };
 
 const ActionButtons = ({
@@ -81,6 +84,7 @@ const ActionButtons = ({
   data,
   disabled,
   deleteBySlug,
+  whatsappMessage,
 }: Props) => {
   const { t } = useTranslation();
   const { openModal } = useModalAction();
@@ -94,6 +98,12 @@ const ActionButtons = ({
     } else {
       openModal(deleteModalView, id);
     }
+  }
+
+  function handleWhatsappMessage() {
+    if (!whatsappMessage) return;
+    const cleanedPhone = whatsappMessage.replace(/\D/g, '');
+    window.open(`https://wa.me/${cleanedPhone}`, '_blank');
   }
 
   function handleEditModal() {
@@ -288,6 +298,11 @@ const ActionButtons = ({
           )}
         </>
       )}
+      {whatsappMessage && (
+        <button onClick={(e) => handleWhatsappMessage()}>
+          <Whatsapp className="w-5 h-5" />
+        </button>
+      )}
       {editUrl && (
         <Link
           href={editUrl}
@@ -321,7 +336,6 @@ const ActionButtons = ({
           <Eye className="w-5 h-5" />
         </Link>
       )}
-
       {deleteModalView &&
         (role !== STAFF ||
           router.asPath !== `/${router.query.shop}${Routes.coupon.list}`) && (

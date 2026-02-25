@@ -20,6 +20,7 @@ export type LanguageSwitcherProps = {
   couponApproveButton?: boolean;
   isCouponApprove?: boolean;
   deleteBySlug?: string;
+  whatsappMessage?: string;
 };
 
 export default function LanguageSwitcher({
@@ -34,6 +35,7 @@ export default function LanguageSwitcher({
   couponApproveButton,
   isCouponApprove,
   deleteBySlug,
+  whatsappMessage,
 }: LanguageSwitcherProps) {
   const { enableMultiLang } = Config;
   const {
@@ -68,6 +70,7 @@ export default function LanguageSwitcher({
           couponApproveButton={couponApproveButton}
           isCouponApprove={isCouponApprove}
           deleteBySlug={deleteBySlug}
+          whatsappMessage={whatsappMessage}
         />
       )}
     </>

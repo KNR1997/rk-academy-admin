@@ -28,3 +28,14 @@ export const monthOptions = [
   { value: 11, label: 'November' },
   { value: 12, label: 'December' },
 ];
+
+export const activeInactiveStatusOptions = [
+  {
+    label: 'Active',
+    value: true,
+  },
+  {
+    label: 'Inactive',
+    value: false,
+  },
+];

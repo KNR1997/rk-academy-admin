@@ -12,7 +12,7 @@ export const studentValidationSchema = yup.object().shape({
   // username: yup.string().required('form:error-username-required'),
   // date_of_birth: yup.string().required('form:error-birthday-required'),
   // parent_guardian_name: yup.string().required('form:error-guardian-name-required'),
-  // parent_guardian_phone: yup.string().required('form:error-guardian-phone-required'),
+  parent_guardian_phone: yup.string().max(11, 'maximum 10 digit').optional(),
   grade_level: yup.object().required('form:error-grade-level-required'),
   academic_year: yup.object().required('form:error-academic-year-required'),
 });
