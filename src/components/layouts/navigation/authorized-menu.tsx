@@ -1,15 +1,18 @@
 import cn from 'classnames';
 import { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
-import Avatar from '@/components/common/avatar';
-import Link from '@/components/ui/link';
-import { siteSettings } from '@/settings/site.settings';
-import { useTranslation } from 'next-i18next';
-import { useMeQuery } from '@/data/user';
-import { getIcon } from '@/utils/get-icon';
-import * as sidebarIcons from '@/components/icons/sidebar';
 import { useRouter } from 'next/router';
-import { getAuthCredentials, hasAccess } from '@/utils/auth-utils';
+import { useTranslation } from 'next-i18next';
+import { Menu, Transition } from '@headlessui/react';
+import { siteSettings } from '@/settings/site.settings';
+// hooks
+import { useMeQuery } from '@/data/user';
+// utils
+import { getIcon } from '@/utils/get-icon';
+import { getAuthCredentials } from '@/utils/auth-utils';
+// components
+import Link from '@/components/ui/link';
+import Avatar from '@/components/common/avatar';
+import * as sidebarIcons from '@/components/icons/sidebar';
 
 export default function AuthorizedMenu() {
   const { data } = useMeQuery();
