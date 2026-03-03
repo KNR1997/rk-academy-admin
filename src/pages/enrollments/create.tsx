@@ -1,7 +1,9 @@
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // components
-import Layout from '@/components/layouts/admin';
+import AppLayout from '@/components/layouts/app';
 import CreateOrUpdateEnrollmentForm from '@/components/enrollment/enrollment-form';
 
 export default function CreateEnrollmentPage() {
@@ -18,7 +20,10 @@ export default function CreateEnrollmentPage() {
   );
 }
 
-CreateEnrollmentPage.Layout = Layout;
+CreateEnrollmentPage.authenticate = {
+  permissions: adminAndCoordinatorOnly,
+};
+CreateEnrollmentPage.Layout = AppLayout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {

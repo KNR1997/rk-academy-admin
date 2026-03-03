@@ -1,16 +1,22 @@
-import Layout from '@/components/layouts/admin';
 import { useRouter } from 'next/router';
-import ErrorMessage from '@/components/ui/error-message';
-import Loader from '@/components/ui/loader/loader';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// config
 import { Config } from '@/config';
+// utils
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
+// hooks
 import { useEnrollmentQuery } from '@/data/enrollment';
+// components
+import AppLayout from '@/components/layouts/app';
+import ErrorMessage from '@/components/ui/error-message';
+import Loader from '@/components/ui/loader/loader';
 import CreateOrUpdateEnrollmentForm from '@/components/enrollment/enrollment-form';
 
 export default function UpdateEnrollmentPage() {
-  const { query, locale } = useRouter();
   const { t } = useTranslation();
+  const { query, locale } = useRouter();
+  // queries
   const {
     enrollment,
     isLoading: loading,
@@ -37,7 +43,10 @@ export default function UpdateEnrollmentPage() {
   );
 }
 
-UpdateEnrollmentPage.Layout = Layout;
+UpdateEnrollmentPage.authenticate = {
+  permissions: adminAndCoordinatorOnly,
+};
+UpdateEnrollmentPage.Layout = AppLayout;
 
 export const getServerSideProps = async ({ locale }: any) => ({
   props: {

@@ -3,20 +3,19 @@ import { useState } from 'react';
 import { SortOrder } from '@/types';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { adminOnly } from '@/utils/auth-utils';
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // hooks
 import { useEnrollmentPendingPaymentsQuery } from '@/data/enrollment-payment';
 // components
 import Card from '@/components/common/card';
-import Layout from '@/components/layouts/admin';
 import Search from '@/components/common/search';
+import AppLayout from '@/components/layouts/app';
 import Loader from '@/components/ui/loader/loader';
 import { ArrowUp } from '@/components/icons/arrow-up';
 import ErrorMessage from '@/components/ui/error-message';
 import { ArrowDown } from '@/components/icons/arrow-down';
 import PageHeading from '@/components/common/page-heading';
-import EnrollmentList from '@/components/enrollment/enrollment-list';
 import EnrollmentPendingPaymentFilter from '@/components/filters/enrollment-pending-payment-filter';
 import EnrollmentPendingPaymentList from '@/components/enrollment/enrollment-pending-payment-list';
 
@@ -124,9 +123,9 @@ export default function EnrollmentPendingPayments() {
 }
 
 EnrollmentPendingPayments.authenticate = {
-  permissions: adminOnly,
+  permissions: adminAndCoordinatorOnly,
 };
-EnrollmentPendingPayments.Layout = Layout;
+EnrollmentPendingPayments.Layout = AppLayout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
