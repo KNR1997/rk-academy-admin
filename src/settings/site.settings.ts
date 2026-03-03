@@ -170,7 +170,7 @@ export const siteSettings = {
               {
                 href: Routes.enrollmentPayment.pendingPayments,
                 label: 'text-pending-payments',
-                icon: 'TaxesIcon',
+                icon: 'PendingIcon',
               },
             ],
           },
@@ -358,6 +358,24 @@ export const siteSettings = {
         href: Routes.student.list,
         label: 'text-student-list',
         icon: 'CustomersIcon',
+        permissions: coordinatorOnly,
+      },
+      {
+        href: Routes.enrollment.list,
+        label: 'text-all-enrollments',
+        icon: 'TagIcon',
+        permissions: coordinatorOnly,
+      },
+      {
+        href: Routes.enrollmentPayment.list,
+        label: 'text-all-payments',
+        icon: 'TaxesIcon',
+        permissions: coordinatorOnly,
+      },
+      {
+        href: Routes.enrollmentPayment.pendingPayments,
+        label: 'text-pending-payments',
+        icon: 'PendingIcon',
         permissions: coordinatorOnly,
       },
     ],
