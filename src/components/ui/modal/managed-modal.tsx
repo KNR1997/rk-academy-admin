@@ -16,6 +16,9 @@ const EnrollmentDeleteView = dynamic(
 const TeacherDeleteView = dynamic(
   () => import('@/components/teacher/teacher-delete-view'),
 );
+const CoordinatorDeleteView = dynamic(
+  () => import('@/components/coordinator/coordinator-delete-view'),
+);
 const BanCustomerView = dynamic(
   () => import('@/components/user/user-ban-view'),
 );
@@ -61,6 +64,8 @@ function renderModal(view: MODAL_VIEWS | undefined, data: any) {
       return <EnrollmentDeleteView />;
     case 'DELETE_TEACHER':
       return <TeacherDeleteView />;
+    case 'DELETE_COORDINATOR':
+      return <CoordinatorDeleteView />;
     case 'ENROLLMENT_PAYMENT_VIEW':
       return <EnrollmentPaymentView />;
     case 'DELETE_STORE_NOTICE':
