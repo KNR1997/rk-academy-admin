@@ -159,6 +159,22 @@ export interface Course {
   fee: number;
 }
 
+export interface Coordinator {
+  id: string;
+  name: string;
+  slug: string;
+  fee: number;
+}
+
+export interface CreateCoordinatorInput {
+  first_name: string;
+  last_name: string;
+  display_name: string;
+  mobile_number: string;
+  email: string;
+  password: string;
+}
+
 export interface CourseOffering {
   id: string;
   course: Course;
@@ -1266,6 +1282,10 @@ export interface CourseQueryOptions extends QueryOptions {
   name: string;
 }
 
+export interface CoordinatorQueryOptions extends QueryOptions {
+  name: string;
+}
+
 export interface CourseOfferingQueryOptions extends QueryOptions {
   name: string;
   grade_level: string;
@@ -1568,6 +1588,8 @@ export interface StudentPaginator extends PaginatorInfo<Student> {}
 export interface TeacherPaginator extends PaginatorInfo<Teacher> {}
 
 export interface CoursePaginator extends PaginatorInfo<Course> {}
+
+export interface CoordinatorPaginator extends PaginatorInfo<Coordinator> {}
 
 export interface CourseOfferingPaginator
   extends PaginatorInfo<CourseOffering> {}
