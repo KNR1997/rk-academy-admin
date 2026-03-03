@@ -1,6 +1,9 @@
-import Layout from '@/components/layouts/admin';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
+// components
+import AppLayout from '@/components/layouts/app';
 import CreateOrUpdateStudentForm from '@/components/student/student-form';
 
 export default function CreateStudentPage() {
@@ -17,7 +20,10 @@ export default function CreateStudentPage() {
   );
 }
 
-CreateStudentPage.Layout = Layout;
+CreateStudentPage.authenticate = {
+  permissions: adminAndCoordinatorOnly,
+};
+CreateStudentPage.Layout = AppLayout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {

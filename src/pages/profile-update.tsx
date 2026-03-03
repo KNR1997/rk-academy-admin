@@ -1,12 +1,14 @@
-import Layout from '@/components/layouts/app';
-import ProfileUpdateFrom from '@/components/auth/profile-update-form';
-import ChangePasswordForm from '@/components/auth/change-password-from';
-import ErrorMessage from '@/components/ui/error-message';
-import Loader from '@/components/ui/loader/loader';
-import { useMeQuery } from '@/data/user';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// hooks
+import { useMeQuery } from '@/data/user';
+// components
+import AppLayout from '@/components/layouts/app';
+import Loader from '@/components/ui/loader/loader';
+import ErrorMessage from '@/components/ui/error-message';
 import EmailUpdateForm from '@/components/auth/email-update-form';
+import ProfileUpdateFrom from '@/components/auth/profile-update-form';
+import ChangePasswordForm from '@/components/auth/change-password-from';
 
 export default function ProfilePage() {
   const { t } = useTranslation();
@@ -27,7 +29,8 @@ export default function ProfilePage() {
     </>
   );
 }
-ProfilePage.Layout = Layout;
+
+ProfilePage.Layout = AppLayout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
