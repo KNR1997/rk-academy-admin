@@ -48,6 +48,9 @@ export const Routes = {
   course: {
     ...routesFactory('/courses'),
   },
+  coordinator: {
+    ...routesFactory('/coordinators'),
+  },
   courseOffering: {
     ...routesFactory('/course-offerings'),
   },
