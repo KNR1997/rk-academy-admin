@@ -1,30 +1,37 @@
+import '@/assets/css/main.css';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import type { AppProps } from 'next/app';
 import 'react-toastify/dist/ReactToastify.css';
-import '@/assets/css/main.css';
+import { ToastContainer } from 'react-toastify';
+import { Hydrate } from 'react-query/hydration';
+import { appWithTranslation } from 'next-i18next';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { QueryClient, QueryClientProvider } from 'react-query';
+// contexts
 import { UIProvider } from '@/contexts/ui.context';
 import { SettingsProvider } from '@/contexts/settings.context';
-import ErrorMessage from '@/components/ui/error-message';
-import PageLoader from '@/components/ui/page-loader/page-loader';
-import { ToastContainer } from 'react-toastify';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
-import { useSettingsQuery } from '@/data/settings';
-import { ReactQueryDevtools } from 'react-query/devtools';
-import { appWithTranslation } from 'next-i18next';
-import { ModalProvider } from '@/components/ui/modal/modal.context';
-import DefaultSeo from '@/components/ui/default-seo';
-import ManagedModal from '@/components/ui/modal/managed-modal';
-import { useState } from 'react';
+// types
 import type { NextPageWithLayout } from '@/types';
-import { useRouter } from 'next/router';
+// utils
 import PrivateRoute from '@/utils/private-route';
 import { Config } from '@/config';
+// hooks
+import { useSettingsQuery } from '@/data/settings';
+// components
+import DefaultSeo from '@/components/ui/default-seo';
+import ErrorMessage from '@/components/ui/error-message';
+import ManagedModal from '@/components/ui/modal/managed-modal';
+import PageLoader from '@/components/ui/page-loader/page-loader';
+import { ModalProvider } from '@/components/ui/modal/modal.context';
+
 const Noop: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <>{children}</>
 );
 
 const AppSettings: React.FC<{ children?: React.ReactNode }> = (props) => {
   const { query, locale } = useRouter();
+  // query
   const { settings, loading, error } = useSettingsQuery({ language: locale! });
   if (loading) return <PageLoader />;
   if (error) return <ErrorMessage message={error.message} />;
@@ -32,9 +39,11 @@ const AppSettings: React.FC<{ children?: React.ReactNode }> = (props) => {
   // @ts-ignore
   return <SettingsProvider initialValue={settings?.options} {...props} />;
 };
+
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
+
 const CustomApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const Layout = (Component as any).Layout || Noop;
   const authProps = (Component as any).authenticate;
