@@ -1,14 +1,16 @@
-import { useTranslation } from 'next-i18next';
-import UserBoxHeaderView from '@/components/message/user-box-header';
-import UserListView from '@/components/message/user-list';
-import Button from '@/components/ui/button';
 import cn from 'classnames';
-import { useModalAction } from '@/components/ui/modal/modal.context';
+import { useState } from 'react';
+import { useTranslation } from 'next-i18next';
+// utils
 import { useWindowSize } from '@/utils/use-window-size';
 import { RESPONSIVE_WIDTH } from '@/utils/constants';
-import { useState } from 'react';
 import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
+// components
+import Button from '@/components/ui/button';
+import UserListView from '@/components/message/user-list';
 import { ComposeEditIcon } from '@/components/icons/edit';
+import { useModalAction } from '@/components/ui/modal/modal.context';
+import UserBoxHeaderView from '@/components/message/user-box-header';
 
 interface Props {
   className?: string;

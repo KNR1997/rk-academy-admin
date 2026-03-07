@@ -423,6 +423,7 @@ export interface User {
   username: string;
   first_name: string;
   last_name: string;
+  full_name: string;
   display_name: string;
   shops: Shop[];
   managed_shop: Shop;
@@ -784,18 +785,19 @@ export interface LatestMessage {
   updated_at: string;
   user_id: string;
   id: string;
+  my_message: boolean;
 }
 
 export interface Conversations {
   id: string;
+  is_group: boolean;
+  latest_message: LatestMessage;
   created_at: string;
   updated_at: string;
-  shop_id: number;
-  unseen?: boolean;
-  user_id: string;
-  user: User;
-  shop: Shop;
-  latest_message: LatestMessage;
+  participants: {
+    id: string;
+    user: User;
+  }[]
 }
 
 export interface Message extends LatestMessage {

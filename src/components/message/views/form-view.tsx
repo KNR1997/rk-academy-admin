@@ -1,19 +1,23 @@
-import Avatar from '@/components/common/avatar';
-import { SendMessageGhostIcon } from '@/components/icons/send-message';
-import Button from '@/components/ui/button';
-import TextArea from '@/components/ui/text-area';
-import { useSendMessage } from '@/data/conversations';
-import { Conversations } from '@/types';
-import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
-import { yupResolver } from '@hookform/resolvers/yup';
-import classNames from 'classnames';
-import { isEmpty } from 'lodash';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import { isEmpty } from 'lodash';
+import { useEffect } from 'react';
+import classNames from 'classnames';
+import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'next-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
+// types
+import { Conversations } from '@/types';
+// utils
+import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
+// hooks
+import { useSendMessage } from '@/data/conversations';
+// components
+import Button from '@/components/ui/button';
+import Avatar from '@/components/common/avatar';
+import TextArea from '@/components/ui/text-area';
+import { SendMessageGhostIcon } from '@/components/icons/send-message';
 
 type FormValues = {
   message: string;
@@ -69,7 +73,8 @@ const CreateMessageForm = ({ className, shop, ...rest }: Props) => {
     }
     createMessage(
       {
-        message: values?.message,
+        body: values?.message,
+        conversation: query.id,
         id: query?.id as string,
       },
       {
@@ -84,7 +89,7 @@ const CreateMessageForm = ({ className, shop, ...rest }: Props) => {
           });
           reset();
         },
-      }
+      },
     );
   };
   useEffect(() => {
@@ -115,7 +120,7 @@ const CreateMessageForm = ({ className, shop, ...rest }: Props) => {
                     : shop?.user?.profile?.avatar?.original
                 )
                   ? ''
-                  : 'bg-muted-black text-base font-medium text-white'
+                  : 'bg-muted-black text-base font-medium text-white',
               )}
             />
           </div>

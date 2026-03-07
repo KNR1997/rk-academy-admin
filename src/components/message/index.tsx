@@ -1,9 +1,11 @@
+// utils
+import { RESPONSIVE_WIDTH } from '@/utils/constants';
+import { useWindowSize } from '@/utils/use-window-size';
+// components
+import Card from '@/components/common/card';
 import UserListIndex from '@/components/message/user-list-index';
 import UserMessageIndex from '@/components/message/user-message-index';
-import Card from '@/components/common/card';
-import { useWindowSize } from '@/utils/use-window-size';
 import ResponsiveView from '@/components/message/views/responsive-vew';
-import { RESPONSIVE_WIDTH } from '@/utils/constants';
 
 export default function MessagePageIndex() {
   const { width } = useWindowSize();

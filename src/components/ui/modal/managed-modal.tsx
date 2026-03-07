@@ -54,6 +54,10 @@ const SearchModal = dynamic(
   () => import('@/components/layouts/topbar/search-modal'),
 );
 
+const ComposerMessage = dynamic(
+  () => import('@/components/message/compose-message'),
+);
+
 function renderModal(view: MODAL_VIEWS | undefined, data: any) {
   switch (view) {
     case 'DELETE_SUBJECT':
@@ -88,6 +92,8 @@ function renderModal(view: MODAL_VIEWS | undefined, data: any) {
       return <DeclineAbuseReportView />;
     case 'REVIEW_IMAGE_POPOVER':
       return <ReviewImageModal />;
+    case 'COMPOSE_MESSAGE':
+      return <ComposerMessage />;
     case 'ABUSE_REPORT':
     case 'SEARCH_VIEW':
       return <SearchModal />;

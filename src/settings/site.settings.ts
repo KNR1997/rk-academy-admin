@@ -210,6 +210,24 @@ export const siteSettings = {
         ],
       },
 
+      feature: {
+        href: '',
+        label: 'text-feature-management',
+        icon: 'SettingsIcon',
+        childMenu: [
+          {
+            href: Routes.message.list,
+            label: 'sidebar-nav-item-message',
+            icon: 'ChatIcon',
+          },
+          // {
+          //   href: Routes.storeNotice.list,
+          //   label: 'sidebar-nav-item-store-notice',
+          //   icon: 'StoreNoticeIcon',
+          // },
+        ],
+      },
+
       report: {
         href: '',
         label: 'text-reports',
@@ -253,6 +271,24 @@ export const siteSettings = {
             label: 'sidebar-nav-item-course-offerings',
             icon: 'ProductsIcon',
           },
+        ],
+      },
+
+      feature: {
+        href: '',
+        label: 'text-feature-management',
+        icon: 'SettingsIcon',
+        childMenu: [
+          {
+            href: Routes.message.list,
+            label: 'sidebar-nav-item-message',
+            icon: 'ChatIcon',
+          },
+          // {
+          //   href: Routes.storeNotice.list,
+          //   label: 'sidebar-nav-item-store-notice',
+          //   icon: 'StoreNoticeIcon',
+          // },
         ],
       },
     },

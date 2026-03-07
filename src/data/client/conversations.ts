@@ -16,10 +16,11 @@ export const conversationsClient = {
   ...crudFactory<Conversations, QueryOptions, CreateMessageInput>(
     API_ENDPOINTS.CONVERSIONS,
   ),
-  create({ shop_id, via }: { shop_id: number; via: string }) {
-    return HttpClient.post<Conversations>(API_ENDPOINTS.CONVERSIONS, {
+  create({ shop_id, via, participant_id }: { shop_id: number; via: string, participant_id: string }) {
+    return HttpClient.post<Conversations>(`${API_ENDPOINTS.CONVERSIONS}/`, {
       shop_id,
       via,
+      participant_id,
     });
   },
   getMessage({ slug, ...prams }: Partial<MessageQueryOptions>) {
@@ -36,7 +37,7 @@ export const conversationsClient = {
   },
   messageCreate({ id, ...input }: Partial<CreateMessageInput>) {
     return HttpClient.post<CreateMessageInput>(
-      `${API_ENDPOINTS.MESSAGE}/${id}`,
+      `${API_ENDPOINTS.MESSAGE}/${id}/`,
       input,
     );
   },

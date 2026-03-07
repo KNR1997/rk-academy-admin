@@ -1,7 +1,9 @@
-import Layout from '@/components/layouts/admin';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { GetStaticProps } from 'next';
-import { adminOnly } from '@/utils/auth-utils';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { allowedRoles } from '@/utils/auth-utils';
+// components
+import AppLayout from '@/components/layouts/app';
 import MessagePageIndex from '@/components/message/index';
 
 export default function MessagePage() {
@@ -13,10 +15,10 @@ export default function MessagePage() {
 }
 
 MessagePage.authenticate = {
-  permissions: adminOnly,
+  permissions: allowedRoles,
 };
 
-MessagePage.Layout = Layout;
+MessagePage.Layout = AppLayout;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
