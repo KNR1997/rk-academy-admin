@@ -204,14 +204,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
               className="mb-5"
               required
             />
-            <Input
-              label={t('form:input-label-email')}
-              {...register('email')}
-              error={t(errors.email?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
+
             {/* <Input
               label={t('form:input-label-username')}
               {...register('username')}
@@ -219,6 +212,20 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
               variant="outline"
               className="mb-5"
               required
+              /> */}
+            <Input
+              label={t('form:input-label-contact')}
+              {...register('parent_guardian_phone')}
+              error={t(errors.parent_guardian_phone?.message!)}
+              variant="outline"
+              className="mb-5"
+              required
+            />
+            {/* <PhoneNumberInput
+              label={t('form:input-label-contact')}
+              {...register('parent_guardian_phone')}
+              control={control}
+              error={t(errors.parent_guardian_phone?.message!)}
             /> */}
             {!initialValues && (
               <Input
@@ -232,18 +239,19 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
               />
             )}
             <Input
+              label={t('form:input-label-email')}
+              {...register('email')}
+              error={t(errors.email?.message!)}
+              variant="outline"
+              className="mb-5"
+            />
+            <Input
               label={t('form:input-label-date-of-birth')}
               {...register('date_of_birth')}
               type="date"
               error={t(errors.date_of_birth?.message!)}
               variant="outline"
               className="mb-5"
-            />
-            <PhoneNumberInput
-              label={t('form:input-label-contact')}
-              {...register('parent_guardian_phone')}
-              control={control}
-              error={t(errors.parent_guardian_phone?.message!)}
             />
           </Card>
         </div>
