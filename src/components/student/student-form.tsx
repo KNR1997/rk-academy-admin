@@ -21,10 +21,10 @@ import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
 import SelectInput from '../ui/select-input';
 import Description from '@/components/ui/description';
-import PhoneNumberInput from '@/components/ui/phone-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import ValidationError from '@/components/ui/form-validation-error';
 import SelectGradeLevel from '@/components/grade-level/select-grade-level';
+import SelectExamYear from '../exam-year/select-exam-year';
 
 function SelectAcademicYear({
   control,
@@ -66,6 +66,10 @@ type FormValues = {
   parent_guardian_phone: string;
   grade_level: GradeLevel;
   academic_year: AcademicYear;
+  exam_year: {
+    label: string;
+    value: string;
+  };
 };
 
 const defaultValues = {
@@ -100,9 +104,12 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? {
           ...initialValues.user,
+          ...initialValues,
           grade_level: initialValues.current_grade,
           academic_year: initialValues.current_academic_year,
-          ...initialValues,
+          exam_year: initialValues?.exam_year
+            ? { label: initialValues.exam_year, value: initialValues.exam_year }
+            : {},
           ...(isNewTranslation && {
             type: null,
           }),
@@ -149,6 +156,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
       parent_guardian_phone: values.parent_guardian_phone,
       current_grade: values.grade_level.id,
       current_academic_year: values.academic_year.id,
+      exam_year: values.exam_year.value,
     };
     const mutationOptions = { onError: handleMutationError };
 
@@ -269,6 +277,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <SelectGradeLevel control={control} errors={errors} />
             <SelectAcademicYear control={control} errors={errors} />
+            <SelectExamYear control={control} errors={errors} />
           </Card>
         </div>
 
