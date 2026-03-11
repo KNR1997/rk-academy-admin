@@ -250,6 +250,7 @@ export interface AcademicYear {
 export interface Student {
   id: string;
   student_number: string;
+  exam_year: string;
   date_of_birth: string;
   gender: string;
   is_active: string;
@@ -1294,6 +1295,10 @@ export interface CourseOfferingQueryOptions extends QueryOptions {
 }
 
 export interface UserQueryOptions extends QueryOptions {
+  name: string;
+}
+
+export interface AdminQueryOptions extends QueryOptions {
   name: string;
 }
 
