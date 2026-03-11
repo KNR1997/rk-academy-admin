@@ -24,9 +24,10 @@ type FormValues = {
 
 export default function ProfileUpdate({ me }: any) {
   const { t } = useTranslation();
-  const { mutate: updateUser, isLoading: loading } = useUpdateUserMutation();
   const { permissions } = getAuthCredentials();
   let permission = hasAccess(adminOnly, permissions);
+  // mutations
+  const { mutate: updateUser, isLoading: loading } = useUpdateUserMutation();
   const {
     register,
     handleSubmit,
@@ -45,6 +46,8 @@ export default function ProfileUpdate({ me }: any) {
       id: me?.id,
       input: {
         display_name: values.display_name,
+        first_name: values.first_name,
+        last_name: values.last_name,
         mobile_number: values.mobile_number,
       },
     };
