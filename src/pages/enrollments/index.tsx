@@ -8,7 +8,7 @@ import { Routes } from '@/config/routes';
 // utils
 import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // types
-import { GradeLevel, SortOrder } from '@/types';
+import { GradeLevel } from '@/types';
 // hooks
 import { useEnrollmentsWithMonthsQuery } from '@/data/enrollment';
 // components
@@ -35,8 +35,7 @@ export default function Enrollments() {
   const [grade, setGrade] = useState('');
   const [batch, setBatch] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const [ordering, setOrdering] = useState('-created_at');
   // query
   const { enrollmentsWithMonths, paginatorInfo, loading, error } =
     useEnrollmentsWithMonthsQuery({
@@ -45,8 +44,7 @@ export default function Enrollments() {
       name: searchTerm,
       grade_level: grade,
       batch: batch,
-      ordering: orderBy,
-      sortedBy,
+      ordering,
       language: locale,
     });
 
@@ -142,8 +140,7 @@ export default function Enrollments() {
         enrollmentsWithMonths={enrollmentsWithMonths}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}
-        onOrder={setOrder}
-        onSort={setColumn}
+        onOrdering={setOrdering}
       />
     </>
   );

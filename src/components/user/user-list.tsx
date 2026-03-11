@@ -61,9 +61,10 @@ const UserList = ({
         <TitleWithSort
           title={t('table:table-item-title')}
           ascending={
-            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'first_name'
           }
-          isActive={sortingObj.column === 'id'}
+          isActive={sortingObj.column === 'first_name'}
         />
       ),
       className: 'cursor-pointer',

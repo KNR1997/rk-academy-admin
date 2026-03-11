@@ -1,30 +1,29 @@
-import Pagination from '@/components/ui/pagination';
-import { Table } from '@/components/ui/table';
-import { Enrollment, EnrollmentPayment, SortOrder } from '@/types';
-import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@/utils/locals';
 import { useState } from 'react';
-import TitleWithSort from '@/components/ui/title-with-sort';
+import { useTranslation } from 'next-i18next';
+// utils
+import { useIsRTL } from '@/utils/locals';
+// types
 import { MappedPaginatorInfo } from '@/types';
-import { Routes } from '@/config/routes';
-import LanguageSwitcher from '@/components/ui/lang-action/action';
-import { NoDataFound } from '@/components/icons/no-data-found';
+import { Enrollment, EnrollmentPayment, SortOrder } from '@/types';
+// components
+import { Table } from '@/components/ui/table';
 import Avatar from '@/components/common/avatar';
+import Pagination from '@/components/ui/pagination';
+import TitleWithSort from '@/components/ui/title-with-sort';
+import { NoDataFound } from '@/components/icons/no-data-found';
 
 export type IProps = {
   enrollmentPayments: EnrollmentPayment[] | undefined;
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
-  onSort: (current: any) => void;
-  onOrder: (current: string) => void;
+  onOrdering: (current: any) => void;
 };
 
 const EnrollmentPaymentList = ({
   enrollmentPayments,
   paginatorInfo,
   onPagination,
-  onSort,
-  onOrder,
+  onOrdering,
 }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft, alignRight } = useIsRTL();
@@ -38,16 +37,14 @@ const EnrollmentPaymentList = ({
 
   const onHeaderClick = (column: string | null) => ({
     onClick: () => {
-      onSort((currentSortDirection: SortOrder) =>
-        currentSortDirection === SortOrder.Desc
-          ? SortOrder.Asc
-          : SortOrder.Desc,
-      );
-      onOrder(column!);
+      const nextSort =
+        sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc;
 
+      const ordering = nextSort === SortOrder.Desc ? `-${column}` : column;
+
+      onOrdering(ordering);
       setSortingObj({
-        sort:
-          sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc,
+        sort: nextSort,
         column: column,
       });
     },
@@ -67,9 +64,10 @@ const EnrollmentPaymentList = ({
         <TitleWithSort
           title={t('table:table-item-student')}
           ascending={
-            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'enrollment__student__user__first_name'
           }
-          isActive={sortingObj.column === 'id'}
+          isActive={sortingObj.column === 'enrollment__student__user__first_name'}
         />
       ),
       className: 'cursor-pointer',
@@ -78,7 +76,7 @@ const EnrollmentPaymentList = ({
       align: alignLeft,
       width: 250,
       ellipsis: true,
-      onHeaderCell: () => onHeaderClick('enrollment'),
+      onHeaderCell: () => onHeaderClick('enrollment__student__user__first_name'),
       render: (
         enrollment: Enrollment,
         { profile, email }: { profile: any; email: string },

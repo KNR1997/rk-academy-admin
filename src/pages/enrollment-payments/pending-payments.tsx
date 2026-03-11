@@ -1,10 +1,10 @@
 import cn from 'classnames';
 import { useState } from 'react';
-import { SortOrder } from '@/types';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // hooks
 import { useEnrollmentPendingPaymentsQuery } from '@/data/enrollment-payment';
 // components
@@ -26,19 +26,18 @@ export default function EnrollmentPendingPayments() {
   const currentMonth = new Date().getMonth() + 1;
   // states
   const [page, setPage] = useState(1);
-  const [year, setYear] = useState<number | null>(currentYear);
-  const [month, setMonth] = useState<number | null>(currentMonth);
   const [visible, setVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const [ordering, setOrdering] = useState('-created_at');
+  const [year, setYear] = useState<number | null>(currentYear);
+  const [month, setMonth] = useState<number | null>(currentMonth);
   // query
   const { enrollmentPendingPayments, paginatorInfo, loading, error } =
     useEnrollmentPendingPaymentsQuery({
       limit: 20,
       page,
       name: searchTerm,
-      sortedBy,
+      ordering,
       language: locale,
       last_payment_month: month ?? currentMonth,
       last_payment_year: year ?? currentYear,
@@ -115,8 +114,7 @@ export default function EnrollmentPendingPayments() {
         enrollments={enrollmentPendingPayments}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}
-        onOrder={setOrder}
-        onSort={setColumn}
+        onOrdering={setOrdering}
       />
     </>
   );

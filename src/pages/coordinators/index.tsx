@@ -1,12 +1,10 @@
 import { useState } from 'react';
-import { Config } from '@/config';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // config
+import { Config } from '@/config';
 import { Routes } from '@/config/routes';
-// types
-import { SortOrder } from '@/types';
 // utils
 import { adminOnly } from '@/utils/auth-utils';
 // hooks
@@ -27,14 +25,13 @@ export default function Coordinators() {
   // states
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const [ordering, setOrdering] = useState('created_at');
   // query
   const { coordinators, paginatorInfo, loading, error } = useCoordinatorsQuery({
     limit: 20,
     page,
     name: searchTerm,
-    sortedBy,
+    ordering,
   });
 
   if (loading) return <Loader text={t('common:text-loading')} />;
@@ -84,8 +81,7 @@ export default function Coordinators() {
         coordinators={coordinators}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}
-        onOrder={setOrder}
-        onSort={setColumn}
+        onOrdering={setOrdering}
       />
     </>
   );

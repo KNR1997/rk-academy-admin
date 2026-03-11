@@ -7,8 +7,6 @@ import { Config } from '@/config';
 import { Routes } from '@/config/routes';
 // utils
 import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
-// types
-import { SortOrder } from '@/types';
 // hooks
 import { useEnrollmentPaymentsQuery } from '@/data/enrollment-payment';
 // components
@@ -27,15 +25,14 @@ export default function EnrollmentPayments() {
   // states
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const [ordering, setOrdering] = useState('-created_at');
   // query
   const { enrollmentPayments, paginatorInfo, loading, error } =
     useEnrollmentPaymentsQuery({
       limit: 20,
       page,
       name: searchTerm,
-      sortedBy,
+      ordering,
       language: locale,
     });
 
@@ -85,8 +82,7 @@ export default function EnrollmentPayments() {
         enrollmentPayments={enrollmentPayments}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}
-        onOrder={setOrder}
-        onSort={setColumn}
+        onOrdering={setOrdering}
       />
     </>
   );

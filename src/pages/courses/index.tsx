@@ -1,30 +1,31 @@
 import { useState } from 'react';
-import { Config } from '@/config';
 import { useRouter } from 'next/router';
-import { Routes } from '@/config/routes';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// config
+import { Config } from '@/config';
+import { Routes } from '@/config/routes';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
+// hooks
+import { useCoursesQuery } from '@/data/course';
 // components
 import Card from '@/components/common/card';
 import Layout from '@/components/layouts/admin';
 import Search from '@/components/common/search';
 import Loader from '@/components/ui/loader/loader';
 import LinkButton from '@/components/ui/link-button';
+import CourseList from '@/components/course/course-list';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
-import CourseList from '@/components/course/course-list';
-// utils
-import { adminOnly } from '@/utils/auth-utils';
-// hooks
-import { useCoursesQuery } from '@/data/course';
 
 export default function Courses() {
   const { locale } = useRouter();
   const { t } = useTranslation();
   // states
-  const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
-  const [ordering, setOrdering] = useState('created_at');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [ordering, setOrdering] = useState('-created_at');
   // query
   const { courses, paginatorInfo, loading, error } = useCoursesQuery({
     limit: 20,

@@ -7,8 +7,6 @@ import { Config } from '@/config';
 import { Routes } from '@/config/routes';
 // utils
 import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
-// types
-import { SortOrder } from '@/types';
 // hooks
 import { useStudentsQuery } from '@/data/student';
 // components
@@ -24,18 +22,16 @@ import StudentList from '@/components/student/student-list';
 export default function Students() {
   const { locale } = useRouter();
   const { t } = useTranslation();
-
   // states
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const [ordering, setOrdering] = useState('-created_at');
   // queries
   const { students, paginatorInfo, loading, error } = useStudentsQuery({
     limit: 20,
     page,
     name: searchTerm,
-    sortedBy,
+    ordering,
     language: locale,
   });
 
@@ -85,8 +81,7 @@ export default function Students() {
         students={students}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}
-        onOrder={setOrder}
-        onSort={setColumn}
+        onOrdering={setOrdering}
       />
     </>
   );

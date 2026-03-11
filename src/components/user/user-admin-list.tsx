@@ -21,15 +21,13 @@ type IProps = {
   admins: User[] | undefined;
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (current: number) => void;
-  onSort: (current: any) => void;
-  onOrder: (current: string) => void;
+  onOrdering: (current: any) => void;
 };
 const AdminsList = ({
   admins,
   paginatorInfo,
   onPagination,
-  onSort,
-  onOrder,
+  onOrdering,
 }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft, alignRight } = useIsRTL();
@@ -44,49 +42,30 @@ const AdminsList = ({
 
   const onHeaderClick = (column: any | null) => ({
     onClick: () => {
-      onSort((currentSortDirection: SortOrder) =>
-        currentSortDirection === SortOrder.Desc
-          ? SortOrder.Asc
-          : SortOrder.Desc,
-      );
+      const nextSort =
+        sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc;
 
-      onOrder(column);
+      const ordering = nextSort === SortOrder.Desc ? `-${column}` : column;
+
+      onOrdering(ordering);
 
       setSortingObj({
-        sort:
-          sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc,
+        sort: nextSort,
         column: column,
       });
     },
   });
 
   const columns = [
-    // {
-    //   title: (
-    //     <TitleWithSort
-    //       title={t('table:table-item-id')}
-    //       ascending={
-    //         sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
-    //       }
-    //       isActive={sortingObj.column === 'id'}
-    //     />
-    //   ),
-    //   className: 'cursor-pointer',
-    //   dataIndex: 'id',
-    //   key: 'id',
-    //   align: alignLeft,
-    //   width: 150,
-    //   onHeaderCell: () => onHeaderClick('id'),
-    //   render: (id: number) => `#${t('table:table-item-id')}: ${id}`,
-    // },
     {
       title: (
         <TitleWithSort
           title={t('table:table-item-title')}
           ascending={
-            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'first_name'
           }
-          isActive={sortingObj.column === 'id'}
+          isActive={sortingObj.column === 'first_name'}
         />
       ),
       className: 'cursor-pointer',

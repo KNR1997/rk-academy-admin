@@ -1,40 +1,32 @@
-import Pagination from '@/components/ui/pagination';
-import { Table } from '@/components/ui/table';
-import { getIcon } from '@/utils/get-icon';
-import * as categoriesIcon from '@/components/icons/category';
-import {
-  AcademicYear,
-  GradeLevel,
-  SortOrder,
-  Student,
-  Subject,
-  User,
-} from '@/types';
-import Image from 'next/image';
-import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@/utils/locals';
 import { useState } from 'react';
-import TitleWithSort from '@/components/ui/title-with-sort';
+import { useTranslation } from 'next-i18next';
+// types
 import { MappedPaginatorInfo } from '@/types';
+import { AcademicYear, GradeLevel, SortOrder, Student, User } from '@/types';
+// utils
+import { useIsRTL } from '@/utils/locals';
+// config
 import { Routes } from '@/config/routes';
-import LanguageSwitcher from '@/components/ui/lang-action/action';
-import { NoDataFound } from '@/components/icons/no-data-found';
+// components
+import { Table } from '@/components/ui/table';
 import Avatar from '@/components/common/avatar';
 import Badge from '@/components/ui/badge/badge';
+import Pagination from '@/components/ui/pagination';
+import TitleWithSort from '@/components/ui/title-with-sort';
+import { NoDataFound } from '@/components/icons/no-data-found';
+import LanguageSwitcher from '@/components/ui/lang-action/action';
 
 export type IProps = {
   students: Student[] | undefined;
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
-  onSort: (current: any) => void;
-  onOrder: (current: string) => void;
+  onOrdering: (current: any) => void;
 };
 const StudentList = ({
   students,
   paginatorInfo,
   onPagination,
-  onSort,
-  onOrder,
+  onOrdering,
 }: IProps) => {
   const { t } = useTranslation();
   const rowExpandable = (record: any) => record.children?.length;
@@ -49,16 +41,14 @@ const StudentList = ({
 
   const onHeaderClick = (column: string | null) => ({
     onClick: () => {
-      onSort((currentSortDirection: SortOrder) =>
-        currentSortDirection === SortOrder.Desc
-          ? SortOrder.Asc
-          : SortOrder.Desc,
-      );
-      onOrder(column!);
+      const nextSort =
+        sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc;
 
+      const ordering = nextSort === SortOrder.Desc ? `-${column}` : column;
+
+      onOrdering(ordering);
       setSortingObj({
-        sort:
-          sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc,
+        sort: nextSort,
         column: column,
       });
     },
@@ -78,9 +68,10 @@ const StudentList = ({
         <TitleWithSort
           title={t('table:table-item-title')}
           ascending={
-            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'user__first_name'
           }
-          isActive={sortingObj.column === 'id'}
+          isActive={sortingObj.column === 'user__first_name'}
         />
       ),
       className: 'cursor-pointer',
@@ -89,13 +80,16 @@ const StudentList = ({
       align: alignLeft,
       width: 180,
       ellipsis: true,
-      onHeaderCell: () => onHeaderClick('student_number'),
+      onHeaderCell: () => onHeaderClick('user__first_name'),
       render: (
         student_number: string,
         { profile, email, user }: { profile: any; email: string; user: User },
       ) => (
         <div className="flex items-center">
-          <Avatar name={`${user.first_name} ${user.last_name}`} src={profile?.avatar?.thumbnail} />
+          <Avatar
+            name={`${user.first_name} ${user.last_name}`}
+            src={profile?.avatar?.thumbnail}
+          />
           <div className="flex flex-col whitespace-nowrap font-medium ms-2">
             {user.first_name} {user.last_name}
             <span className="text-[13px] font-normal text-gray-500/80">
