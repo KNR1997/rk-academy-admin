@@ -114,6 +114,7 @@ export const useMessagesQuery = (options: Partial<MessageQueryOptions>) => {
     {
       getNextPageParam: ({ current_page, last_page }) =>
         last_page > current_page && { page: current_page + 1 },
+      enabled: !!options.slug,
     }
   );
 
@@ -145,6 +146,7 @@ export const useConversationQuery = ({ id }: { id: string }) => {
     () => conversationsClient.getConversion({ id }),
     {
       keepPreviousData: true,
+      enabled: !!id,
     }
   );
 

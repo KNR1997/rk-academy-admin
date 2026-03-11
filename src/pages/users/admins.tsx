@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-// types
-import { SortOrder } from '@/types';
 // utils
 import { adminOnly } from '@/utils/auth-utils';
 // hooks
@@ -20,15 +18,13 @@ export default function Admins() {
   // states
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const [ordering, setOrdering] = useState('created_at');
   // query
   const { admins, paginatorInfo, loading, error } = useAdminsQuery({
     limit: 20,
     page,
     name: searchTerm,
-    orderBy,
-    sortedBy,
+    ordering,
   });
 
   if (loading) return <Loader text={t('common:text-loading')} />;
@@ -56,8 +52,7 @@ export default function Admins() {
           admins={admins}
           paginatorInfo={paginatorInfo}
           onPagination={handlePagination}
-          onOrder={setOrder}
-          onSort={setColumn}
+          onOrdering={setOrdering}
         />
       )}
     </>

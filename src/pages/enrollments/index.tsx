@@ -6,15 +6,15 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Config } from '@/config';
 import { Routes } from '@/config/routes';
 // utils
-import { adminOnly } from '@/utils/auth-utils';
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // types
-import { GradeLevel, SortOrder } from '@/types';
+import { GradeLevel } from '@/types';
 // hooks
 import { useEnrollmentsWithMonthsQuery } from '@/data/enrollment';
 // components
 import Card from '@/components/common/card';
-import Layout from '@/components/layouts/admin';
 import Search from '@/components/common/search';
+import AppLayout from '@/components/layouts/app';
 import Loader from '@/components/ui/loader/loader';
 import LinkButton from '@/components/ui/link-button';
 import ErrorMessage from '@/components/ui/error-message';
@@ -35,8 +35,7 @@ export default function Enrollments() {
   const [grade, setGrade] = useState('');
   const [batch, setBatch] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  const [ordering, setOrdering] = useState('-created_at');
   // query
   const { enrollmentsWithMonths, paginatorInfo, loading, error } =
     useEnrollmentsWithMonthsQuery({
@@ -45,8 +44,7 @@ export default function Enrollments() {
       name: searchTerm,
       grade_level: grade,
       batch: batch,
-      ordering: orderBy,
-      sortedBy,
+      ordering,
       language: locale,
     });
 
@@ -142,17 +140,16 @@ export default function Enrollments() {
         enrollmentsWithMonths={enrollmentsWithMonths}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}
-        onOrder={setOrder}
-        onSort={setColumn}
+        onOrdering={setOrdering}
       />
     </>
   );
 }
 
 Enrollments.authenticate = {
-  permissions: adminOnly,
+  permissions: adminAndCoordinatorOnly,
 };
-Enrollments.Layout = Layout;
+Enrollments.Layout = AppLayout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {

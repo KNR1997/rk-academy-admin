@@ -1,30 +1,32 @@
-import Pagination from '@/components/ui/pagination';
-import { Table } from '@/components/ui/table';
-import { SortOrder, Teacher, User } from '@/types';
-import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@/utils/locals';
 import { useState } from 'react';
-import TitleWithSort from '@/components/ui/title-with-sort';
-import { MappedPaginatorInfo } from '@/types';
+import { useTranslation } from 'next-i18next';
+// utils
+import { useIsRTL } from '@/utils/locals';
+// config
 import { Routes } from '@/config/routes';
-import LanguageSwitcher from '@/components/ui/lang-action/action';
-import { NoDataFound } from '@/components/icons/no-data-found';
+// types
+import { MappedPaginatorInfo } from '@/types';
+import { SortOrder, Teacher, User } from '@/types';
+// components
+import { Table } from '@/components/ui/table';
 import Avatar from '@/components/common/avatar';
 import Badge from '@/components/ui/badge/badge';
+import Pagination from '@/components/ui/pagination';
+import TitleWithSort from '@/components/ui/title-with-sort';
+import { NoDataFound } from '@/components/icons/no-data-found';
+import LanguageSwitcher from '@/components/ui/lang-action/action';
 
 export type IProps = {
   teachers: Teacher[] | undefined;
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
-  onSort: (current: any) => void;
-  onOrder: (current: string) => void;
+  onOrdering: (current: any) => void;
 };
 const TeacherList = ({
   teachers,
   paginatorInfo,
   onPagination,
-  onSort,
-  onOrder,
+  onOrdering,
 }: IProps) => {
   const { t } = useTranslation();
   const rowExpandable = (record: any) => record.children?.length;
@@ -37,18 +39,17 @@ const TeacherList = ({
     column: null,
   });
 
-  const onHeaderClick = (column: string | null) => ({
+  const onHeaderClick = (column: any | null) => ({
     onClick: () => {
-      onSort((currentSortDirection: SortOrder) =>
-        currentSortDirection === SortOrder.Desc
-          ? SortOrder.Asc
-          : SortOrder.Desc,
-      );
-      onOrder(column!);
+      const nextSort =
+        sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc;
+
+      const ordering = nextSort === SortOrder.Desc ? `-${column}` : column;
+
+      onOrdering(ordering);
 
       setSortingObj({
-        sort:
-          sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc,
+        sort: nextSort,
         column: column,
       });
     },
@@ -68,9 +69,10 @@ const TeacherList = ({
         <TitleWithSort
           title={t('table:table-item-title')}
           ascending={
-            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'user__first_name'
           }
-          isActive={sortingObj.column === 'id'}
+          isActive={sortingObj.column === 'user__first_name'}
         />
       ),
       className: 'cursor-pointer',
@@ -79,7 +81,7 @@ const TeacherList = ({
       align: alignLeft,
       width: 250,
       ellipsis: true,
-      onHeaderCell: () => onHeaderClick('teacher_number'),
+      onHeaderCell: () => onHeaderClick('user__first_name'),
       render: (
         teacher_number: string,
         { profile, email, user }: { profile: any; email: string; user: User },

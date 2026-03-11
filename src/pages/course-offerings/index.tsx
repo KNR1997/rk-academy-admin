@@ -1,9 +1,14 @@
 import { useState } from 'react';
-import { Config } from '@/config';
 import { useRouter } from 'next/router';
-import { Routes } from '@/config/routes';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// config
+import { Config } from '@/config';
+import { Routes } from '@/config/routes';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
+// hooks
+import { useCourseOfferingsQuery } from '@/data/course-offering';
 // components
 import Card from '@/components/common/card';
 import Layout from '@/components/layouts/admin';
@@ -13,10 +18,6 @@ import LinkButton from '@/components/ui/link-button';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
 import CourseOfferingList from '@/components/course-offering/course-offering-list';
-// utils
-import { adminOnly } from '@/utils/auth-utils';
-// hooks
-import { useCourseOfferingsQuery } from '@/data/course-offering';
 
 export default function CourseOfferings() {
   const { locale } = useRouter();

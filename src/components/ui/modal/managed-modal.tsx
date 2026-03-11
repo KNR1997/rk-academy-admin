@@ -16,6 +16,9 @@ const EnrollmentDeleteView = dynamic(
 const TeacherDeleteView = dynamic(
   () => import('@/components/teacher/teacher-delete-view'),
 );
+const CoordinatorDeleteView = dynamic(
+  () => import('@/components/coordinator/coordinator-delete-view'),
+);
 const BanCustomerView = dynamic(
   () => import('@/components/user/user-ban-view'),
 );
@@ -51,6 +54,10 @@ const SearchModal = dynamic(
   () => import('@/components/layouts/topbar/search-modal'),
 );
 
+const ComposerMessage = dynamic(
+  () => import('@/components/message/compose-message'),
+);
+
 function renderModal(view: MODAL_VIEWS | undefined, data: any) {
   switch (view) {
     case 'DELETE_SUBJECT':
@@ -61,6 +68,8 @@ function renderModal(view: MODAL_VIEWS | undefined, data: any) {
       return <EnrollmentDeleteView />;
     case 'DELETE_TEACHER':
       return <TeacherDeleteView />;
+    case 'DELETE_COORDINATOR':
+      return <CoordinatorDeleteView />;
     case 'ENROLLMENT_PAYMENT_VIEW':
       return <EnrollmentPaymentView />;
     case 'DELETE_STORE_NOTICE':
@@ -83,6 +92,8 @@ function renderModal(view: MODAL_VIEWS | undefined, data: any) {
       return <DeclineAbuseReportView />;
     case 'REVIEW_IMAGE_POPOVER':
       return <ReviewImageModal />;
+    case 'COMPOSE_MESSAGE':
+      return <ComposerMessage />;
     case 'ABUSE_REPORT':
     case 'SEARCH_VIEW':
       return <SearchModal />;

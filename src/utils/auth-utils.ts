@@ -11,19 +11,36 @@ import {
   STUDENT,
   ADMIN,
   TEACHER,
+  COORDINATOR,
 } from './constants';
+import { GetServerSideProps } from 'next';
 
-export const allowedRoles = [SUPER_ADMIN, TEACHER, STORE_OWNER, STAFF, STUDENT];
+export const allowedRoles = [
+  SUPER_ADMIN,
+  ADMIN,
+  TEACHER,
+  STORE_OWNER,
+  STAFF,
+  STUDENT,
+  COORDINATOR,
+];
+export const adminAndCoordinatorOnly = [SUPER_ADMIN, COORDINATOR];
 export const adminAndOwnerOnly = [SUPER_ADMIN, STORE_OWNER];
 export const adminOwnerAndStaffOnly = [SUPER_ADMIN, STORE_OWNER, STAFF];
 export const adminAndStudentOnly = [SUPER_ADMIN, ADMIN, TEACHER, STUDENT];
 export const adminOnly = [SUPER_ADMIN];
 export const ownerOnly = [STORE_OWNER];
+export const coordinatorOnly = [COORDINATOR];
 export const ownerAndStaffOnly = [STORE_OWNER, STAFF];
 export const studentOnly = [STUDENT];
 export const teacherOnly = [TEACHER];
 
-export function setAuthCredentials(token: string, permissions: any, role: any, refresh: string) {
+export function setAuthCredentials(
+  token: string,
+  permissions: any,
+  role: any,
+  refresh: string,
+) {
   Cookie.set(AUTH_CRED, JSON.stringify({ token, permissions, role, refresh }));
 }
 export function setEmailVerified(emailVerified: boolean) {
@@ -76,3 +93,22 @@ export function isAuthenticated(_cookies: any) {
     !!_cookies[PERMISSIONS].length
   );
 }
+
+// export const withAuth = (gssp: GetServerSideProps) => async (ctx: any) => {
+//   const { token, permissions } = getAuthCredentials(ctx);
+
+//   if (!isAuthenticated({ token, permissions })) {
+//     return { redirect: { destination: '/login', permanent: false } };
+//   }
+
+//   const result = await gssp(ctx);
+
+//   return {
+//     ...result,
+//     props: {
+//       // @ts-ignore
+//       ...result.props,
+//       userPermissions: permissions,
+//     },
+//   };
+// };

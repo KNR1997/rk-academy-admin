@@ -159,6 +159,22 @@ export interface Course {
   fee: number;
 }
 
+export interface Coordinator {
+  id: string;
+  name: string;
+  slug: string;
+  fee: number;
+}
+
+export interface CreateCoordinatorInput {
+  first_name: string;
+  last_name: string;
+  display_name: string;
+  mobile_number: string;
+  email: string;
+  password: string;
+}
+
 export interface CourseOffering {
   id: string;
   course: Course;
@@ -234,6 +250,7 @@ export interface AcademicYear {
 export interface Student {
   id: string;
   student_number: string;
+  exam_year: string;
   date_of_birth: string;
   gender: string;
   is_active: string;
@@ -407,6 +424,7 @@ export interface User {
   username: string;
   first_name: string;
   last_name: string;
+  full_name: string;
   display_name: string;
   shops: Shop[];
   managed_shop: Shop;
@@ -768,18 +786,19 @@ export interface LatestMessage {
   updated_at: string;
   user_id: string;
   id: string;
+  my_message: boolean;
 }
 
 export interface Conversations {
   id: string;
+  is_group: boolean;
+  latest_message: LatestMessage;
   created_at: string;
   updated_at: string;
-  shop_id: number;
-  unseen?: boolean;
-  user_id: string;
-  user: User;
-  shop: Shop;
-  latest_message: LatestMessage;
+  participants: {
+    id: string;
+    user: User;
+  }[]
 }
 
 export interface Message extends LatestMessage {
@@ -1266,12 +1285,20 @@ export interface CourseQueryOptions extends QueryOptions {
   name: string;
 }
 
+export interface CoordinatorQueryOptions extends QueryOptions {
+  name: string;
+}
+
 export interface CourseOfferingQueryOptions extends QueryOptions {
   name: string;
   grade_level: string;
 }
 
 export interface UserQueryOptions extends QueryOptions {
+  name: string;
+}
+
+export interface AdminQueryOptions extends QueryOptions {
   name: string;
 }
 
@@ -1568,6 +1595,8 @@ export interface StudentPaginator extends PaginatorInfo<Student> {}
 export interface TeacherPaginator extends PaginatorInfo<Teacher> {}
 
 export interface CoursePaginator extends PaginatorInfo<Course> {}
+
+export interface CoordinatorPaginator extends PaginatorInfo<Coordinator> {}
 
 export interface CourseOfferingPaginator
   extends PaginatorInfo<CourseOffering> {}

@@ -1,16 +1,22 @@
-import Layout from '@/components/layouts/admin';
 import { useRouter } from 'next/router';
-import ErrorMessage from '@/components/ui/error-message';
-import Loader from '@/components/ui/loader/loader';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// config
 import { Config } from '@/config';
+// hooks
 import { useStudentQuery } from '@/data/student';
+// utils
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
+// components
+import AppLayout from '@/components/layouts/app';
+import Loader from '@/components/ui/loader/loader';
+import ErrorMessage from '@/components/ui/error-message';
 import CreateOrUpdateStudentForm from '@/components/student/student-form';
 
 export default function UpdateStudentPage() {
-  const { query, locale } = useRouter();
   const { t } = useTranslation();
+  const { query, locale } = useRouter();
+  // queries
   const {
     student,
     isLoading: loading,
@@ -37,7 +43,10 @@ export default function UpdateStudentPage() {
   );
 }
 
-UpdateStudentPage.Layout = Layout;
+UpdateStudentPage.authenticate = {
+  permissions: adminAndCoordinatorOnly,
+};
+UpdateStudentPage.Layout = AppLayout;
 
 export const getServerSideProps = async ({ locale }: any) => ({
   props: {

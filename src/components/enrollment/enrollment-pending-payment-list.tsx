@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Routes } from '@/config/routes';
-import { useIsRTL } from '@/utils/locals';
 import { useTranslation } from 'next-i18next';
+// config
+import { Routes } from '@/config/routes';
+// utils
+import { useIsRTL } from '@/utils/locals';
 // types
-import { CourseOffering, Enrollment, SortOrder, Student } from '@/types';
 import { MappedPaginatorInfo } from '@/types';
+import { CourseOffering, Enrollment, SortOrder, Student } from '@/types';
 // components
 import { Table } from '@/components/ui/table';
 import Avatar from '@/components/common/avatar';
@@ -18,15 +20,13 @@ export type IProps = {
   enrollments: Enrollment[] | undefined;
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
-  onSort: (current: any) => void;
-  onOrder: (current: string) => void;
+  onOrdering: (current: any) => void;
 };
 const EnrollmentPendingPaymentList = ({
   enrollments,
   paginatorInfo,
   onPagination,
-  onSort,
-  onOrder,
+  onOrdering,
 }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft, alignRight } = useIsRTL();
@@ -40,38 +40,31 @@ const EnrollmentPendingPaymentList = ({
 
   const onHeaderClick = (column: string | null) => ({
     onClick: () => {
-      onSort((currentSortDirection: SortOrder) =>
-        currentSortDirection === SortOrder.Desc
-          ? SortOrder.Asc
-          : SortOrder.Desc,
-      );
-      onOrder(column!);
+      const nextSort =
+        sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc;
 
+      const ordering = nextSort === SortOrder.Desc ? `-${column}` : column;
+
+      onOrdering(ordering);
       setSortingObj({
-        sort:
-          sortingObj.sort === SortOrder.Desc ? SortOrder.Asc : SortOrder.Desc,
+        sort: nextSort,
         column: column,
       });
     },
   });
 
   const columns = [
-    // {
-    //   title: t('table:table-item-id'),
-    //   dataIndex: 'id',
-    //   key: 'id',
-    //   align: alignLeft,
-    //   width: 120,
-    //   render: (id: number) => `#${t('table:table-item-id')}: ${id}`,
-    // },
     {
       title: (
         <TitleWithSort
           title={t('table:table-item-student')}
           ascending={
-            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'student__user__first_name'
           }
-          isActive={sortingObj.column === 'id'}
+          isActive={
+            sortingObj.column === 'student__user__first_name'
+          }
         />
       ),
       className: 'cursor-pointer',
@@ -80,7 +73,8 @@ const EnrollmentPendingPaymentList = ({
       align: alignLeft,
       width: 250,
       ellipsis: true,
-      onHeaderCell: () => onHeaderClick('student'),
+      onHeaderCell: () =>
+        onHeaderClick('student__user__first_name'),
       render: (
         student: Student,
         { profile, email }: { profile: any; email: string },

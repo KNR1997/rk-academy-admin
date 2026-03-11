@@ -1,20 +1,18 @@
 import { useState } from 'react';
-import { Routes } from '@/config/routes';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // utils
 import { adminOnly } from '@/utils/auth-utils';
+// hooks
+import { useUsersQuery } from '@/data/user';
 // components
 import Card from '@/components/common/card';
 import Layout from '@/components/layouts/admin';
 import Search from '@/components/common/search';
 import UserList from '@/components/user/user-list';
 import Loader from '@/components/ui/loader/loader';
-import LinkButton from '@/components/ui/link-button';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
-// hooks
-import { useUsersQuery } from '@/data/user';
 
 export default function AllUsersPage() {
   const { t } = useTranslation();
@@ -54,13 +52,6 @@ export default function AllUsersPage() {
             onSearch={handleSearch}
             placeholderText={t('form:input-placeholder-search-name')}
           />
-
-          {/* <LinkButton
-            href={`${Routes.user.create}`}
-            className="h-12 w-full md:w-auto md:ms-6"
-          >
-            <span>+ {t('form:button-label-add-user')}</span>
-          </LinkButton> */}
         </div>
       </Card>
 

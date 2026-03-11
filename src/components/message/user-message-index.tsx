@@ -1,38 +1,44 @@
-import Loader from '@/components/ui/loader/loader';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
-import UserMessageView from '@/components/message/views/message-view';
+import { useRouter } from 'next/router';
+import { useEffect, useRef } from 'react';
+import { useTranslation } from 'next-i18next';
+// utils
+import { LIMIT } from '@/utils/constants';
+import { RESPONSIVE_WIDTH } from '@/utils/constants';
+import { useWindowSize } from '@/utils/use-window-size';
+// types
+import { Conversations, Shop } from '@/types';
+// hooks
+import { useMessageSeen } from '@/data/conversations';
 import { useMessagesQuery } from '@/data/conversations';
 import { useConversationQuery } from '@/data/conversations';
-import { LIMIT } from '@/utils/constants';
-import SelectConversation from '@/components/message/views/select-conversation';
-import BlockedView from '@/components/message/views/blocked-view';
-import CreateMessageForm from '@/components/message/views/form-view';
-import HeaderView from '@/components/message/views/header-view';
-import { useEffect, useRef } from 'react';
-import MessageCardLoader from '@/components/message/content-loader';
-import { useWindowSize } from '@/utils/use-window-size';
-import { RESPONSIVE_WIDTH } from '@/utils/constants';
+// components
+import Loader from '@/components/ui/loader/loader';
 import ErrorMessage from '@/components/ui/error-message';
-import { useMessageSeen } from '@/data/conversations';
-import { Conversations, Shop } from '@/types';
+import HeaderView from '@/components/message/views/header-view';
+import BlockedView from '@/components/message/views/blocked-view';
+import MessageCardLoader from '@/components/message/content-loader';
+import CreateMessageForm from '@/components/message/views/form-view';
+import UserMessageView from '@/components/message/views/message-view';
+import SelectConversation from '@/components/message/views/select-conversation';
 
 interface Props {
   className?: string;
 }
 
 const UserMessageIndex = ({ className, ...rest }: Props) => {
+  const router = useRouter();
+  const { query } = router;
   const { t } = useTranslation();
   const loadMoreRef = useRef(null);
-  const router = useRouter();
+  const { width } = useWindowSize();
+  // mutations
   const { mutate: createSeenMessage } = useMessageSeen();
-  const { query } = router;
+  // query
   const { data, loading, error } = useConversationQuery({
     id: query.id as string,
   });
-  const { width } = useWindowSize();
   let {
     error: messageError,
     messages,
@@ -45,6 +51,7 @@ const UserMessageIndex = ({ className, ...rest }: Props) => {
   } = useMessagesQuery({
     slug: query?.id as string,
     limit: LIMIT,
+    ordering: '-created_at',
   });
 
   useEffect(() => {

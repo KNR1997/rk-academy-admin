@@ -170,8 +170,9 @@ const UserMessageView = ({
             {!isEmpty(messages) ? (
               <div className="space-y-6">
                 {messages?.map((item: Message, key: number) => {
-                  const { body, created_at, user_id, conversation } = item;
-                  const checkUser = Number(data?.id) === Number(user_id);
+                  const { body, created_at, user_id, user, conversation, my_message } = item;
+                  // const checkUser = Number(data?.id) === Number(user_id);
+                  const checkUser = my_message;
                   let avatarUrl = !permission
                     ? conversation?.user?.profile?.avatar?.original
                     : item?.conversation?.shop?.logo?.original;

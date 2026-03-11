@@ -59,11 +59,22 @@ const CourseOfferingList = ({
 
   const columns = [
     {
-      title: t('table:table-item-course'),
+      title: (
+        <TitleWithSort
+          title={t('table:table-item-course')}
+          ascending={
+            sortingObj.sort === SortOrder.Asc &&
+            sortingObj.column === 'course__name'
+          }
+          isActive={sortingObj.column === 'course__name'}
+        />
+      ),
       dataIndex: 'course',
       key: 'course',
       align: alignLeft,
       width: 120,
+      ellipsis: true,
+      onHeaderCell: () => onHeaderClick('course__name'),
       render: (course: Course) => (
         <div
           className="overflow-hidden truncate whitespace-nowrap"

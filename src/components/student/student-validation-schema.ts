@@ -3,7 +3,7 @@ import * as yup from 'yup';
 export const studentValidationSchema = yup.object().shape({
   first_name: yup.string().required('form:error-first-name-required'),
   last_name: yup.string().required('form:error-last-name-required'),
-  email: yup.string().email().required('form:error-email-required'),
+  // email: yup.string().email().required('form:error-email-required'),
   password: yup.string().when('$isEditMode', {
     is: true,
     then: (schema) => schema.notRequired(),
@@ -12,7 +12,13 @@ export const studentValidationSchema = yup.object().shape({
   // username: yup.string().required('form:error-username-required'),
   // date_of_birth: yup.string().required('form:error-birthday-required'),
   // parent_guardian_name: yup.string().required('form:error-guardian-name-required'),
-  parent_guardian_phone: yup.string().max(11, 'maximum 10 digit').optional(),
+  parent_guardian_phone: yup
+    .string()
+    .matches(
+      /^07\d{8}$/,
+      'Phone number must be exactly 10 digits starting with 07',
+    )
+    .required('form:error-contact-number-required'),
   grade_level: yup.object().required('form:error-grade-level-required'),
   academic_year: yup.object().required('form:error-academic-year-required'),
 });

@@ -1,35 +1,37 @@
-import CategoryList from '@/components/category/category-list';
-import Card from '@/components/common/card';
-import Layout from '@/components/layouts/admin';
-import Search from '@/components/common/search';
-import LinkButton from '@/components/ui/link-button';
 import { useState } from 'react';
-import ErrorMessage from '@/components/ui/error-message';
-import Loader from '@/components/ui/loader/loader';
-import { SortOrder, Type } from '@/types';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Routes } from '@/config/routes';
-import { adminOnly } from '@/utils/auth-utils';
-import { useRouter } from 'next/router';
+// config
 import { Config } from '@/config';
-import PageHeading from '@/components/common/page-heading';
+import { Routes } from '@/config/routes';
+// utils
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
+// hooks
 import { useStudentsQuery } from '@/data/student';
+// components
+import Card from '@/components/common/card';
+import Search from '@/components/common/search';
+import AppLayout from '@/components/layouts/app';
+import Loader from '@/components/ui/loader/loader';
+import LinkButton from '@/components/ui/link-button';
+import ErrorMessage from '@/components/ui/error-message';
+import PageHeading from '@/components/common/page-heading';
 import StudentList from '@/components/student/student-list';
 
 export default function Students() {
   const { locale } = useRouter();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
   const { t } = useTranslation();
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  // states
+  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [ordering, setOrdering] = useState('-created_at');
+  // queries
   const { students, paginatorInfo, loading, error } = useStudentsQuery({
     limit: 20,
     page,
     name: searchTerm,
-    orderBy,
-    sortedBy,
+    ordering,
     language: locale,
   });
 
@@ -79,17 +81,16 @@ export default function Students() {
         students={students}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}
-        onOrder={setOrder}
-        onSort={setColumn}
+        onOrdering={setOrdering}
       />
     </>
   );
 }
 
 Students.authenticate = {
-  permissions: adminOnly,
+  permissions: adminAndCoordinatorOnly,
 };
-Students.Layout = Layout;
+Students.Layout = AppLayout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {

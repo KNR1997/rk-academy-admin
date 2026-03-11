@@ -19,6 +19,7 @@ import {
   Course,
   EnrollmentQueryOptions,
   Enrollment,
+  AdminQueryOptions,
 } from '@/types';
 import { mapPaginatorData } from '@/utils/data-mappers';
 import axios from 'axios';
@@ -274,7 +275,7 @@ export const useUsersQuery = (params: Partial<UserQueryOptions>) => {
   };
 };
 
-export const useAdminsQuery = (params: Partial<QueryOptionsType>) => {
+export const useAdminsQuery = (params: Partial<AdminQueryOptions>) => {
   const { data, isLoading, error } = useQuery<UserPaginator, Error>(
     [API_ENDPOINTS.ADMIN_LIST, params],
     () => userClient.fetchAdmins(params),

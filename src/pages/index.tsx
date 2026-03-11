@@ -1,23 +1,31 @@
 import dynamic from 'next/dynamic';
 import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
 import {
   allowedRoles,
   getAuthCredentials,
   hasAccess,
   isAuthenticated,
 } from '@/utils/auth-utils';
-import { SUPER_ADMIN, TEACHER } from '@/utils/constants';
-import AppLayout from '@/components/layouts/app';
-import { Routes } from '@/config/routes';
+import { COORDINATOR, SUPER_ADMIN, TEACHER } from '@/utils/constants';
+// config
 import { Config } from '@/config';
+import { Routes } from '@/config/routes';
+// components
+import AppLayout from '@/components/layouts/app';
 
-const AdminDashboard = dynamic(() => import('@/components/dashboard/admin'));
+const AdminDashboard = dynamic(
+  () => import('@/components/dashboard/admin')
+);
 const TeacherDashboard = dynamic(
   () => import('@/components/dashboard/teacher'),
 );
 const StudentDashboard = dynamic(
   () => import('@/components/dashboard/student'),
+);
+const CoordinatorDashboard = dynamic(
+  () => import('@/components/dashboard/coordinator'),
 );
 
 export default function Dashboard({
@@ -27,11 +35,13 @@ export default function Dashboard({
 }) {
   if (userPermissions?.includes(SUPER_ADMIN)) {
     return <AdminDashboard />;
-  }
-  if (userPermissions?.includes(TEACHER)) {
+  } else if (userPermissions?.includes(TEACHER)) {
     return <TeacherDashboard />;
+  } else if (userPermissions?.includes(COORDINATOR)) {
+    return <CoordinatorDashboard />;
+  } else {
+    return <StudentDashboard />;
   }
-  return <StudentDashboard />;
 }
 
 Dashboard.Layout = AppLayout;

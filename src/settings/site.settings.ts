@@ -1,8 +1,8 @@
 import {
   adminAndOwnerOnly,
-  adminAndStudentOnly,
-  adminOnly,
   adminOwnerAndStaffOnly,
+  allowedRoles,
+  coordinatorOnly,
   ownerAndStaffOnly,
   studentOnly,
 } from '@/utils/auth-utils';
@@ -37,13 +37,13 @@ export const siteSettings = {
       href: Routes.profileUpdate,
       labelTransKey: 'authorized-nav-item-profile',
       icon: 'UserIcon',
-      permission: adminAndStudentOnly,
+      permission: allowedRoles,
     },
     {
       href: Routes.logout,
       labelTransKey: 'authorized-nav-item-logout',
       icon: 'LogOutIcon',
-      permission: adminAndStudentOnly,
+      permission: allowedRoles,
     },
   ],
   currencyCode: 'USD',
@@ -170,7 +170,7 @@ export const siteSettings = {
               {
                 href: Routes.enrollmentPayment.pendingPayments,
                 label: 'text-pending-payments',
-                icon: 'TaxesIcon',
+                icon: 'PendingIcon',
               },
             ],
           },
@@ -198,10 +198,33 @@ export const siteSettings = {
             icon: 'StaffIcon',
           },
           {
+            href: Routes.coordinator.list,
+            label: 'text-coordinator-list',
+            icon: 'CustomersIcon',
+          },
+          {
             href: Routes.student.list,
             label: 'text-student-list',
             icon: 'CustomersIcon',
           },
+        ],
+      },
+
+      feature: {
+        href: '',
+        label: 'text-feature-management',
+        icon: 'SettingsIcon',
+        childMenu: [
+          {
+            href: Routes.message.list,
+            label: 'sidebar-nav-item-message',
+            icon: 'ChatIcon',
+          },
+          // {
+          //   href: Routes.storeNotice.list,
+          //   label: 'sidebar-nav-item-store-notice',
+          //   icon: 'StoreNoticeIcon',
+          // },
         ],
       },
 
@@ -215,7 +238,7 @@ export const siteSettings = {
             label: 'text-income-report',
             icon: 'ReportIcon',
           },
-                    {
+          {
             href: Routes.reports.pendingPayments,
             label: 'text-pending-payments',
             icon: 'ShiftPendingIcon',
@@ -248,6 +271,24 @@ export const siteSettings = {
             label: 'sidebar-nav-item-course-offerings',
             icon: 'ProductsIcon',
           },
+        ],
+      },
+
+      feature: {
+        href: '',
+        label: 'text-feature-management',
+        icon: 'SettingsIcon',
+        childMenu: [
+          {
+            href: Routes.message.list,
+            label: 'sidebar-nav-item-message',
+            icon: 'ChatIcon',
+          },
+          // {
+          //   href: Routes.storeNotice.list,
+          //   label: 'sidebar-nav-item-store-notice',
+          //   icon: 'StoreNoticeIcon',
+          // },
         ],
       },
     },
@@ -339,6 +380,39 @@ export const siteSettings = {
         label: 'sidebar-nav-item-dashboard',
         icon: 'DashboardIcon',
         permissions: ownerAndStaffOnly,
+      },
+    ],
+
+    coordinatorDashboard: [
+      {
+        href: Routes.dashboard,
+        label: 'sidebar-nav-item-dashboard',
+        icon: 'DashboardIcon',
+        permissions: coordinatorOnly,
+      },
+      {
+        href: Routes.student.list,
+        label: 'text-student-list',
+        icon: 'CustomersIcon',
+        permissions: coordinatorOnly,
+      },
+      {
+        href: Routes.enrollment.list,
+        label: 'text-all-enrollments',
+        icon: 'TagIcon',
+        permissions: coordinatorOnly,
+      },
+      {
+        href: Routes.enrollmentPayment.list,
+        label: 'text-all-payments',
+        icon: 'TaxesIcon',
+        permissions: coordinatorOnly,
+      },
+      {
+        href: Routes.enrollmentPayment.pendingPayments,
+        label: 'text-pending-payments',
+        icon: 'PendingIcon',
+        permissions: coordinatorOnly,
       },
     ],
   },
