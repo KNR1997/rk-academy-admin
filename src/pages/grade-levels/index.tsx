@@ -1,35 +1,35 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
+// types
+import { SortOrder } from '@/types';
+// hooks
+import { useGradeLevelsQuery } from '@/data/grade-level';
+// components
 import Card from '@/components/common/card';
 import Layout from '@/components/layouts/admin';
 import Search from '@/components/common/search';
-import LinkButton from '@/components/ui/link-button';
-import { useState } from 'react';
-import ErrorMessage from '@/components/ui/error-message';
 import Loader from '@/components/ui/loader/loader';
-import { SortOrder, Type } from '@/types';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Routes } from '@/config/routes';
-import { adminOnly } from '@/utils/auth-utils';
-import { useRouter } from 'next/router';
-import { Config } from '@/config';
+import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
-import { useCoursesQuery } from '@/data/course';
-import CourseList from '@/components/course/course-list';
-import { useGradeLevelsQuery } from '@/data/grade-level';
 import GradeLevelList from '@/components/grade-level/grade-level-list';
 
 export default function GradeLevels() {
-  const { locale } = useRouter();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
   const { t } = useTranslation();
+  const { locale } = useRouter();
+  // states
+  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
   const [orderBy, setOrder] = useState('created_at');
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+  // query
   const { gradeLevels, paginatorInfo, loading, error } = useGradeLevelsQuery({
     limit: 20,
     page,
     name: searchTerm,
-    orderBy,
     sortedBy,
     language: locale,
   });
@@ -60,7 +60,7 @@ export default function GradeLevels() {
               placeholderText={t('form:input-placeholder-search-name')}
             />
 
-            {locale === Config.defaultLanguage && (
+            {/* {locale === Config.defaultLanguage && (
               <LinkButton
                 href={`${Routes.gradeLevel.create}`}
                 className="h-12 w-full md:w-auto md:ms-6"
@@ -72,7 +72,7 @@ export default function GradeLevels() {
                   + {t('form:button-label-add')}
                 </span>
               </LinkButton>
-            )}
+            )} */}
           </div>
         </div>
       </Card>

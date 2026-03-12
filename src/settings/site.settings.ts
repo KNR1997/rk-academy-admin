@@ -118,23 +118,23 @@ export const siteSettings = {
               },
             ],
           },
-          {
-            href: '',
-            label: 'sidebar-nav-item-grade-levels',
-            icon: 'InformationIcon',
-            childMenu: [
-              {
-                href: Routes.gradeLevel.list,
-                label: 'text-all-grade-levels',
-                icon: 'InformationIcon',
-              },
-              {
-                href: Routes.gradeLevel.create,
-                label: 'text-add-all-grade-levels',
-                icon: 'InformationIcon',
-              },
-            ],
-          },
+          // {
+          //   href: '',
+          //   label: 'sidebar-nav-item-grade-levels',
+          //   icon: 'InformationIcon',
+          //   childMenu: [
+          //     {
+          //       href: Routes.gradeLevel.list,
+          //       label: 'text-all-grade-levels',
+          //       icon: 'InformationIcon',
+          //     },
+          //     {
+          //       href: Routes.gradeLevel.create,
+          //       label: 'text-add-all-grade-levels',
+          //       icon: 'InformationIcon',
+          //     },
+          //   ],
+          // },
           {
             href: '',
             label: 'sidebar-nav-item-enrollments',
