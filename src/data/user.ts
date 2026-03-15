@@ -119,13 +119,13 @@ export const useUpdateUserEmailMutation = () => {
     onSuccess: () => {
       toast.success(t('common:successfully-updated'));
     },
-    onError: (error) => {
-      const {
-        response: { data },
-      }: any = error ?? {};
+    // onError: (error) => {
+    //   const {
+    //     response: { data },
+    //   }: any = error ?? {};
 
-      toast.error(data?.message);
-    },
+    //   toast.error(data?.message);
+    // },
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.ME);
