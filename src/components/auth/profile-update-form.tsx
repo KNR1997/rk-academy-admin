@@ -1,18 +1,20 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 // validations
 import { profileValidationSchema } from './profile-validation-schema';
 // utils
+import { handleMutationError } from '@/utils/handle-mutation-error';
 import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
 // hooks
 import { useUpdateUserMutation } from '@/data/user';
 // components
 import Input from '@/components/ui/input';
+import Alert from '@/components/ui/alert';
 import Card from '@/components/common/card';
 import Button from '@/components/ui/button';
-import FileInput from '@/components/ui/file-input';
 import Description from '@/components/ui/description';
-import { yupResolver } from '@hookform/resolvers/yup';
 import PhoneNumberInput from '@/components/ui/phone-input';
 
 type FormValues = {
@@ -26,10 +28,13 @@ export default function ProfileUpdate({ me }: any) {
   const { t } = useTranslation();
   const { permissions } = getAuthCredentials();
   let permission = hasAccess(adminOnly, permissions);
+  // states
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // mutations
   const { mutate: updateUser, isLoading: loading } = useUpdateUserMutation();
   const {
     register,
+    setError,
     handleSubmit,
     control,
     formState: { errors },
@@ -51,12 +56,26 @@ export default function ProfileUpdate({ me }: any) {
         mobile_number: values.mobile_number,
       },
     };
-    updateUser({ ...input });
+    const mutationOptions = {
+      onError: (error: any) =>
+        handleMutationError(error, setError, setErrorMessage),
+    };
+    updateUser({ ...input }, mutationOptions);
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap pb-8 my-5 border-b border-dashed border-border-base sm:my-8">
+    <>
+      {errorMessage ? (
+        <Alert
+          message={t(`common:${errorMessage}`)}
+          variant="error"
+          closeable={true}
+          className="mt-5"
+          onClose={() => setErrorMessage(null)}
+        />
+      ) : null}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* <div className="flex flex-wrap pb-8 my-5 border-b border-dashed border-border-base sm:my-8">
         <Description
           title={t('form:input-label-avatar')}
           details={t('form:avatar-help-text')}
@@ -66,60 +85,64 @@ export default function ProfileUpdate({ me }: any) {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <FileInput name="profile.avatar" control={control} multiple={false} />
         </Card>
-      </div>
-      {permission ? (
+      </div> */}
+        {permission ? (
+          <div className="flex flex-wrap pb-8 my-5 border-b border-dashed border-border-base sm:my-8">
+            <Description
+              title={t('form:form-notification-title')}
+              details={t('form:form-notification-description')}
+              className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+            />
+          </div>
+        ) : (
+          ''
+        )}
         <div className="flex flex-wrap pb-8 my-5 border-b border-dashed border-border-base sm:my-8">
           <Description
-            title={t('form:form-notification-title')}
-            details={t('form:form-notification-description')}
+            title={t('form:form-title-information')}
+            details={t('form:profile-info-help-text')}
             className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
-        </div>
-      ) : (
-        ''
-      )}
-      <div className="flex flex-wrap pb-8 my-5 border-b border-dashed border-border-base sm:my-8">
-        <Description
-          title={t('form:form-title-information')}
-          details={t('form:profile-info-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
-        />
 
-        <Card className="w-full mb-5 sm:w-8/12 md:w-2/3">
-          <Input
-            label={t('form:input-label-display-name')}
-            {...register('display_name')}
-            error={t(errors.display_name?.message!)}
-            variant="outline"
-            className="mb-5"
-          />
-          <Input
-            label={t('form:input-label-first-name')}
-            {...register('first_name')}
-            error={t(errors.display_name?.message!)}
-            variant="outline"
-            className="mb-5"
-          />
-          <Input
-            label={t('form:input-label-last-name')}
-            {...register('last_name')}
-            error={t(errors.display_name?.message!)}
-            variant="outline"
-            className="mb-5"
-          />
-          <PhoneNumberInput
-            label={t('form:input-label-contact')}
-            {...register('mobile_number')}
-            control={control}
-            error={t(errors.mobile_number?.message!)}
-          />
-        </Card>
-        <div className="w-full text-end">
-          <Button loading={loading} disabled={loading}>
-            {t('form:button-label-save')}
-          </Button>
+          <Card className="w-full mb-5 sm:w-8/12 md:w-2/3">
+            <Input
+              label={t('form:input-label-display-name')}
+              {...register('display_name')}
+              error={t(errors.display_name?.message!)}
+              variant="outline"
+              className="mb-5"
+              required
+            />
+            <Input
+              label={t('form:input-label-first-name')}
+              {...register('first_name')}
+              error={t(errors.first_name?.message!)}
+              variant="outline"
+              className="mb-5"
+              required
+            />
+            <Input
+              label={t('form:input-label-last-name')}
+              {...register('last_name')}
+              error={t(errors.last_name?.message!)}
+              variant="outline"
+              className="mb-5"
+              required
+            />
+            <PhoneNumberInput
+              label={t('form:input-label-contact')}
+              {...register('mobile_number')}
+              control={control}
+              error={t(errors.mobile_number?.message!)}
+            />
+          </Card>
+          <div className="w-full text-end">
+            <Button loading={loading} disabled={loading}>
+              {t('form:button-label-save')}
+            </Button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
