@@ -1,16 +1,8 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { animateScroll } from 'react-scroll';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Control, FieldErrors, useForm } from 'react-hook-form';
-// components
-import Input from '@/components/ui/input';
-import Button from '@/components/ui/button';
-import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
-import SelectInput from '@/components/ui/select-input';
-import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
-import ValidationError from '@/components/ui/form-validation-error';
 // form-validations
 import { subjectValidationSchema } from './course-validation-schema';
 // types
@@ -20,12 +12,22 @@ import {
   generateCourseCode,
   generateCourseName,
 } from '@/utils/use-code-generate';
+import { handleMutationError } from '@/utils/handle-mutation-error';
 // hooks
 import { useSubjectsQuery } from '@/data/subject';
 import {
   useCreateCourseMutation,
   useUpdateCourseMutation,
 } from '@/data/course';
+// components
+import Alert from '@/components/ui/alert';
+import Input from '@/components/ui/input';
+import Button from '@/components/ui/button';
+import Card from '@/components/common/card';
+import Description from '@/components/ui/description';
+import SelectInput from '@/components/ui/select-input';
+import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
+import ValidationError from '@/components/ui/form-validation-error';
 
 function SelectSubject({
   control,
@@ -74,6 +76,8 @@ type IProps = {
 export default function CreateOrUpdateCourseForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  // states
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -95,27 +99,13 @@ export default function CreateOrUpdateCourseForm({ initialValues }: IProps) {
 
   const subject = watch('subject');
 
-  const courseName = generateCourseName(
-    subject?.name,
-  );
-  const courseCode = generateCourseCode(
-    subject?.code,
-  );
+  const courseName = generateCourseName(subject?.name);
+  const courseCode = generateCourseCode(subject?.code);
   // mutations
   const { mutate: createCourse, isLoading: creating } =
     useCreateCourseMutation();
   const { mutate: updateCourse, isLoading: updating } =
     useUpdateCourseMutation();
-
-  const handleMutationError = (error: any) => {
-    Object.keys(error?.response?.data).forEach((field: any) => {
-      setError(field, {
-        type: 'manual',
-        message: error?.response?.data[field],
-      });
-    });
-    animateScroll.scrollToTop();
-  };
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -124,7 +114,10 @@ export default function CreateOrUpdateCourseForm({ initialValues }: IProps) {
       code: courseCode,
       slug: courseCode,
     };
-    const mutationOptions = { onError: handleMutationError };
+    const mutationOptions = {
+      onError: (error: any) =>
+        handleMutationError(error, setError, setErrorMessage),
+    };
     if (!initialValues) {
       createCourse(input, mutationOptions);
     } else {
@@ -139,67 +132,78 @@ export default function CreateOrUpdateCourseForm({ initialValues }: IProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
-        <Description
-          title={t('form:input-label-description')}
-          details={`${
-            initialValues
-              ? t('form:item-description-edit')
-              : t('form:item-description-add')
-          } ${t('form:course-description-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
+    <>
+      {errorMessage ? (
+        <Alert
+          message={t(`common:${errorMessage}`)}
+          variant="error"
+          closeable={true}
+          className="mt-5"
+          onClose={() => setErrorMessage(null)}
         />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <SelectSubject
-            control={control}
-            errors={errors}
-            disabled={!!initialValues}
+      ) : null}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-wrap my-5 sm:my-8">
+          <Description
+            title={t('form:input-label-description')}
+            details={`${
+              initialValues
+                ? t('form:item-description-edit')
+                : t('form:item-description-add')
+            } ${t('form:course-description-helper-text')}`}
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
           />
-          <Input
-            label={t('form:input-label-name')}
-            {...register('name')}
-            error={t(errors.name?.message!)}
-            variant="outline"
-            className="mb-5"
-            disabled
-            value={courseName}
-          />
-          <Input
-            label={t('form:input-label-code')}
-            {...register('code')}
-            type="text"
-            variant="outline"
-            className="mb-4"
-            error={t(errors.code?.message!)}
-            disabled
-            value={courseCode}
-          />
-        </Card>
-      </div>
-      <StickyFooterPanel className="z-0">
-        <div className="text-end">
-          {initialValues && (
-            <Button
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <SelectSubject
+              control={control}
+              errors={errors}
+              disabled={!!initialValues}
+            />
+            <Input
+              label={t('form:input-label-name')}
+              {...register('name')}
+              error={t(errors.name?.message!)}
               variant="outline"
-              onClick={router.back}
-              className="text-sm me-4 md:text-base"
-              type="button"
-            >
-              {t('form:button-label-back')}
-            </Button>
-          )}
-          <Button
-            loading={creating || updating}
-            disabled={creating || updating}
-            className="text-sm md:text-base"
-          >
-            {initialValues
-              ? t('form:button-label-update-course')
-              : t('form:button-label-add-course')}
-          </Button>
+              className="mb-5"
+              disabled
+              value={courseName}
+            />
+            <Input
+              label={t('form:input-label-code')}
+              {...register('code')}
+              type="text"
+              variant="outline"
+              className="mb-4"
+              error={t(errors.code?.message!)}
+              disabled
+              value={courseCode}
+            />
+          </Card>
         </div>
-      </StickyFooterPanel>
-    </form>
+        <StickyFooterPanel className="z-0">
+          <div className="text-end">
+            {initialValues && (
+              <Button
+                variant="outline"
+                onClick={router.back}
+                className="text-sm me-4 md:text-base"
+                type="button"
+              >
+                {t('form:button-label-back')}
+              </Button>
+            )}
+            <Button
+              loading={creating || updating}
+              disabled={creating || updating}
+              className="text-sm md:text-base"
+            >
+              {initialValues
+                ? t('form:button-label-update-course')
+                : t('form:button-label-add-course')}
+            </Button>
+          </div>
+        </StickyFooterPanel>
+      </form>
+    </>
   );
 }

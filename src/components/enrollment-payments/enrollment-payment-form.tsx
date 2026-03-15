@@ -1,22 +1,29 @@
-import { Control, FieldErrors, useForm, useWatch } from 'react-hook-form';
-import Button from '@/components/ui/button';
-import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
 import { useRouter } from 'next/router';
-import { Enrollment, Student } from '@/types';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
-import SelectInput from '../ui/select-input';
-import ValidationError from '@/components/ui/form-validation-error';
-import { animateScroll } from 'react-scroll';
+import { Control, FieldErrors, useForm, useWatch } from 'react-hook-form';
+// types
+import { Enrollment, Student } from '@/types';
+// utils
+import { handleMutationError } from '@/utils/handle-mutation-error';
+// constants
+import { monthOptions } from '@/constants';
+// hooks
 import { useUpdateEnrollmentMutation } from '@/data/enrollment';
 import { useStudentEnrollmentsQuery, useStudentsQuery } from '@/data/student';
 import { useCreateEnrollmentPaymentMutation } from '@/data/enrollment-payment';
+// form-validations
 import { enrollmentPaymentValidationSchema } from './enrollment-payment-validation-schema';
-import { monthOptions } from '@/constants';
-import { useEffect, useRef } from 'react';
+// components
+import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
+import Button from '@/components/ui/button';
+import Card from '@/components/common/card';
+import SelectInput from '../ui/select-input';
+import Description from '@/components/ui/description';
+import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
+import ValidationError from '@/components/ui/form-validation-error';
 
 function SelectCourse({
   control,
@@ -99,6 +106,9 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
 }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  // states
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const isNewTranslation = router?.query?.action === 'translate';
 
   const d = new Date();
@@ -181,16 +191,6 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
   const { mutate: updateEnrollment, isLoading: updating } =
     useUpdateEnrollmentMutation();
 
-  const handleMutationError = (error: any) => {
-    Object.keys(error?.response?.data).forEach((field: any) => {
-      setError(field, {
-        type: 'manual',
-        message: error?.response?.data[field],
-      });
-    });
-    animateScroll.scrollToTop();
-  };
-
   const onSubmit = async (values: FormValues) => {
     const currentYear = new Date().getFullYear();
 
@@ -203,8 +203,10 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
       payment_year: currentYear,
       amount: values.fee,
     };
-    const mutationOptions = { onError: handleMutationError };
-
+    const mutationOptions = {
+      onError: (error: any) =>
+        handleMutationError(error, setError, setErrorMessage),
+    };
     if (!initialValues) {
       createEnrollmentPayment(input, mutationOptions);
     } else {
@@ -219,71 +221,82 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
-        <Description
-          title={t('form:input-label-description')}
-          details={`${
-            initialValues
-              ? t('form:item-description-edit')
-              : t('form:item-description-add')
-          } ${t('form:category-description-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
+    <>
+      {errorMessage ? (
+        <Alert
+          message={t(`common:${errorMessage}`)}
+          variant="error"
+          closeable={true}
+          className="mt-5"
+          onClose={() => setErrorMessage(null)}
         />
-
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <SelectStudent control={control} errors={errors} />
-          <SelectCourse
-            control={control}
-            errors={errors}
-            studentId={selectedStudent?.id}
+      ) : null}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-wrap my-5 sm:my-8">
+          <Description
+            title={t('form:input-label-description')}
+            details={`${
+              initialValues
+                ? t('form:item-description-edit')
+                : t('form:item-description-add')
+            } ${t('form:category-description-helper-text')}`}
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
           />
-          <div className="mb-5">
-            <SelectInput
-              label="Payment Month"
-              name="payment_month"
+
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <SelectStudent control={control} errors={errors} />
+            <SelectCourse
               control={control}
-              options={currentMonthOption}
-              required
+              errors={errors}
+              studentId={selectedStudent?.id}
             />
-            <ValidationError message={t(errors.payment_month?.message)} />
-          </div>
-          <Input
-            label={t('form:input-label-fee')}
-            {...register('fee')}
-            type="number"
-            variant="outline"
-            className="mb-4"
-            required
-            readOnly
-            error={t(errors.fee?.message!)}
-          />
-        </Card>
-      </div>
-      <StickyFooterPanel className="z-0">
-        <div className="text-end">
-          {initialValues && (
-            <Button
+            <div className="mb-5">
+              <SelectInput
+                label="Payment Month"
+                name="payment_month"
+                control={control}
+                options={currentMonthOption}
+                required
+              />
+              <ValidationError message={t(errors.payment_month?.message)} />
+            </div>
+            <Input
+              label={t('form:input-label-fee')}
+              {...register('fee')}
+              type="number"
               variant="outline"
-              onClick={router.back}
-              className="text-sm me-4 md:text-base"
-              type="button"
-            >
-              {t('form:button-label-back')}
-            </Button>
-          )}
-
-          <Button
-            loading={creating || updating}
-            disabled={creating || updating}
-            className="text-sm md:text-base"
-          >
-            {initialValues
-              ? t('form:button-label-update-enrollment-payment')
-              : t('form:button-label-add-enrollment-payment')}
-          </Button>
+              className="mb-4"
+              required
+              readOnly
+              error={t(errors.fee?.message!)}
+            />
+          </Card>
         </div>
-      </StickyFooterPanel>
-    </form>
+        <StickyFooterPanel className="z-0">
+          <div className="text-end">
+            {initialValues && (
+              <Button
+                variant="outline"
+                onClick={router.back}
+                className="text-sm me-4 md:text-base"
+                type="button"
+              >
+                {t('form:button-label-back')}
+              </Button>
+            )}
+
+            <Button
+              loading={creating || updating}
+              disabled={creating || updating}
+              className="text-sm md:text-base"
+            >
+              {initialValues
+                ? t('form:button-label-update-enrollment-payment')
+                : t('form:button-label-add-enrollment-payment')}
+            </Button>
+          </div>
+        </StickyFooterPanel>
+      </form>
+    </>
   );
 }

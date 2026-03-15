@@ -1,23 +1,28 @@
-import Input from '@/components/ui/input';
-import { useForm } from 'react-hook-form';
-import Button from '@/components/ui/button';
-import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Teacher } from '@/types';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
+// types
+import { Teacher } from '@/types';
+// form-validations
 import { teacherValidationSchema } from './teacher-validation-schema';
-import { useState } from 'react';
-import Alert from '@/components/ui/alert';
-import { animateScroll } from 'react-scroll';
-import PhoneNumberInput from '@/components/ui/phone-input';
-import PasswordInput from '@/components/ui/password-input';
+// utils
+import { handleMutationError } from '@/utils/handle-mutation-error';
+// hooks
 import {
   useCreateTeacherMutation,
   useUpdateTeacherMutation,
 } from '@/data/teacher';
+// components
+import Alert from '@/components/ui/alert';
+import Input from '@/components/ui/input';
+import Button from '@/components/ui/button';
+import Card from '@/components/common/card';
+import Description from '@/components/ui/description';
+import PhoneNumberInput from '@/components/ui/phone-input';
+import PasswordInput from '@/components/ui/password-input';
+import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 
 type FormValues = {
   first_name: string;
@@ -43,8 +48,9 @@ type IProps = {
 };
 export default function CreateOrUpdateTeacherForm({ initialValues }: IProps) {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { t } = useTranslation();
+  // states
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {
     control,
     watch,
@@ -71,16 +77,6 @@ export default function CreateOrUpdateTeacherForm({ initialValues }: IProps) {
   const { mutate: updateTeacher, isLoading: updating } =
     useUpdateTeacherMutation();
 
-  const handleMutationError = (error: any) => {
-    Object.keys(error?.response?.data).forEach((field: any) => {
-      setError(field, {
-        type: 'manual',
-        message: error?.response?.data[field],
-      });
-    });
-    animateScroll.scrollToTop();
-  };
-
   const passwordSuggest = watch('mobile_number');
 
   const onSubmit = async (values: FormValues) => {
@@ -93,9 +89,10 @@ export default function CreateOrUpdateTeacherForm({ initialValues }: IProps) {
       department: values.department,
       mobile_number: values.mobile_number,
     };
-
-    const mutationOptions = { onError: handleMutationError };
-
+    const mutationOptions = {
+      onError: (error: any) =>
+        handleMutationError(error, setError, setErrorMessage),
+    };
     if (!initialValues) {
       createTeacher(input, mutationOptions);
     } else {

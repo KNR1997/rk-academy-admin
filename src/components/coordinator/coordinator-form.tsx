@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { animateScroll } from 'react-scroll';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 // types
 import { Coordinator } from '@/types';
+// utils
+import { handleMutationError } from '@/utils/handle-mutation-error';
 // validation schema
 import { coordinatorValidationSchema } from './coordinator-validation-schema';
 // hooks
@@ -72,17 +73,6 @@ const CoordinatorCreateForm = ({ initialValues }: IProps) => {
   const { mutate: updateCoordinator, isLoading: updating } =
     useUpdateCoordinatorMutation();
 
-  const handleMutationError = (error: any) => {
-    Object.keys(error?.response?.data).forEach((field: any) => {
-      setError(field, {
-        type: 'manual',
-        message: error?.response?.data[field],
-      });
-    });
-    setErrorMessage('PICKBAZAR_ERROR.SOMETHING_WENT_WRONG');
-    animateScroll.scrollToTop();
-  };
-
   async function onSubmit(value: FormValues) {
     const input = {
       first_name: value.first_name,
@@ -92,9 +82,10 @@ const CoordinatorCreateForm = ({ initialValues }: IProps) => {
       password: value.password,
       mobile_number: value.mobile_number,
     };
-
-    const mutationOptions = { onError: handleMutationError };
-
+    const mutationOptions = {
+      onError: (error: any) =>
+        handleMutationError(error, setError, setErrorMessage),
+    };
     if (!initialValues) {
       createCoordinator(input, mutationOptions);
     } else {
