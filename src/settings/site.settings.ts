@@ -118,6 +118,23 @@ export const siteSettings = {
               },
             ],
           },
+          {
+            href: '',
+            label: 'sidebar-nav-item-course-videos',
+            icon: 'VideoIcon',
+            childMenu: [
+              {
+                href: Routes.video.list,
+                label: 'text-all-videos',
+                icon: 'VideoIcon',
+              },
+              {
+                href: Routes.video.create,
+                label: 'text-add-all-video',
+                icon: 'VideoIcon',
+              },
+            ],
+          },
           // {
           //   href: '',
           //   label: 'sidebar-nav-item-grade-levels',
@@ -238,11 +255,11 @@ export const siteSettings = {
             label: 'text-income-report',
             icon: 'ReportIcon',
           },
-          {
-            href: Routes.reports.pendingPayments,
-            label: 'text-pending-payments',
-            icon: 'ShiftPendingIcon',
-          },
+          // {
+          //   href: Routes.reports.pendingPayments,
+          //   label: 'text-pending-payments',
+          //   icon: 'ShiftPendingIcon',
+          // },
         ],
       },
     },
