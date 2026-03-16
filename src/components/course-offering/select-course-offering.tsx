@@ -2,15 +2,15 @@ import { QueryClient } from 'react-query';
 import { useTranslation } from 'next-i18next';
 import { Control, FieldErrors } from 'react-hook-form';
 // data
-import { courseClient } from '@/data/client/course';
 import { API_ENDPOINTS } from '@/data/client/api-endpoints';
+import { courseOfferingClient } from '@/data/client/course-offering';
 // types
-import { Course } from '@/types';
+import { CourseOffering } from '@/types';
 // components
 import AsyncSelectInput from '@/components/ui/async-select-input';
 import ValidationError from '@/components/ui/form-validation-error';
 
-export default function SelectCourse({
+export default function SelectCourseOffering({
   control,
   errors,
   disabled,
@@ -24,9 +24,9 @@ export default function SelectCourse({
   async function fetchAsyncOptions(inputValue: string) {
     const queryClient = new QueryClient();
     const data = await queryClient.fetchQuery(
-      [API_ENDPOINTS.COURSES, { text: inputValue, page: 1 }],
+      [API_ENDPOINTS.COURSE_OFFERING, { text: inputValue, page: 1 }],
       () =>
-        courseClient.paginated({
+        courseOfferingClient.paginated({
           name: inputValue,
         }),
     );
@@ -37,16 +37,18 @@ export default function SelectCourse({
   return (
     <div className="mb-5">
       <AsyncSelectInput
-        name="course"
+        name="course_offering"
         control={control}
-        label={t('form:input-label-courses')}
+        label={t('form:input-label-course-offering')}
         loadOptions={fetchAsyncOptions}
-        getOptionLabel={(option: Course) => option.name}
-        getOptionValue={(option: Course) => option.slug}
+        getOptionLabel={(option: CourseOffering) =>
+          `${option.course.name} ${option.year} - Batch ${option.batch}`
+        }
+        getOptionValue={(option: CourseOffering) => option.id}
         disabled={disabled}
         required
       />
-      <ValidationError message={t(errors.course?.message)} />
+      <ValidationError message={t(errors.course_offering?.message)} />
     </div>
   );
 }

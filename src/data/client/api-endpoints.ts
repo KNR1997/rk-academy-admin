@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
   STUDENTS: 'students',
   GRADE_LEVEL: 'grade-levels',
   COURSES: 'courses',
+  VIDEOS: 'videos',
   COORDINATORS: 'coordinators',
   COURSE_OFFERING: 'course-offerings',
   ENROLLMENTS: 'enrollments',
@@ -53,6 +54,6 @@ export const API_ENDPOINTS = {
   READ_ALL_NOTIFY_LOG: 'notify-log-read-all',
   ENROLLED_COURSES: 'enrolled-courses',
   MY_STAFFS: '/my-staffs',
-  MY_ENROLLMENTS: 'students/me/enrollments/',
+  MY_ENROLLMENTS: 'students/me/enrollments',
   ALL_STAFFS: '/all-staffs',
 };

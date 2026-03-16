@@ -120,21 +120,38 @@ export const siteSettings = {
           },
           {
             href: '',
-            label: 'sidebar-nav-item-grade-levels',
-            icon: 'InformationIcon',
+            label: 'sidebar-nav-item-course-videos',
+            icon: 'VideoIcon',
             childMenu: [
               {
-                href: Routes.gradeLevel.list,
-                label: 'text-all-grade-levels',
-                icon: 'InformationIcon',
+                href: Routes.video.list,
+                label: 'text-all-videos',
+                icon: 'VideoIcon',
               },
               {
-                href: Routes.gradeLevel.create,
-                label: 'text-add-all-grade-levels',
-                icon: 'InformationIcon',
+                href: Routes.video.create,
+                label: 'text-add-all-video',
+                icon: 'VideoIcon',
               },
             ],
           },
+          // {
+          //   href: '',
+          //   label: 'sidebar-nav-item-grade-levels',
+          //   icon: 'InformationIcon',
+          //   childMenu: [
+          //     {
+          //       href: Routes.gradeLevel.list,
+          //       label: 'text-all-grade-levels',
+          //       icon: 'InformationIcon',
+          //     },
+          //     {
+          //       href: Routes.gradeLevel.create,
+          //       label: 'text-add-all-grade-levels',
+          //       icon: 'InformationIcon',
+          //     },
+          //   ],
+          // },
           {
             href: '',
             label: 'sidebar-nav-item-enrollments',
@@ -238,11 +255,11 @@ export const siteSettings = {
             label: 'text-income-report',
             icon: 'ReportIcon',
           },
-          {
-            href: Routes.reports.pendingPayments,
-            label: 'text-pending-payments',
-            icon: 'ShiftPendingIcon',
-          },
+          // {
+          //   href: Routes.reports.pendingPayments,
+          //   label: 'text-pending-payments',
+          //   icon: 'ShiftPendingIcon',
+          // },
         ],
       },
     },

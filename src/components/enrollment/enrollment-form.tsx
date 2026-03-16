@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { animateScroll } from 'react-scroll';
 import { useTranslation } from 'next-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Control, FieldErrors, useForm } from 'react-hook-form';
 // types
 import { CourseOffering, Enrollment, Student } from '@/types';
-import { yupResolver } from '@hookform/resolvers/yup';
+// utils
+import { handleMutationError } from '@/utils/handle-mutation-error';
+// form-validations
+import { enrollmentValidationSchema } from './enrollment-validation-schema';
 // constants
 import { activeInactiveStatusOptions } from '@/constants';
 // hooks
@@ -13,16 +17,15 @@ import {
   useCreateEnrollmentMutation,
   useUpdateEnrollmentMutation,
 } from '@/data/enrollment';
-import { useStudentsQuery } from '@/data/student';
 import { useCourseOfferingsQuery } from '@/data/course-offering';
-// form-validation-schema
-import { enrollmentValidationSchema } from './enrollment-validation-schema';
 // components
+import Alert from '@/components/ui/alert';
 import Label from '@/components/ui/label';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
 import Description from '@/components/ui/description';
 import SelectInput from '@/components/ui/select-input';
+import SelectStudent from '@/components/student/select-student';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import ValidationError from '@/components/ui/form-validation-error';
 
@@ -58,36 +61,6 @@ function SelectCourseOffering({
   );
 }
 
-function SelectStudent({
-  control,
-  errors,
-}: {
-  control: Control<FormValues>;
-  errors: FieldErrors;
-}) {
-  const { t } = useTranslation();
-  const { students, paginatorInfo, loading, error } = useStudentsQuery({
-    limit: 20,
-  });
-  return (
-    <div className="mb-5">
-      <Label>{t('form:input-label-student')}</Label>
-      <SelectInput
-        name="student"
-        control={control}
-        getOptionLabel={(option: any) =>
-          `${option.user.first_name} ${option.user.last_name} - ${option.current_grade.name}`
-        }
-        getOptionValue={(option: any) => option.id}
-        options={students!}
-        isLoading={loading}
-        required
-      />
-      <ValidationError message={t(errors.student?.message)} />
-    </div>
-  );
-}
-
 type FormValues = {
   student: Student;
   course_offering: CourseOffering;
@@ -104,8 +77,8 @@ export default function CreateOrUpdateEnrollmentForm({
 }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
-  const isNewTranslation = router?.query?.action === 'translate';
-
+  // states
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {
     watch,
     handleSubmit,
@@ -143,17 +116,9 @@ export default function CreateOrUpdateEnrollmentForm({
   const { mutate: updateEnrollment, isLoading: updating } =
     useUpdateEnrollmentMutation();
 
-  const handleMutationError = (error: any) => {
-    Object.keys(error?.response?.data).forEach((field: any) => {
-      setError(field, {
-        type: 'manual',
-        message: error?.response?.data[field],
-      });
-    });
-    animateScroll.scrollToTop();
-  };
-
   const student = watch('student');
+
+  console.log('student-----------: ', student)
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -161,8 +126,10 @@ export default function CreateOrUpdateEnrollmentForm({
       course_offering: values.course_offering.id,
       is_active: values.is_active.value,
     };
-    const mutationOptions = { onError: handleMutationError };
-
+    const mutationOptions = {
+      onError: (error: any) =>
+        handleMutationError(error, setError, setErrorMessage),
+    };
     if (!initialValues) {
       createEnrollment(input, mutationOptions);
     } else {
@@ -177,60 +144,75 @@ export default function CreateOrUpdateEnrollmentForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
-        <Description
-          title={t('form:input-label-description')}
-          details={`${
-            initialValues
-              ? t('form:item-description-edit')
-              : t('form:item-description-add')
-          } ${t('form:enrollment-description-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
+    <>
+      {errorMessage ? (
+        <Alert
+          message={t(`common:${errorMessage}`)}
+          variant="error"
+          closeable={true}
+          className="mt-5"
+          onClose={() => setErrorMessage(null)}
         />
-
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <SelectStudent control={control} errors={errors} />
-          <SelectCourseOffering
-            control={control}
-            errors={errors}
-            gradeLevel={student?.current_grade?.name}
+      ) : null}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-wrap my-5 sm:my-8">
+          <Description
+            title={t('form:input-label-description')}
+            details={`${
+              initialValues
+                ? t('form:item-description-edit')
+                : t('form:item-description-add')
+            } ${t('form:enrollment-description-helper-text')}`}
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
           />
-          <div className="mb-5">
-            <SelectInput
-              label={t('form:input-label-status')}
-              name="is_active"
-              control={control}
-              options={activeInactiveStatusOptions}
-              isClearable={true}
-            />
-          </div>
-        </Card>
-      </div>
-      <StickyFooterPanel className="z-0">
-        <div className="text-end">
-          {initialValues && (
-            <Button
-              variant="outline"
-              onClick={router.back}
-              className="text-sm me-4 md:text-base"
-              type="button"
-            >
-              {t('form:button-label-back')}
-            </Button>
-          )}
 
-          <Button
-            loading={creating || updating}
-            disabled={creating || updating}
-            className="text-sm md:text-base"
-          >
-            {initialValues
-              ? t('form:button-label-update-enrollment')
-              : t('form:button-label-add-enrollment')}
-          </Button>
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <SelectStudent
+              control={control}
+              errors={errors}
+              disabled={!!initialValues}
+            />
+            <SelectCourseOffering
+              control={control}
+              errors={errors}
+              gradeLevel={student?.current_grade?.name}
+            />
+            <div className="mb-5">
+              <SelectInput
+                label={t('form:input-label-status')}
+                name="is_active"
+                control={control}
+                options={activeInactiveStatusOptions}
+                isClearable={true}
+              />
+            </div>
+          </Card>
         </div>
-      </StickyFooterPanel>
-    </form>
+        <StickyFooterPanel className="z-0">
+          <div className="text-end">
+            {initialValues && (
+              <Button
+                variant="outline"
+                onClick={router.back}
+                className="text-sm me-4 md:text-base"
+                type="button"
+              >
+                {t('form:button-label-back')}
+              </Button>
+            )}
+
+            <Button
+              loading={creating || updating}
+              disabled={creating || updating}
+              className="text-sm md:text-base"
+            >
+              {initialValues
+                ? t('form:button-label-update-enrollment')
+                : t('form:button-label-add-enrollment')}
+            </Button>
+          </div>
+        </StickyFooterPanel>
+      </form>
+    </>
   );
 }

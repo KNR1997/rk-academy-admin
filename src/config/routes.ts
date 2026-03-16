@@ -54,9 +54,12 @@ export const Routes = {
   courseOffering: {
     ...routesFactory('/course-offerings'),
   },
-  gradeLevel: {
-    ...routesFactory('/grade-levels'),
+  video: {
+    ...routesFactory('/videos'),
   },
+  // gradeLevel: {
+  //   ...routesFactory('/grade-levels'),
+  // },
   enrollment: {
     ...routesFactory('/enrollments'),
   },
@@ -98,7 +101,7 @@ export const Routes = {
   ownerDashboardNotifyLogs: '/notify-logs',
   reports: {
     incomeReport: '/reports/income-report',
-    pendingPayments: '/reports/pending-payments',
+    // pendingPayments: '/reports/pending-payments',
   },
 };
 

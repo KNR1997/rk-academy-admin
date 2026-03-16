@@ -4,6 +4,9 @@ import dynamic from 'next/dynamic';
 import { MODAL_VIEWS, useModalAction, useModalState } from './modal.context';
 import EnrollmentPaymentView from '@/components/enrollment-payments/enrollment-payment-view';
 
+const VideoDeleteView = dynamic(
+  () => import('@/components/video/video-delete-view'),
+);
 const SubjectDeleteView = dynamic(
   () => import('@/components/subject/subject-delete-view'),
 );
@@ -62,6 +65,8 @@ function renderModal(view: MODAL_VIEWS | undefined, data: any) {
   switch (view) {
     case 'DELETE_SUBJECT':
       return <SubjectDeleteView />;
+    case 'DELETE_VIDEO':
+      return <VideoDeleteView />;
     case 'DELETE_COURSE':
       return <CourseDeleteView />;
     case 'DELETE_ENROLLMENT':

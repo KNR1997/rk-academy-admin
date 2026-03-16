@@ -152,11 +152,33 @@ export interface Subject {
   code: string;
 }
 
+export interface CourseContent {
+  id: string;
+  month: number;
+  year: number;
+  course_offering: CourseOffering;
+}
+
 export interface Course {
   id: string;
   name: string;
   slug: string;
   fee: number;
+}
+
+export interface Video {
+  id: string;
+  title: string;
+  video_url: string;
+  course_content: CourseContent;
+}
+
+export interface CreateVideo {
+  title: string;
+  video_url: string;
+  month: number;
+  year: number;
+  course_offering_id: string;
 }
 
 export interface Coordinator {
@@ -1285,6 +1307,10 @@ export interface CourseQueryOptions extends QueryOptions {
   name: string;
 }
 
+export interface VideoQueryOptions extends QueryOptions {
+  name: string;
+}
+
 export interface CoordinatorQueryOptions extends QueryOptions {
   name: string;
 }
@@ -1308,6 +1334,13 @@ export interface StudentEnrolledCourseQueryOptions extends QueryOptions {
 }
 
 export interface EnrollmentQueryOptions extends QueryOptions {
+  name: string;
+  grade_level: string;
+  batch: string;
+}
+
+export interface MyEnrollmentVideosQueryOptions extends QueryOptions {
+  enrollment_id: string;
   name: string;
   grade_level: string;
   batch: string;
@@ -1595,6 +1628,8 @@ export interface StudentPaginator extends PaginatorInfo<Student> {}
 export interface TeacherPaginator extends PaginatorInfo<Teacher> {}
 
 export interface CoursePaginator extends PaginatorInfo<Course> {}
+
+export interface VideoPaginator extends PaginatorInfo<Video> {}
 
 export interface CoordinatorPaginator extends PaginatorInfo<Coordinator> {}
 

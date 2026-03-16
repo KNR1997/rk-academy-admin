@@ -1,13 +1,17 @@
+import * as yup from 'yup';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'next-i18next';
+import { yupResolver } from '@hookform/resolvers/yup';
+// hooks
+import { useChangePasswordMutation } from '@/data/user';
+// components
+import Alert from '@/components/ui/alert';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
 import Description from '@/components/ui/description';
-import { toast } from 'react-toastify';
 import PasswordInput from '@/components/ui/password-input';
-import { useChangePasswordMutation } from '@/data/user';
-import { useTranslation } from 'next-i18next';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 
 interface FormValues {
   old_password: string;
@@ -26,8 +30,12 @@ const changePasswordSchema = yup.object().shape({
 
 const ChangePasswordForm = () => {
   const { t } = useTranslation();
+  // states
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // mutations
   const { mutate: changePassword, isLoading: loading } =
     useChangePasswordMutation();
+
   const {
     register,
     handleSubmit,
@@ -39,76 +47,86 @@ const ChangePasswordForm = () => {
   });
 
   async function onSubmit(values: FormValues) {
-    changePassword(
-      {
-        old_password: values.old_password,
-        new_password: values.new_password,
-      },
-      {
-        onError: (error: any) => {
-          Object.keys(error?.response?.data).forEach((field: any) => {
-            setError(field, {
-              type: 'manual',
-              message: error?.response?.data[field][0],
-            });
+    const input = {
+      old_password: values.old_password,
+      new_password: values.new_password,
+    };
+    changePassword(input, {
+      onError: (error: any) => {
+        Object.keys(error?.response?.data).forEach((field: any) => {
+          setError(field, {
+            type: 'manual',
+            message: error?.response?.data[field][0],
           });
-        },
-        onSuccess: (data) => {
-          toast.success(t('common:password-changed-successfully'));
-          reset();
-          // if (!data?.success) {
-          //   setError('old_password', {
-          //     type: 'manual',
-          //     message: data?.message ?? '',
-          //   });
-          // } else if (data?.success) {
-          //   toast.success(t('common:password-changed-successfully'));
-          //   reset();
-          // }
-        },
-      }
-    );
+        });
+        setErrorMessage('PICKBAZAR_ERROR.SOMETHING_WENT_WRONG');
+      },
+      onSuccess: (data) => {
+        toast.success(t('common:password-changed-successfully'));
+        reset();
+        // if (!data?.success) {
+        //   setError('old_password', {
+        //     type: 'manual',
+        //     message: data?.message ?? '',
+        //   });
+        // } else if (data?.success) {
+        //   toast.success(t('common:password-changed-successfully'));
+        //   reset();
+        // }
+      },
+    });
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit(onSubmit)}>
-      <div className="my-5 flex flex-wrap sm:my-8">
-        <Description
-          title={t('form:input-label-password')}
-          details={t('form:password-help-text')}
-          className="sm:pe-4 md:pe-5 w-full px-0 pb-5 sm:w-4/12 sm:py-8 md:w-1/3"
+    <>
+      {errorMessage ? (
+        <Alert
+          message={t(`common:${errorMessage}`)}
+          variant="error"
+          closeable={true}
+          className="mt-5"
+          onClose={() => setErrorMessage(null)}
         />
+      ) : null}
+      <form noValidate onSubmit={handleSubmit(onSubmit)}>
+        <div className="my-5 flex flex-wrap sm:my-8">
+          <Description
+            title={t('form:input-label-password')}
+            details={t('form:password-help-text')}
+            className="sm:pe-4 md:pe-5 w-full px-0 pb-5 sm:w-4/12 sm:py-8 md:w-1/3"
+          />
 
-        <Card className="mb-5 w-full sm:w-8/12 md:w-2/3">
-          <PasswordInput
-            label={t('form:input-label-old-password')}
-            {...register('old_password')}
-            variant="outline"
-            error={t(errors.old_password?.message!)}
-            className="mb-5"
-          />
-          <PasswordInput
-            label={t('form:input-label-new-password')}
-            {...register('new_password')}
-            variant="outline"
-            error={t(errors.new_password?.message!)}
-            className="mb-5"
-          />
-          <PasswordInput
-            label={t('form:input-label-confirm-password')}
-            {...register('passwordConfirmation')}
-            variant="outline"
-            error={t(errors.passwordConfirmation?.message!)}
-          />
-        </Card>
+          <Card className="mb-5 w-full sm:w-8/12 md:w-2/3">
+            <PasswordInput
+              label={t('form:input-label-old-password')}
+              {...register('old_password')}
+              variant="outline"
+              error={t(errors.old_password?.message!)}
+              className="mb-5"
+            />
+            <PasswordInput
+              label={t('form:input-label-new-password')}
+              {...register('new_password')}
+              variant="outline"
+              error={t(errors.new_password?.message!)}
+              className="mb-5"
+            />
+            <PasswordInput
+              label={t('form:input-label-confirm-password')}
+              {...register('passwordConfirmation')}
+              variant="outline"
+              error={t(errors.passwordConfirmation?.message!)}
+            />
+          </Card>
 
-        <div className="text-end w-full">
-          <Button loading={loading} disabled={loading}>
-            {t('form:button-label-change-password')}
-          </Button>
+          <div className="text-end w-full">
+            <Button loading={loading} disabled={loading}>
+              {t('form:button-label-change-password')}
+            </Button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 };
 export default ChangePasswordForm;

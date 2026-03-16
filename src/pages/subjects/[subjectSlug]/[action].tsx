@@ -1,17 +1,22 @@
-import Layout from '@/components/layouts/admin';
 import { useRouter } from 'next/router';
-import ErrorMessage from '@/components/ui/error-message';
-import Loader from '@/components/ui/loader/loader';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// config
 import { Config } from '@/config';
-import CreateOrUpdateSubjectForm from '@/components/subject/subject-form';
+// hooks
 import { useSubjectQuery } from '@/data/subject';
+// utils
 import { adminOnly } from '@/utils/auth-utils';
+// components
+import Layout from '@/components/layouts/admin';
+import Loader from '@/components/ui/loader/loader';
+import ErrorMessage from '@/components/ui/error-message';
+import CreateOrUpdateSubjectForm from '@/components/subject/subject-form';
 
 export default function UpdateSubjectPage() {
   const { query, locale } = useRouter();
   const { t } = useTranslation();
+  // query
   const {
     subject,
     isLoading: loading,
@@ -37,6 +42,7 @@ export default function UpdateSubjectPage() {
     </>
   );
 }
+
 UpdateSubjectPage.authenticate = {
   permissions: adminOnly,
 };

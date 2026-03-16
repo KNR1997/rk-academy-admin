@@ -48,3 +48,4 @@ export { StoreNoticeOwnerIcon } from '@/components/icons/sidebar/store-notice';
 export { ReportIcon } from '@/components/icons/sidebar/report';
 export { ShiftPendingIcon } from '@/components/icons/sidebar/shifts-pending';
 export { PendingIcon } from '@/components/icons/sidebar/pending';
+export { VideoIcon } from '@/components/icons/sidebar/video';

@@ -1,29 +1,69 @@
-import Layout from '@/components/layouts/student';
-import { useTranslation } from 'next-i18next';
-import { studentOnly } from '@/utils/auth-utils';
+import { useState } from 'react';
 import { GetStaticPaths } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
-import Dropdown from '@/components/ui/dropdown';
-import { useCourseQuery } from '@/data/course';
-import ErrorMessage from '@/components/ui/error-message';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { studentOnly } from '@/utils/auth-utils';
+// hooks
+import { useMyEnrollmentVideosPaginatedQuery } from '@/data/user';
+// components
+import Card from '@/components/common/card';
+import Search from '@/components/common/search';
+import Layout from '@/components/layouts/student';
 import Loader from '@/components/ui/loader/loader';
+import VideoList from '@/components/video/video-list';
+import ErrorMessage from '@/components/ui/error-message';
+import PageHeading from '@/components/common/page-heading';
 
 export default function MyCoursePage() {
-  const { query } = useRouter();
+  const { query, locale } = useRouter();
   const { t } = useTranslation();
+  // states
+  const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [ordering, setOrdering] = useState('-created_at');
+  // query
+  const { videos, paginatorInfo, loading, error } =
+    useMyEnrollmentVideosPaginatedQuery({
+      enrollment_id: query.id as string,
+    });
 
-  const { course, isLoading, error } = useCourseQuery({
-    slug: query.id as string,
-  });
-
-  if (isLoading) return <Loader text={t('common:text-loading')} />;
+  if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
+
+  function handleSearch({ searchText }: { searchText: string }) {
+    setSearchTerm(searchText);
+    setPage(1);
+  }
+
+  function handlePagination(current: any) {
+    setPage(current);
+  }
 
   return (
     <>
-      <div className="flex border-b border-dashed border-border-base pb-5 md:pb-7">
+      <Card className="mb-8 flex flex-col">
+        <div className="flex w-full flex-col items-center md:flex-row">
+          <div className="mb-4 md:mb-0 md:w-1/4">
+            <PageHeading title={t('form:input-label-course-videos')} />
+          </div>
+
+          <div className="flex w-full flex-col items-center space-y-4 ms-auto md:flex-row md:space-y-0 xl:w-3/4">
+            <Search
+              onSearch={handleSearch}
+              placeholderText={t('form:input-placeholder-search-name')}
+            />
+          </div>
+        </div>
+      </Card>
+      <VideoList
+        videos={videos}
+        paginatorInfo={paginatorInfo}
+        onPagination={handlePagination}
+        onOrdering={setOrdering}
+      />
+      {/* <div className="flex border-b border-dashed border-border-base pb-5 md:pb-7">
         <h1 className="text-lg font-semibold text-heading">{course?.name}</h1>
       </div>
       <div className="relative h-[20rem] bg-white lg:h-[37.5rem]">
@@ -64,14 +104,15 @@ export default function MyCoursePage() {
             </ul>
           </Dropdown>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
-MyCoursePage.Layout = Layout;
+
 MyCoursePage.authenticate = {
   permissions: studentOnly,
 };
+MyCoursePage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {

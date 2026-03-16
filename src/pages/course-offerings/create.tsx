@@ -1,7 +1,9 @@
-import Layout from '@/components/layouts/admin';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import CreateOrUpdateCourseForm from '@/components/course/course-form';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
+// components
+import Layout from '@/components/layouts/admin';
 import CreateOrUpdateCourseOfferingForm from '@/components/course-offering/course-offering-form';
 
 export default function CreateCourseOfferingPage() {
@@ -18,6 +20,9 @@ export default function CreateCourseOfferingPage() {
   );
 }
 
+CreateCourseOfferingPage.authenticate = {
+  permissions: adminOnly,
+};
 CreateCourseOfferingPage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({

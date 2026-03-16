@@ -2,6 +2,8 @@ import { Config } from '@/config';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
 // hooks
 import { useCourseOfferingQuery } from '@/data/course-offering';
 // components
@@ -39,6 +41,9 @@ export default function UpdateCourseOfferingPage() {
   );
 }
 
+UpdateCourseOfferingPage.authenticate = {
+  permissions: adminOnly,
+};
 UpdateCourseOfferingPage.Layout = Layout;
 
 export const getServerSideProps = async ({ locale }: any) => ({

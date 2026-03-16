@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { animateScroll } from 'react-scroll';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Control, FieldErrors, useForm } from 'react-hook-form';
+// form-validations
 import { studentValidationSchema } from './student-validation-schema';
 // types
 import { AcademicYear, GradeLevel, Student } from '@/types';
+// utils
+import { handleMutationError } from '@/utils/handle-mutation-error';
 // hooks
 import {
   useCreateStudentMutation,
@@ -21,10 +23,10 @@ import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
 import SelectInput from '../ui/select-input';
 import Description from '@/components/ui/description';
+import SelectExamYear from '../exam-year/select-exam-year';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import ValidationError from '@/components/ui/form-validation-error';
 import SelectGradeLevel from '@/components/grade-level/select-grade-level';
-import SelectExamYear from '../exam-year/select-exam-year';
 
 function SelectAcademicYear({
   control,
@@ -88,8 +90,9 @@ type IProps = {
 };
 export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { t } = useTranslation();
+  // states
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isNewTranslation = router?.query?.action === 'translate';
 
   const {
@@ -133,17 +136,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
   const { mutate: updateStudent, isLoading: updating } =
     useUpdateStudentMutation();
 
-  const handleMutationError = (error: any) => {
-    Object.keys(error?.response?.data).forEach((field: any) => {
-      setError(field, {
-        type: 'manual',
-        message: error?.response?.data[field],
-      });
-    });
-    setErrorMessage('PICKBAZAR_ERROR.SOMETHING_WENT_WRONG');
-    animateScroll.scrollToTop();
-  };
-
   const onSubmit = async (values: FormValues) => {
     const input = {
       // username: values.username,
@@ -158,8 +150,10 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
       current_academic_year: values.academic_year.id,
       exam_year: values.exam_year.value,
     };
-    const mutationOptions = { onError: handleMutationError };
-
+    const mutationOptions = {
+      onError: (error: any) =>
+        handleMutationError(error, setError, setErrorMessage),
+    };
     if (!initialValues) {
       createStudent(input, mutationOptions);
     } else {

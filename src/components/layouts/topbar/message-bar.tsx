@@ -1,43 +1,59 @@
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { MessageIcon } from '@/components/icons/sidebar/message';
-import { useConversationsQuery, useMessageSeen } from '@/data/conversations';
-import { LIMIT } from '@/utils/constants';
-import { useNotifyLogAllReadMutation } from '@/data/notify-logs';
-import { Menu, Transition } from '@headlessui/react';
-import cn from 'classnames';
-import Link from '@/components/ui/link';
-import Image from 'next/image';
-import { Fragment, useEffect, useState } from 'react';
-import { isEmpty } from 'lodash';
-import { SortOrder } from '@/types';
 import dayjs from 'dayjs';
-import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
-import { Routes } from '@/config/routes';
-import { MessageAvatarPlaceholderIcon } from '@/components/icons/message-avatar-placeholder-icon';
-import { PusherConfig } from '@/utils/pusher-config';
+import cn from 'classnames';
+import Image from 'next/image';
+import utc from 'dayjs/plugin/utc';
+import { isEmpty } from 'lodash';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import timezone from 'dayjs/plugin/timezone';
+import { useTranslation } from 'next-i18next';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { Menu, Transition } from '@headlessui/react';
+import { Fragment, useEffect, useState } from 'react';
+// config
 import { Config } from '@/config';
+import { Routes } from '@/config/routes';
+// types
+import { Conversations, SortOrder } from '@/types';
+// hooks
+import { useNotifyLogAllReadMutation } from '@/data/notify-logs';
+import { useConversationsQuery, useMessageSeen } from '@/data/conversations';
+// utils
+import { LIMIT } from '@/utils/constants';
+import { PusherConfig } from '@/utils/pusher-config';
+import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
+// components
+import Link from '@/components/ui/link';
+import Avatar from '@/components/common/avatar';
+import { MessageIcon } from '@/components/icons/sidebar/message';
+import { MessageAvatarPlaceholderIcon } from '@/components/icons/message-avatar-placeholder-icon';
+
+dayjs.extend(relativeTime);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 type IProps = {
   user: any;
 };
 
 const MessageBar = ({ user }: IProps) => {
-  const { t } = useTranslation();
-  const [notice, setNotice] = useState([]);
-  let allNotice: any = [];
   const router = useRouter();
-  const [conversationsOpen, setConversationsOpen] = useState(false);
+  const { t } = useTranslation();
   const { permissions } = getAuthCredentials();
   let permission = hasAccess(adminOnly, permissions);
+  // states
+  let allNotice: any = [];
+  const [notice, setNotice] = useState([]);
+  const [conversationsOpen, setConversationsOpen] = useState(false);
+  // mutations
   const { mutate: createSeenMessage } = useMessageSeen();
   const { mutate: readAllNotifyLogs, isLoading: creating } =
     useNotifyLogAllReadMutation();
+  // query
   let { conversations } = useConversationsQuery({
     limit: 5,
     sortedBy: SortOrder.Desc,
-    orderBy: 'updated_at',
+    // orderBy: 'updated_at',
   });
 
   const markAllAsRead = () => {
@@ -47,7 +63,7 @@ const MessageBar = ({ user }: IProps) => {
       receiver: user?.id,
     });
   };
-  const activeStatus = conversations.find(({ unseen }) => unseen);
+  // const activeStatus = conversations.find(({ unseen }) => unseen);
 
   useEffect(() => {
     if (Config.broadcastDriver === 'pusher' && Config.pusherEnable === 'true') {
@@ -72,6 +88,21 @@ const MessageBar = ({ user }: IProps) => {
     }
   }, [notice]);
 
+  const getConversationName = (conversation: Conversations) => {
+    if (!conversation?.participants?.length) return '';
+
+    return conversation.participants
+      .map((p) => {
+        if (p.user?.full_name) {
+          return p.user.full_name;
+        } else if (p.user?.display_name) {
+          return p.user.display_name;
+        }
+        return 'Unknown User'; // Fallback if neither exists
+      })
+      .join(', ');
+  };
+
   // here messages will be passed as a props in eventData. to keep the useEffect track of having a new message
   return (
     <>
@@ -79,7 +110,7 @@ const MessageBar = ({ user }: IProps) => {
         <Menu.Button
           className={cn(
             'relative flex h-9 w-9 items-center justify-center gap-2 rounded-full border border-gray-200 bg-gray-50 text-gray-600 before:absolute before:top-0 before:right-0 before:h-2 before:w-2 before:rounded-full focus:outline-none data-[headlessui-state=open]:bg-white data-[headlessui-state=open]:text-accent',
-            activeStatus?.unseen ? 'before:bg-accent' : null
+            // activeStatus?.unseen ? 'before:bg-accent' : null,
           )}
         >
           <MessageIcon
@@ -113,7 +144,7 @@ const MessageBar = ({ user }: IProps) => {
               <>
                 <div className="flex items-center justify-between rounded-tl-lg rounded-tr-lg border-b border-gray-200/80 px-5 py-4 font-medium">
                   <span>{t('text-messages')}</span>
-                  {activeStatus?.unseen ? (
+                  {/* {activeStatus?.unseen ? (
                     <span
                       className="block cursor-pointer text-sm font-medium text-accent hover:text-heading"
                       onClick={markAllAsRead}
@@ -122,14 +153,15 @@ const MessageBar = ({ user }: IProps) => {
                     </span>
                   ) : (
                     ''
-                  )}
+                  )} */}
                 </div>
                 <div className="py-0">
                   {conversations?.length ? (
-                    conversations?.map((item: any) => {
+                    conversations?.map((item: Conversations) => {
                       const routes = permission
                         ? Routes?.message?.details(item?.id)
-                        : Routes?.shopMessage?.details(item?.id);
+                        : // : Routes?.shopMessage?.details(item?.id);
+                          '';
 
                       const seenMessage = (unseen: boolean) => {
                         if (unseen) {
@@ -145,15 +177,15 @@ const MessageBar = ({ user }: IProps) => {
                         >
                           <div
                             className={cn(
-                              'flex gap-2 rounded-md py-3.5 px-5 text-sm font-semibold capitalize transition duration-200 hover:text-accent group-hover:bg-gray-100/70'
+                              'flex gap-2 rounded-md py-3.5 px-5 text-sm font-semibold capitalize transition duration-200 hover:text-accent group-hover:bg-gray-100/70',
                             )}
                             onClick={() => {
                               router.push(`${routes}`);
-                              seenMessage(Boolean(item?.unseen));
+                              // seenMessage(Boolean(item?.unseen));
                             }}
                           >
                             <div className="flex w-full items-center gap-x-3">
-                              <div className="relative h-8 w-8 shrink-0 grow-0 basis-auto rounded-full 2xl:h-9 2xl:w-9">
+                              {/* <div className="relative h-8 w-8 shrink-0 grow-0 basis-auto rounded-full 2xl:h-9 2xl:w-9">
                                 {item?.unseen ? (
                                   <span className="absolute top-0 right-0 z-10 h-2.5 w-2.5 rounded-full border border-white bg-blue-700"></span>
                                 ) : (
@@ -174,26 +206,31 @@ const MessageBar = ({ user }: IProps) => {
                                     color="#DDDDDD"
                                   />
                                 )}
+                              </div> */}
+                              <div className="relative h-8 w-8 shrink-0 grow-0 basis-auto rounded-full 2xl:h-9 2xl:w-9">
+                                {/* {true ? (
+                                  <span className="absolute top-0 right-0 z-10 h-2.5 w-2.5 rounded-full border border-white bg-blue-700"></span>
+                                ) : (
+                                  ''
+                                )} */}
+                                <Avatar
+                                  name={getConversationName(item)}
+                                  className={cn(
+                                    'relative h-full w-full border-0',
+                                    // conversation?.shop?.logo?.original
+                                    //   ? ''
+                                    //   : 'bg-muted-black text-base font-medium text-white',
+                                  )}
+                                />
                               </div>
                               <div className="block w-10/12">
                                 <div className="flex items-center justify-between">
-                                  {isEmpty(item?.latest_message?.body) ? (
-                                    <h2 className="mr-1 w-[70%] truncate text-sm font-semibold">
-                                      {item?.shop?.name}
-                                    </h2>
-                                  ) : (
-                                    <h2 className="mr-1 w-[70%] truncate text-sm font-semibold">
-                                      {item?.shop?.name}
-                                    </h2>
-                                  )}
-
-                                  {item?.latest_message?.created_at ? (
+                                  <h2 className="mr-1 w-[70%] truncate text-sm font-semibold">
+                                    {getConversationName(item)}
+                                  </h2>
+                                  {item?.created_at ? (
                                     <p className="truncate text-xs font-normal text-[#686D73]">
-                                      {dayjs().to(
-                                        dayjs.utc(
-                                          item?.latest_message?.created_at
-                                        )
-                                      )}
+                                      {dayjs().to(dayjs.utc(item?.created_at))}
                                     </p>
                                   ) : (
                                     ''

@@ -20,6 +20,9 @@ import {
   EnrollmentQueryOptions,
   Enrollment,
   AdminQueryOptions,
+  EnrollmentPaginator,
+  VideoPaginator,
+  MyEnrollmentVideosQueryOptions,
 } from '@/types';
 import { mapPaginatorData } from '@/utils/data-mappers';
 import axios from 'axios';
@@ -119,13 +122,13 @@ export const useUpdateUserEmailMutation = () => {
     onSuccess: () => {
       toast.success(t('common:successfully-updated'));
     },
-    onError: (error) => {
-      const {
-        response: { data },
-      }: any = error ?? {};
+    // onError: (error) => {
+    //   const {
+    //     response: { data },
+    //   }: any = error ?? {};
 
-      toast.error(data?.message);
-    },
+    //   toast.error(data?.message);
+    // },
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.ME);
@@ -154,22 +157,22 @@ export const useResendVerificationEmail = () => {
   });
 };
 
-export const useLicenseKeyMutation = () => {
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  return useMutation(userClient.addLicenseKey, {
-    onSuccess: () => {
-      toast.success(t('common:successfully-updated'));
-      setTimeout(() => {
-        router.reload();
-      }, 1000);
-    },
-    onError: () => {
-      toast.error(t('common:PICKBAZAR_MESSAGE.INVALID_LICENSE_KEY'));
-    },
-  });
-};
+// export const useLicenseKeyMutation = () => {
+//   const { t } = useTranslation();
+//   const queryClient = useQueryClient();
+//   const router = useRouter();
+//   return useMutation(userClient.addLicenseKey, {
+//     onSuccess: () => {
+//       toast.success(t('common:successfully-updated'));
+//       setTimeout(() => {
+//         router.reload();
+//       }, 1000);
+//     },
+//     onError: () => {
+//       toast.error(t('common:PICKBAZAR_MESSAGE.INVALID_LICENSE_KEY'));
+//     },
+//   });
+// };
 
 export const useVerifyForgetPasswordTokenMutation = () => {
   return useMutation(userClient.verifyForgetPasswordToken);
@@ -209,8 +212,8 @@ export const useBlockUserMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.USERS);
       queryClient.invalidateQueries(API_ENDPOINTS.STAFFS);
       queryClient.invalidateQueries(API_ENDPOINTS.ADMIN_LIST);
-      queryClient.invalidateQueries(API_ENDPOINTS.CUSTOMERS);
-      queryClient.invalidateQueries(API_ENDPOINTS.VENDORS_LIST);
+      // queryClient.invalidateQueries(API_ENDPOINTS.CUSTOMERS);
+      // queryClient.invalidateQueries(API_ENDPOINTS.VENDORS_LIST);
     },
   });
 };
@@ -228,25 +231,25 @@ export const useUnblockUserMutation = () => {
       queryClient.invalidateQueries(API_ENDPOINTS.USERS);
       queryClient.invalidateQueries(API_ENDPOINTS.STAFFS);
       queryClient.invalidateQueries(API_ENDPOINTS.ADMIN_LIST);
-      queryClient.invalidateQueries(API_ENDPOINTS.CUSTOMERS);
-      queryClient.invalidateQueries(API_ENDPOINTS.VENDORS_LIST);
+      // queryClient.invalidateQueries(API_ENDPOINTS.CUSTOMERS);
+      // queryClient.invalidateQueries(API_ENDPOINTS.VENDORS_LIST);
     },
   });
 };
 
-export const useAddWalletPointsMutation = () => {
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  return useMutation(userClient.addWalletPoints, {
-    onSuccess: () => {
-      toast.success(t('common:successfully-updated'));
-    },
-    // Always refetch after error or success:
-    onSettled: () => {
-      queryClient.invalidateQueries(API_ENDPOINTS.USERS);
-    },
-  });
-};
+// export const useAddWalletPointsMutation = () => {
+//   const { t } = useTranslation();
+//   const queryClient = useQueryClient();
+//   return useMutation(userClient.addWalletPoints, {
+//     onSuccess: () => {
+//       toast.success(t('common:successfully-updated'));
+//     },
+//     // Always refetch after error or success:
+//     onSettled: () => {
+//       queryClient.invalidateQueries(API_ENDPOINTS.USERS);
+//     },
+//   });
+// };
 
 export const useUserQuery = ({ id }: { id: string }) => {
   return useQuery<User, Error>(
@@ -292,39 +295,39 @@ export const useAdminsQuery = (params: Partial<AdminQueryOptions>) => {
   };
 };
 
-export const useVendorsQuery = (params: Partial<UserQueryOptions>) => {
-  const { data, isLoading, error } = useQuery<UserPaginator, Error>(
-    [API_ENDPOINTS.VENDORS_LIST, params],
-    () => userClient.fetchVendors(params),
-    {
-      keepPreviousData: true,
-    }
-  );
+// export const useVendorsQuery = (params: Partial<UserQueryOptions>) => {
+//   const { data, isLoading, error } = useQuery<UserPaginator, Error>(
+//     [API_ENDPOINTS.VENDORS_LIST, params],
+//     () => userClient.fetchVendors(params),
+//     {
+//       keepPreviousData: true,
+//     }
+//   );
 
-  return {
-    vendors: data?.data ?? [],
-    paginatorInfo: mapPaginatorData(data as any),
-    loading: isLoading,
-    error,
-  };
-};
+//   return {
+//     vendors: data?.data ?? [],
+//     paginatorInfo: mapPaginatorData(data as any),
+//     loading: isLoading,
+//     error,
+//   };
+// };
 
-export const useCustomersQuery = (params: Partial<UserQueryOptions>) => {
-  const { data, isLoading, error } = useQuery<UserPaginator, Error>(
-    [API_ENDPOINTS.CUSTOMERS, params],
-    () => userClient.fetchCustomers(params),
-    {
-      keepPreviousData: true,
-    }
-  );
+// export const useCustomersQuery = (params: Partial<UserQueryOptions>) => {
+//   const { data, isLoading, error } = useQuery<UserPaginator, Error>(
+//     [API_ENDPOINTS.CUSTOMERS, params],
+//     () => userClient.fetchCustomers(params),
+//     {
+//       keepPreviousData: true,
+//     }
+//   );
 
-  return {
-    customers: data?.data ?? [],
-    paginatorInfo: mapPaginatorData(data as any),
-    loading: isLoading,
-    error,
-  };
-};
+//   return {
+//     customers: data?.data ?? [],
+//     paginatorInfo: mapPaginatorData(data as any),
+//     loading: isLoading,
+//     error,
+//   };
+// };
 
 
 export const useMyStaffsQuery = (params: Partial<UserQueryOptions & { shop_id: string }>) => {
@@ -361,6 +364,49 @@ export const useMyEnrollmentsQuery = (params: Partial<EnrollmentQueryOptions>) =
   };
 };
 
+export const useMyEnrollmentsPaginatedQuery = (params: Partial<EnrollmentQueryOptions>) => {
+  const { data, isLoading, error } = useQuery<EnrollmentPaginator, Error>(
+    [API_ENDPOINTS.MY_ENROLLMENTS, params],
+    () => userClient.getMyEnrollmentsPaginated(params),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  return {
+    myEnrollments: data?.data ?? [],
+    paginatorInfo: mapPaginatorData(data as any),
+    loading: isLoading,
+    error,
+  };
+};
+
+export const useMyEnrollmentVideosPaginatedQuery = (params: Partial<MyEnrollmentVideosQueryOptions>) => {
+  const { data, isLoading, error } = useQuery<VideoPaginator, Error>(
+    [API_ENDPOINTS.MY_ENROLLMENTS, params],
+    () => userClient.getMyEnrollmentVideosPaginated(params),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  return {
+    videos: data?.data ?? [],
+    paginatorInfo: mapPaginatorData(data as any),
+    loading: isLoading,
+    error,
+  };
+};
+
+export const useMyEnrollmentQuery = ({ id }: { id: string }) => {
+  return useQuery<Enrollment, Error>(
+    [API_ENDPOINTS.USERS, id],
+    () => userClient.getMyEnrollment({ id }),
+    {
+      enabled: Boolean(id),
+    }
+  );
+};
 
 export const useAllStaffsQuery = (params: Partial<UserQueryOptions>) => {
   const { data, isLoading, error } = useQuery<UserPaginator, Error>(

@@ -2,6 +2,7 @@ import React from 'react';
 
 export type MODAL_VIEWS =
   | 'DELETE_PRODUCT'
+  | 'DELETE_VIDEO'
   | 'DELETE_COURSE'
   | 'DELETE_TEACHER'
   | 'DELETE_COORDINATOR'

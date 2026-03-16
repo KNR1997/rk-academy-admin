@@ -24,16 +24,17 @@ export const allowedRoles = [
   STUDENT,
   COORDINATOR,
 ];
-export const adminAndCoordinatorOnly = [SUPER_ADMIN, COORDINATOR];
-export const adminAndOwnerOnly = [SUPER_ADMIN, STORE_OWNER];
-export const adminOwnerAndStaffOnly = [SUPER_ADMIN, STORE_OWNER, STAFF];
-export const adminAndStudentOnly = [SUPER_ADMIN, ADMIN, TEACHER, STUDENT];
+export const studentOnly = [STUDENT];
+export const teacherOnly = [TEACHER];
 export const adminOnly = [SUPER_ADMIN];
 export const ownerOnly = [STORE_OWNER];
 export const coordinatorOnly = [COORDINATOR];
 export const ownerAndStaffOnly = [STORE_OWNER, STAFF];
-export const studentOnly = [STUDENT];
-export const teacherOnly = [TEACHER];
+export const adminAndOwnerOnly = [SUPER_ADMIN, STORE_OWNER];
+export const adminAndStaffOnly = [SUPER_ADMIN, ADMIN, TEACHER];
+export const adminAndCoordinatorOnly = [SUPER_ADMIN, COORDINATOR];
+export const adminOwnerAndStaffOnly = [SUPER_ADMIN, STORE_OWNER, STAFF];
+export const adminAndStudentOnly = [SUPER_ADMIN, ADMIN, TEACHER, STUDENT];
 
 export function setAuthCredentials(
   token: string,

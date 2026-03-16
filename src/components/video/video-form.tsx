@@ -3,45 +3,36 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-// types
-import {
-  Course,
-  CourseOffering,
-  CourseType,
-  GradeLevel,
-  Teacher,
-} from '@/types';
 // utils
 import { handleMutationError } from '@/utils/handle-mutation-error';
-// hooks
-import {
-  useCreateCourseOfferingMutation,
-  useUpdateCourseOfferingMutation,
-} from '@/data/course-offering';
 // form-validations
-import { subjectValidationSchema } from './course-offering-validation-schema';
+import { videoValidationSchema } from './video-validation-schema';
+// types
+import { CourseOffering, Video } from '@/types';
+// constants
+import { monthOptions } from '@/constants';
+// hooks
+import { useCreateVideoMutation, useUpdateVideoMutation } from '@/data/video';
 // components
 import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
 import Description from '@/components/ui/description';
-import SelectCourse from '@/components/course/select-course';
-import SelectTeacher from '@/components/teacher/select-teacher';
+import SelectInput from '@/components/ui/select-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
-import SelectGradeLevel from '@/components/grade-level/select-grade-level';
+import ValidationError from '@/components/ui/form-validation-error';
+import SelectCourseOffering from '@/components/course-offering/select-course-offering';
 
 type FormValues = {
-  name: string;
-  slug: string;
-  code: string;
-  batch: number;
-  fee: number;
+  title: string;
+  video_url: string;
+  month: {
+    label: string;
+    value: number;
+  };
   year: number;
-  course: Course;
-  teacher: Teacher;
-  grade_level: GradeLevel;
-  course_type: { label: string; value: CourseType };
+  course_offering: CourseOffering;
 };
 
 const defaultValues = {
@@ -49,15 +40,13 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: CourseOffering | undefined;
+  initialValues?: Video | undefined;
 };
-export default function CreateOrUpdateCourseOfferingForm({
-  initialValues,
-}: IProps) {
+export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
-  // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -70,34 +59,37 @@ export default function CreateOrUpdateCourseOfferingForm({
     defaultValues: initialValues
       ? {
           ...initialValues,
+          month: monthOptions.find(
+            (option) => option.value == initialValues.course_content.month,
+          ),
+          year: initialValues.course_content.year,
+          course_offering: initialValues.course_content.course_offering,
         }
       : defaultValues,
     //@ts-ignore
-    resolver: yupResolver(subjectValidationSchema),
+    resolver: yupResolver(videoValidationSchema),
   });
+
   // mutations
-  const { mutate: createCourseOffering, isLoading: creating } =
-    useCreateCourseOfferingMutation();
-  const { mutate: updateCourseOffering, isLoading: updating } =
-    useUpdateCourseOfferingMutation();
+  const { mutate: createVideo, isLoading: creating } = useCreateVideoMutation();
+  const { mutate: updateVideo, isLoading: updating } = useUpdateVideoMutation();
 
   const onSubmit = async (values: FormValues) => {
     const input = {
-      course: values.course.id,
-      teacher: values.teacher.id,
-      grade_level: values.grade_level.id,
-      year: values.year,
-      batch: values.batch,
-      fee: values.fee,
+      title: values.title,
+      video_url: values.video_url,
+      month: values.month.value,
+      year: values.course_offering.year,
+      course_offering_id: values.course_offering.id,
     };
     const mutationOptions = {
       onError: (error: any) =>
         handleMutationError(error, setError, setErrorMessage),
     };
     if (!initialValues) {
-      createCourseOffering(input, mutationOptions);
+      createVideo(input, mutationOptions);
     } else {
-      updateCourseOffering(
+      updateVideo(
         {
           ...input,
           id: initialValues.id!,
@@ -118,7 +110,6 @@ export default function CreateOrUpdateCourseOfferingForm({
           onClose={() => setErrorMessage(null)}
         />
       ) : null}
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-wrap my-5 sm:my-8">
           <Description
@@ -127,48 +118,51 @@ export default function CreateOrUpdateCourseOfferingForm({
               initialValues
                 ? t('form:item-description-edit')
                 : t('form:item-description-add')
-            } ${t('form:category-description-helper-text')}`}
+            } ${t('form:course-description-helper-text')}`}
             className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectCourse
+            <SelectCourseOffering
               control={control}
               errors={errors}
-              disabled={!!initialValues}
+              // disabled={!!initialValues}
             />
-            <SelectTeacher
-              control={control}
-              errors={errors}
-              disabled={!!initialValues}
-            />
-            <SelectGradeLevel control={control} errors={errors} />
-            <Input
+            <div className="mb-5">
+              <SelectInput
+                label="Month"
+                name="month"
+                control={control}
+                options={monthOptions}
+                required
+              />
+              <ValidationError message={t(errors.month?.message)} />
+            </div>
+            {/* <Input
               label={t('form:input-label-year')}
               {...register('year')}
               error={t(errors.year?.message!)}
+              value={yearAutoCompleted}
+              variant="outline"
+              className="mb-5"
+              required
+              disabled
+            /> */}
+            <Input
+              label={t('form:input-label-title')}
+              {...register('title')}
+              error={t(errors.title?.message!)}
               variant="outline"
               className="mb-5"
               required
             />
             <Input
-              label={t('form:input-label-batch')}
-              {...register('batch')}
-              error={t(errors.batch?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-fee')}
-              {...register('fee')}
-              type="number"
+              label={t('form:input-label-video-url')}
+              {...register('video_url')}
+              type="text"
               variant="outline"
               className="mb-4"
+              error={t(errors.video_url?.message!)}
               required
-              error={t(errors.fee?.message!)}
-              {...register('fee', {
-                setValueAs: (v) => (v === '' ? null : Number(v)),
-              })}
             />
           </Card>
         </div>
@@ -190,8 +184,8 @@ export default function CreateOrUpdateCourseOfferingForm({
               className="text-sm md:text-base"
             >
               {initialValues
-                ? t('form:button-label-update-course-offering')
-                : t('form:button-label-add-course-offering')}
+                ? t('form:button-label-update-video')
+                : t('form:button-label-add-video')}
             </Button>
           </div>
         </StickyFooterPanel>

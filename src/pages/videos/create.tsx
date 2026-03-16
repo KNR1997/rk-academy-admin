@@ -4,26 +4,26 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { adminOnly } from '@/utils/auth-utils';
 // components
 import Layout from '@/components/layouts/admin';
-import CoordinatorCreateForm from '@/components/coordinator/coordinator-form';
+import CreateOrUpdateVideoForm from '@/components/video/video-form';
 
-export default function CreateCoordinatorPage() {
+export default function CreateVideoPage() {
   const { t } = useTranslation();
   return (
     <>
       <div className="flex border-b border-dashed border-border-base pb-5 md:pb-7">
         <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-create-coordinator')}
+          {t('form:form-title-create-video')}
         </h1>
       </div>
-      <CoordinatorCreateForm />
+      <CreateOrUpdateVideoForm />
     </>
   );
 }
 
-CreateCoordinatorPage.authenticate = {
+CreateVideoPage.authenticate = {
   permissions: adminOnly,
 };
-CreateCoordinatorPage.Layout = Layout;
+CreateVideoPage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {

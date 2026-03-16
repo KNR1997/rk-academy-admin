@@ -2,15 +2,15 @@ import { QueryClient } from 'react-query';
 import { useTranslation } from 'next-i18next';
 import { Control, FieldErrors } from 'react-hook-form';
 // data
-import { courseClient } from '@/data/client/course';
+import { subjectClient } from '@/data/client/subject';
 import { API_ENDPOINTS } from '@/data/client/api-endpoints';
 // types
-import { Course } from '@/types';
+import { Subject } from '@/types';
 // components
 import AsyncSelectInput from '@/components/ui/async-select-input';
 import ValidationError from '@/components/ui/form-validation-error';
 
-export default function SelectCourse({
+export default function SelectSubject({
   control,
   errors,
   disabled,
@@ -24,9 +24,9 @@ export default function SelectCourse({
   async function fetchAsyncOptions(inputValue: string) {
     const queryClient = new QueryClient();
     const data = await queryClient.fetchQuery(
-      [API_ENDPOINTS.COURSES, { text: inputValue, page: 1 }],
+      [API_ENDPOINTS.SUBJECTS, { text: inputValue, page: 1 }],
       () =>
-        courseClient.paginated({
+        subjectClient.paginated({
           name: inputValue,
         }),
     );
@@ -37,16 +37,17 @@ export default function SelectCourse({
   return (
     <div className="mb-5">
       <AsyncSelectInput
-        name="course"
+        name="subject"
         control={control}
-        label={t('form:input-label-courses')}
+        label={t('form:input-label-subjects')}
         loadOptions={fetchAsyncOptions}
-        getOptionLabel={(option: Course) => option.name}
-        getOptionValue={(option: Course) => option.slug}
+        getOptionLabel={(option: Subject) => option.name}
+        getOptionValue={(option: Subject) => option.slug}
         disabled={disabled}
         required
       />
-      <ValidationError message={t(errors.course?.message)} />
+
+      <ValidationError message={t(errors.subject?.message)} />
     </div>
   );
 }
