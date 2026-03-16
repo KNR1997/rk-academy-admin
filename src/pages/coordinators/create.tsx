@@ -1,5 +1,7 @@
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
 // components
 import Layout from '@/components/layouts/admin';
 import CoordinatorCreateForm from '@/components/coordinator/coordinator-form';
@@ -18,6 +20,9 @@ export default function CreateCoordinatorPage() {
   );
 }
 
+CreateCoordinatorPage.authenticate = {
+  permissions: adminOnly,
+};
 CreateCoordinatorPage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({

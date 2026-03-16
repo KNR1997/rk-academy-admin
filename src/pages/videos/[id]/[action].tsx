@@ -3,6 +3,8 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // configs
 import { Config } from '@/config';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
 // hooks
 import { useVideoQuery } from '@/data/video';
 // components
@@ -41,6 +43,9 @@ export default function UpdateVideoPage() {
   );
 }
 
+UpdateVideoPage.authenticate = {
+  permissions: adminOnly,
+};
 UpdateVideoPage.Layout = Layout;
 
 export const getServerSideProps = async ({ locale }: any) => ({

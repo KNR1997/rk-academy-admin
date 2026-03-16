@@ -1,5 +1,7 @@
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
 // components
 import Layout from '@/components/layouts/admin';
 import CreateOrUpdateVideoForm from '@/components/video/video-form';
@@ -18,6 +20,9 @@ export default function CreateVideoPage() {
   );
 }
 
+CreateVideoPage.authenticate = {
+  permissions: adminOnly,
+};
 CreateVideoPage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({

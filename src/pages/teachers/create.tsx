@@ -1,6 +1,9 @@
-import Layout from '@/components/layouts/admin';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
+// components
+import Layout from '@/components/layouts/admin';
 import CreateOrUpdateTeacherForm from '@/components/teacher/teacher-form';
 
 export default function CreateTeacherPage() {
@@ -17,6 +20,9 @@ export default function CreateTeacherPage() {
   );
 }
 
+CreateTeacherPage.authenticate = {
+  permissions: adminOnly,
+};
 CreateTeacherPage.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
