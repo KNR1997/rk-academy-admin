@@ -1,20 +1,23 @@
-import Layout from '@/components/layouts/student';
-import ErrorMessage from '@/components/ui/error-message';
-import Loader from '@/components/ui/loader/loader';
+import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { getAuthCredentials, hasAccess, studentOnly } from '@/utils/auth-utils';
-import CourseCard from '@/components/course/course-card';
-import { isEmpty } from 'lodash';
-import { useMyEnrollmentsQuery } from '@/data/user';
+// hooks
+import { useMyEnrollmentsPaginatedQuery } from '@/data/user';
+// types
 import { Enrollment } from '@/types';
+// components
+import Layout from '@/components/layouts/student';
+import Loader from '@/components/ui/loader/loader';
+import ErrorMessage from '@/components/ui/error-message';
+import CourseCard from '@/components/course/course-card';
 
 export default function MyCourses() {
   const { t } = useTranslation();
   const { permissions } = getAuthCredentials();
   let permission = hasAccess(studentOnly, permissions);
 
-  const { myEnrollments, loading, error } = useMyEnrollmentsQuery({});
+  const { myEnrollments, loading, error } = useMyEnrollmentsPaginatedQuery({});
 
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;

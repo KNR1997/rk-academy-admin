@@ -17,7 +17,6 @@ import {
   useCreateEnrollmentMutation,
   useUpdateEnrollmentMutation,
 } from '@/data/enrollment';
-import { useStudentsQuery } from '@/data/student';
 import { useCourseOfferingsQuery } from '@/data/course-offering';
 // components
 import Alert from '@/components/ui/alert';
@@ -26,6 +25,7 @@ import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
 import Description from '@/components/ui/description';
 import SelectInput from '@/components/ui/select-input';
+import SelectStudent from '@/components/student/select-student';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import ValidationError from '@/components/ui/form-validation-error';
 
@@ -57,36 +57,6 @@ function SelectCourseOffering({
         required
       />
       <ValidationError message={t(errors.course_offering?.message)} />
-    </div>
-  );
-}
-
-function SelectStudent({
-  control,
-  errors,
-}: {
-  control: Control<FormValues>;
-  errors: FieldErrors;
-}) {
-  const { t } = useTranslation();
-  const { students, paginatorInfo, loading, error } = useStudentsQuery({
-    limit: 20,
-  });
-  return (
-    <div className="mb-5">
-      <Label>{t('form:input-label-student')}</Label>
-      <SelectInput
-        name="student"
-        control={control}
-        getOptionLabel={(option: any) =>
-          `${option.user.first_name} ${option.user.last_name} - ${option.current_grade.name}`
-        }
-        getOptionValue={(option: any) => option.id}
-        options={students!}
-        isLoading={loading}
-        required
-      />
-      <ValidationError message={t(errors.student?.message)} />
     </div>
   );
 }
@@ -148,6 +118,8 @@ export default function CreateOrUpdateEnrollmentForm({
 
   const student = watch('student');
 
+  console.log('student-----------: ', student)
+
   const onSubmit = async (values: FormValues) => {
     const input = {
       student: values.student.id,
@@ -195,7 +167,11 @@ export default function CreateOrUpdateEnrollmentForm({
           />
 
           <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectStudent control={control} errors={errors} />
+            <SelectStudent
+              control={control}
+              errors={errors}
+              disabled={!!initialValues}
+            />
             <SelectCourseOffering
               control={control}
               errors={errors}

@@ -146,6 +146,7 @@ const CoordinatorCreateForm = ({ initialValues }: IProps) => {
               variant="outline"
               className="mb-4"
               error={t(errors.first_name?.message!)}
+              required
             />
             <Input
               label={t('form:input-label-last-name')}
@@ -154,6 +155,7 @@ const CoordinatorCreateForm = ({ initialValues }: IProps) => {
               variant="outline"
               className="mb-4"
               error={t(errors.last_name?.message!)}
+              required
             />
             <Input
               label={t('form:input-label-display-name')}
@@ -162,6 +164,7 @@ const CoordinatorCreateForm = ({ initialValues }: IProps) => {
               variant="outline"
               className="mb-4"
               error={t(errors.display_name?.message!)}
+              required
             />
             <PhoneNumberInput
               label={t('form:input-label-contact')}

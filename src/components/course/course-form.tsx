@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Control, FieldErrors, useForm } from 'react-hook-form';
 // form-validations
 import { subjectValidationSchema } from './course-validation-schema';
 // types
@@ -14,7 +14,6 @@ import {
 } from '@/utils/use-code-generate';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // hooks
-import { useSubjectsQuery } from '@/data/subject';
 import {
   useCreateCourseMutation,
   useUpdateCourseMutation,
@@ -25,39 +24,8 @@ import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
 import Description from '@/components/ui/description';
-import SelectInput from '@/components/ui/select-input';
+import SelectSubject from '@/components/subject/select-subject';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
-import ValidationError from '@/components/ui/form-validation-error';
-
-function SelectSubject({
-  control,
-  errors,
-  disabled,
-}: {
-  control: Control<FormValues>;
-  errors: FieldErrors;
-  disabled?: boolean;
-}) {
-  const { locale } = useRouter();
-  const { t } = useTranslation();
-  const { subjects, loading } = useSubjectsQuery({ language: locale });
-  return (
-    <div className="mb-5">
-      <SelectInput
-        name="subject"
-        control={control}
-        label={t('form:input-label-subjects')}
-        getOptionLabel={(option: any) => option.name}
-        getOptionValue={(option: any) => option.slug}
-        options={subjects!}
-        isLoading={loading}
-        required
-        disabled={disabled}
-      />
-      <ValidationError message={t(errors.subject?.message)} />
-    </div>
-  );
-}
 
 type FormValues = {
   name: string;

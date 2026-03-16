@@ -1,8 +1,9 @@
-import { Control, FieldErrors } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import Label from '@/components/ui/label';
+import { Control, FieldErrors } from 'react-hook-form';
+// hooks
 import { useGradeLevelsQuery } from '@/data/grade-level';
+// components
 import SelectInput from '@/components/ui/select-input';
 import ValidationError from '@/components/ui/form-validation-error';
 

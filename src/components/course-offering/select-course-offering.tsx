@@ -1,10 +1,13 @@
-import { useRouter } from 'next/router';
+import { QueryClient } from 'react-query';
 import { useTranslation } from 'next-i18next';
 import { Control, FieldErrors } from 'react-hook-form';
-// hooks
-import { useCourseOfferingsQuery } from '@/data/course-offering';
+// data
+import { API_ENDPOINTS } from '@/data/client/api-endpoints';
+import { courseOfferingClient } from '@/data/client/course-offering';
+// types
+import { CourseOffering } from '@/types';
 // components
-import SelectInput from '@/components/ui/select-input';
+import AsyncSelectInput from '@/components/ui/async-select-input';
 import ValidationError from '@/components/ui/form-validation-error';
 
 export default function SelectCourseOffering({
@@ -16,27 +19,34 @@ export default function SelectCourseOffering({
   errors: FieldErrors;
   disabled?: boolean;
 }) {
-  const { locale } = useRouter();
   const { t } = useTranslation();
-  const { courseOfferings, loading } = useCourseOfferingsQuery({
-    language: locale,
-  });
+
+  async function fetchAsyncOptions(inputValue: string) {
+    const queryClient = new QueryClient();
+    const data = await queryClient.fetchQuery(
+      [API_ENDPOINTS.COURSE_OFFERING, { text: inputValue, page: 1 }],
+      () =>
+        courseOfferingClient.paginated({
+          name: inputValue,
+        }),
+    );
+
+    return data?.data;
+  }
+
   return (
     <div className="mb-5">
-      <SelectInput
+      <AsyncSelectInput
         name="course_offering"
         control={control}
         label={t('form:input-label-course-offering')}
-        // @ts-ignore
+        loadOptions={fetchAsyncOptions}
         getOptionLabel={(option: CourseOffering) =>
           `${option.course.name} ${option.year} - Batch ${option.batch}`
         }
-        // @ts-ignore
         getOptionValue={(option: CourseOffering) => option.id}
-        options={courseOfferings!}
-        isLoading={loading}
-        required
         disabled={disabled}
+        required
       />
       <ValidationError message={t(errors.course_offering?.message)} />
     </div>

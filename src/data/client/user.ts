@@ -23,6 +23,9 @@ import {
   Course,
   Enrollment,
   EnrollmentQueryOptions,
+  EnrollmentPaginator,
+  MyEnrollmentVideosQueryOptions,
+  VideoPaginator,
 } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
@@ -52,7 +55,7 @@ export const userClient = {
   verifyForgetPasswordToken: (variables: VerifyForgetPasswordTokenInput) => {
     return HttpClient.post<any>(
       API_ENDPOINTS.VERIFY_FORGET_PASSWORD_TOKEN,
-      variables
+      variables,
     );
   },
   resetPassword: (variables: ResetPasswordInput) => {
@@ -67,12 +70,12 @@ export const userClient = {
   unblock: (variables: BlockUserInput) => {
     return HttpClient.post<any>(API_ENDPOINTS.UNBLOCK_USER, variables);
   },
-  addWalletPoints: (variables: WalletPointsInput) => {
-    return HttpClient.post<any>(API_ENDPOINTS.ADD_WALLET_POINTS, variables);
-  },
-  addLicenseKey: (variables: KeyInput) => {
-    return HttpClient.post<any>(API_ENDPOINTS.ADD_LICENSE_KEY_VERIFY, variables);
-  },
+  // addWalletPoints: (variables: WalletPointsInput) => {
+  //   return HttpClient.post<any>(API_ENDPOINTS.ADD_WALLET_POINTS, variables);
+  // },
+  // addLicenseKey: (variables: KeyInput) => {
+  //   return HttpClient.post<any>(API_ENDPOINTS.ADD_LICENSE_KEY_VERIFY, variables);
+  // },
 
   fetchUsers: ({ name, ...params }: Partial<UserQueryOptions>) => {
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.USERS, {
@@ -98,27 +101,32 @@ export const userClient = {
   updateEmail: ({ email }: { email: string }) => {
     return HttpClient.post<any>(API_ENDPOINTS.UPDATE_EMAIL, { email });
   },
-  fetchVendors: ({ is_active, ...params }: Partial<UserQueryOptions>) => {
-    return HttpClient.get<UserPaginator>(API_ENDPOINTS.VENDORS_LIST, {
-      searchJoin: 'and',
-      with: 'wallet;permissions;profile',
-      is_active,
-      ...params,
-    });
-  },
-  fetchCustomers: ({ ...params }: Partial<UserQueryOptions>) => {
-    return HttpClient.get<UserPaginator>(API_ENDPOINTS.CUSTOMERS, {
-      searchJoin: 'and',
-      with: 'wallet',
-      ...params,
-    });
-  },
-  getMyStaffs: ({ is_active, shop_id, name, ...params }: Partial<UserQueryOptions & { shop_id: string }>) => {
+  // fetchVendors: ({ is_active, ...params }: Partial<UserQueryOptions>) => {
+  //   return HttpClient.get<UserPaginator>(API_ENDPOINTS.VENDORS_LIST, {
+  //     searchJoin: 'and',
+  //     with: 'wallet;permissions;profile',
+  //     is_active,
+  //     ...params,
+  //   });
+  // },
+  // fetchCustomers: ({ ...params }: Partial<UserQueryOptions>) => {
+  //   return HttpClient.get<UserPaginator>(API_ENDPOINTS.CUSTOMERS, {
+  //     searchJoin: 'and',
+  //     with: 'wallet',
+  //     ...params,
+  //   });
+  // },
+  getMyStaffs: ({
+    is_active,
+    shop_id,
+    name,
+    ...params
+  }: Partial<UserQueryOptions & { shop_id: string }>) => {
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.MY_STAFFS, {
       searchJoin: 'and',
       shop_id,
       ...params,
-      search: HttpClient.formatSearchParams({ name, is_active })
+      search: HttpClient.formatSearchParams({ name, is_active }),
     });
   },
   getAllStaffs: ({ is_active, name, ...params }: Partial<UserQueryOptions>) => {
@@ -132,8 +140,37 @@ export const userClient = {
     return HttpClient.get<Enrollment[]>(API_ENDPOINTS.MY_ENROLLMENTS, {
       searchJoin: 'and',
       ...params,
-      search: HttpClient.formatSearchParams({ name })
+      search: HttpClient.formatSearchParams({ name }),
     });
   },
-  
+  getMyEnrollmentsPaginated: ({
+    name,
+    ...params
+  }: Partial<EnrollmentQueryOptions>) => {
+    return HttpClient.get<EnrollmentPaginator>(
+      `${API_ENDPOINTS.MY_ENROLLMENTS}/`,
+      {
+        searchJoin: 'and',
+        ...params,
+        search: HttpClient.formatSearchParams({ name }),
+      },
+    );
+  },
+  getMyEnrollmentVideosPaginated: ({
+    enrollment_id,
+    name,
+    ...params
+  }: Partial<MyEnrollmentVideosQueryOptions>) => {
+    return HttpClient.get<VideoPaginator>(
+      `${API_ENDPOINTS.MY_ENROLLMENTS}/${enrollment_id}/videos`,
+      {
+        searchJoin: 'and',
+        ...params,
+        search: HttpClient.formatSearchParams({ name }),
+      },
+    );
+  },
+  getMyEnrollment: ({ id }: { id: string }) => {
+    return HttpClient.get<Enrollment>(`${API_ENDPOINTS.MY_ENROLLMENTS}/${id}`);
+  },
 };

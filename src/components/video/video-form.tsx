@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { animateScroll } from 'react-scroll';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
+// utils
+import { handleMutationError } from '@/utils/handle-mutation-error';
 // form-validations
 import { videoValidationSchema } from './video-validation-schema';
 // types
@@ -21,7 +22,7 @@ import Description from '@/components/ui/description';
 import SelectInput from '@/components/ui/select-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import ValidationError from '@/components/ui/form-validation-error';
-import SelectCourseOffering from '../course-offering/select-course-offering';
+import SelectCourseOffering from '@/components/course-offering/select-course-offering';
 
 type FormValues = {
   title: string;
@@ -73,17 +74,6 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
   const { mutate: createVideo, isLoading: creating } = useCreateVideoMutation();
   const { mutate: updateVideo, isLoading: updating } = useUpdateVideoMutation();
 
-  const handleMutationError = (error: any) => {
-    Object.keys(error?.response?.data).forEach((field: any) => {
-      setError(field, {
-        type: 'manual',
-        message: error?.response?.data[field],
-      });
-    });
-    setErrorMessage('PICKBAZAR_ERROR.SOMETHING_WENT_WRONG');
-    animateScroll.scrollToTop();
-  };
-
   const onSubmit = async (values: FormValues) => {
     const input = {
       title: values.title,
@@ -92,7 +82,10 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
       year: values.course_offering.year,
       course_offering_id: values.course_offering.id,
     };
-    const mutationOptions = { onError: handleMutationError };
+    const mutationOptions = {
+      onError: (error: any) =>
+        handleMutationError(error, setError, setErrorMessage),
+    };
     if (!initialValues) {
       createVideo(input, mutationOptions);
     } else {
