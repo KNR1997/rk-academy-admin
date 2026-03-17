@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // utils
 import { studentOnly } from '@/utils/auth-utils';
-import { extractVideoId } from '@/utils/extract-youtube-video-id';
+import { extractYoutubeVideoId } from '@/utils/extract-youtube-video-id';
 // hooks
 import { useMyEnrollmentVideoQuery } from '@/data/user';
 // components
@@ -39,7 +39,7 @@ export default function WatchVideo() {
     },
   };
 
-  const videoId = extractVideoId(video?.video_url);
+  const videoId = extractYoutubeVideoId(video?.video_url);
 
   const isValidYouTubeId = (id: string) => id && id.length === 11;
 
