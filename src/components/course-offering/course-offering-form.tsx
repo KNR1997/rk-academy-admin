@@ -46,6 +46,7 @@ type FormValues = {
 
 const defaultValues = {
   batch: 1,
+  year: new Date().getFullYear(),
 };
 
 type IProps = {
@@ -149,6 +150,7 @@ export default function CreateOrUpdateCourseOfferingForm({
               variant="outline"
               className="mb-5"
               required
+              disabled
             />
             <Input
               label={t('form:input-label-batch')}
