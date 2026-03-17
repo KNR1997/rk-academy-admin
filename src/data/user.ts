@@ -23,6 +23,7 @@ import {
   EnrollmentPaginator,
   VideoPaginator,
   MyEnrollmentVideosQueryOptions,
+  Video,
 } from '@/types';
 import { mapPaginatorData } from '@/utils/data-mappers';
 import axios from 'axios';
@@ -141,7 +142,6 @@ export const useChangePasswordMutation = () => {
   return useMutation(userClient.changePassword);
 };
 
-
 export const useForgetPasswordMutation = () => {
   return useMutation(userClient.forgetPassword);
 };
@@ -181,8 +181,6 @@ export const useVerifyForgetPasswordTokenMutation = () => {
 export const useResetPasswordMutation = () => {
   return useMutation(userClient.resetPassword);
 };
-
-
 
 export const useMakeOrRevokeAdminMutation = () => {
   const queryClient = useQueryClient();
@@ -257,7 +255,7 @@ export const useUserQuery = ({ id }: { id: string }) => {
     () => userClient.fetchUser({ id }),
     {
       enabled: Boolean(id),
-    }
+    },
   );
 };
 
@@ -267,7 +265,7 @@ export const useUsersQuery = (params: Partial<UserQueryOptions>) => {
     () => userClient.fetchUsers(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -284,7 +282,7 @@ export const useAdminsQuery = (params: Partial<AdminQueryOptions>) => {
     () => userClient.fetchAdmins(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -329,14 +327,15 @@ export const useAdminsQuery = (params: Partial<AdminQueryOptions>) => {
 //   };
 // };
 
-
-export const useMyStaffsQuery = (params: Partial<UserQueryOptions & { shop_id: string }>) => {
+export const useMyStaffsQuery = (
+  params: Partial<UserQueryOptions & { shop_id: string }>,
+) => {
   const { data, isLoading, error } = useQuery<UserPaginator, Error>(
     [API_ENDPOINTS.MY_STAFFS, params],
     () => userClient.getMyStaffs(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -347,13 +346,15 @@ export const useMyStaffsQuery = (params: Partial<UserQueryOptions & { shop_id: s
   };
 };
 
-export const useMyEnrollmentsQuery = (params: Partial<EnrollmentQueryOptions>) => {
+export const useMyEnrollmentsQuery = (
+  params: Partial<EnrollmentQueryOptions>,
+) => {
   const { data, isLoading, error } = useQuery<Enrollment[], Error>(
     [API_ENDPOINTS.MY_ENROLLMENTS, params],
     () => userClient.getMyEnrollments(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -364,13 +365,15 @@ export const useMyEnrollmentsQuery = (params: Partial<EnrollmentQueryOptions>) =
   };
 };
 
-export const useMyEnrollmentsPaginatedQuery = (params: Partial<EnrollmentQueryOptions>) => {
+export const useMyEnrollmentsPaginatedQuery = (
+  params: Partial<EnrollmentQueryOptions>,
+) => {
   const { data, isLoading, error } = useQuery<EnrollmentPaginator, Error>(
     [API_ENDPOINTS.MY_ENROLLMENTS, params],
     () => userClient.getMyEnrollmentsPaginated(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -381,13 +384,15 @@ export const useMyEnrollmentsPaginatedQuery = (params: Partial<EnrollmentQueryOp
   };
 };
 
-export const useMyEnrollmentVideosPaginatedQuery = (params: Partial<MyEnrollmentVideosQueryOptions>) => {
+export const useMyEnrollmentVideosPaginatedQuery = (
+  params: Partial<MyEnrollmentVideosQueryOptions>,
+) => {
   const { data, isLoading, error } = useQuery<VideoPaginator, Error>(
     [API_ENDPOINTS.MY_ENROLLMENTS, params],
     () => userClient.getMyEnrollmentVideosPaginated(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -404,7 +409,7 @@ export const useMyEnrollmentQuery = ({ id }: { id: string }) => {
     () => userClient.getMyEnrollment({ id }),
     {
       enabled: Boolean(id),
-    }
+    },
   );
 };
 
@@ -414,7 +419,7 @@ export const useAllStaffsQuery = (params: Partial<UserQueryOptions>) => {
     () => userClient.getAllStaffs(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -425,3 +430,15 @@ export const useAllStaffsQuery = (params: Partial<UserQueryOptions>) => {
   };
 };
 
+export const useMyEnrollmentVideoQuery = ({ id }: { id: string }) => {
+  const { data, error, isLoading } = useQuery<Video, Error>(
+    [API_ENDPOINTS.STUDENT_WATCH_VIDEO, { id }],
+    () => userClient.getMyEnrollmentVideo({ id }),
+  );
+
+  return {
+    video: data,
+    error,
+    isLoading,
+  };
+};
