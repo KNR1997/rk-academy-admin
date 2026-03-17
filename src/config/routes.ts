@@ -91,6 +91,9 @@ export const Routes = {
   myCourseOfferings: {
     ...routesFactory('/my/course-offerings'),
   },
+  watchVideos: {
+    ...routesFactory('/watch-videos')
+  },
   adminList: '/users/admins',
   vendorList: '/users/vendors',
   pendingVendorList: '/users/vendors/pending',
