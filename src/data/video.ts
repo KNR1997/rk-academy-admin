@@ -94,5 +94,8 @@ export const useDeleteVideoMutation = () => {
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.VIDEOS);
     },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.detail);
+    },
   });
 };
