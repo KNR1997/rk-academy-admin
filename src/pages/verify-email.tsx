@@ -1,37 +1,34 @@
-import Button from '@/components/ui/button';
+import { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// config
+import { Routes } from '@/config/routes';
+// utils
+import { getEmailVerified } from '@/utils/auth-utils';
+// hooks
 import {
   useResendVerificationEmail,
   useLogoutMutation,
   useMeQuery,
 } from '@/data/user';
-
-import { Routes } from '@/config/routes';
-import { useRouter } from 'next/router';
+// components
+import Button from '@/components/ui/button';
 import AuthPageLayout from '@/components/layouts/auth-layout';
 
-import { useTranslation } from 'next-i18next';
-import { GetStaticProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { getEmailVerified } from '@/utils/auth-utils';
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale!, ['common', 'form'])),
-  },
-});
-
 export default function VerifyEmailActions() {
-  const { t } = useTranslation('common');
-  useMeQuery();
-
-  const { mutate: logout, isLoading: isLoading } = useLogoutMutation();
-  const { mutate: verifyEmail, isLoading: isVerifying } =
-    useResendVerificationEmail();
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { emailVerified } = getEmailVerified();
   if (emailVerified) {
     router.push(Routes.dashboard);
   }
+  // query
+  useMeQuery();
+  // mutations
+  const { mutate: logout, isLoading: isLoading } = useLogoutMutation();
+  const { mutate: verifyEmail, isLoading: isVerifying } =
+    useResendVerificationEmail();
 
   return (
     <>
@@ -60,3 +57,9 @@ export default function VerifyEmailActions() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale!, ['common', 'form'])),
+  },
+});

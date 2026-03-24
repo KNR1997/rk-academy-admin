@@ -14,10 +14,12 @@ export default function SelectCourseOffering({
   control,
   errors,
   disabled,
+  gradeLevel,
 }: {
   control: Control<any>;
   errors: FieldErrors;
   disabled?: boolean;
+  gradeLevel?: string;
 }) {
   const { t } = useTranslation();
 
@@ -28,6 +30,7 @@ export default function SelectCourseOffering({
       () =>
         courseOfferingClient.paginated({
           name: inputValue,
+          grade_level: gradeLevel,
         }),
     );
 
@@ -42,7 +45,7 @@ export default function SelectCourseOffering({
         label={t('form:input-label-course-offering')}
         loadOptions={fetchAsyncOptions}
         getOptionLabel={(option: CourseOffering) =>
-          `${option.course.name} ${option.year} - Batch ${option.batch}`
+          `${option.course.name} ${option?.grade_level?.name} - Batch ${option.batch}`
         }
         getOptionValue={(option: CourseOffering) => option.id}
         disabled={disabled}

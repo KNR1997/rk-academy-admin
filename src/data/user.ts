@@ -152,7 +152,7 @@ export const useResendVerificationEmail = () => {
       toast.success(t('common:PICKBAZAR_MESSAGE.EMAIL_SENT_SUCCESSFUL'));
     },
     onError: () => {
-      toast(t('common:PICKBAZAR_MESSAGE.EMAIL_SENT_FAILED'));
+      toast.error(t('common:PICKBAZAR_MESSAGE.EMAIL_SENT_FAILED'));
     },
   });
 };

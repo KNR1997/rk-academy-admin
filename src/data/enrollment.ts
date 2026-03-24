@@ -1,9 +1,16 @@
-import Router, { useRouter } from 'next/router';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import Router from 'next/router';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'next-i18next';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+// configs
+import { Config } from '@/config';
 import { Routes } from '@/config/routes';
+// utils
+import { mapPaginatorData } from '@/utils/data-mappers';
+// client
 import { API_ENDPOINTS } from './client/api-endpoints';
+import { enrollmentClient } from './client/enrollment';
+// types
 import {
   GetParams,
   Enrollment,
@@ -11,21 +18,17 @@ import {
   EnrollmentQueryOptions,
   EnrollmentWithMonthsPaginator,
 } from '@/types';
-import { mapPaginatorData } from '@/utils/data-mappers';
-import { enrollmentClient } from './client/enrollment';
-import { Config } from '@/config';
 
 export const useCreateEnrollmentMutation = () => {
   const queryClient = useQueryClient();
-  const { t } = useTranslation();
 
   return useMutation(enrollmentClient.create, {
-    onSuccess: () => {
-      Router.push(Routes.enrollment.list, undefined, {
-        locale: Config.defaultLanguage,
-      });
-      toast.success(t('common:successfully-created'));
-    },
+    // onSuccess: () => {
+    //   Router.push(Routes.enrollment.list, undefined, {
+    //     locale: Config.defaultLanguage,
+    //   });
+    //   toast.success(t('common:successfully-created'));
+    // },
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);

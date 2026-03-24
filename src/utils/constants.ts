@@ -1,4 +1,3 @@
-import { OwnerShipTransferStatus } from '@/types';
 import { atom } from 'jotai';
 export const LIMIT = 10;
 export const SUPER_ADMIN = 'super_admin';
@@ -42,7 +41,3 @@ export const miniSidebarInitialValue = atom(false);
 export const checkIsMaintenanceModeComing = atom(false);
 export const checkIsMaintenanceModeStart = atom(false);
 export const approveModalInitialValues = atom(false);
-export const OWNERSHIP_TRANSFER_STATUS = [
-  OwnerShipTransferStatus['PENDING'],
-  OwnerShipTransferStatus['PROCESSING'],
-];

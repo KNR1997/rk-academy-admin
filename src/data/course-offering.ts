@@ -15,6 +15,8 @@ import {
   CourseOfferingPaginator,
   CourseOffering,
   CourseOfferingQueryOptions,
+  EnrollmentPaginator,
+  CourseOfferingEnrollmentQueryOptions,
 } from '@/types';
 // client
 import { courseOfferingClient } from './client/course-offering';
@@ -103,6 +105,31 @@ export const useCourseOfferingsQuery = (
 
   return {
     courseOfferings: data?.data ?? [],
+    paginatorInfo: mapPaginatorData(data),
+    error,
+    loading: isLoading,
+  };
+};
+
+export const useCourseOfferingEnrollmentsQuery = (
+  options: Partial<CourseOfferingEnrollmentQueryOptions>,
+) => {
+  const { data, error, isLoading } = useQuery<EnrollmentPaginator, Error>(
+    [
+      `${API_ENDPOINTS.COURSE_OFFERING}/${options.course_offering_id}/enrollments/`,
+      options,
+    ],
+    ({ queryKey, pageParam }) =>
+      courseOfferingClient.enrollmentsPaginated(
+        Object.assign({}, queryKey[1], pageParam),
+      ),
+    {
+      keepPreviousData: true,
+    },
+  );
+
+  return {
+    enrollments: data?.data ?? [],
     paginatorInfo: mapPaginatorData(data),
     error,
     loading: isLoading,
