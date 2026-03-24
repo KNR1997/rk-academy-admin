@@ -997,6 +997,11 @@ export interface ResetPasswordInput {
   password: string;
 }
 
+export interface ResetTeacherPassword {
+  teacher_id: string;
+  password: string;
+}
+
 export declare interface MakeAdminInput {
   user_id: string;
 }

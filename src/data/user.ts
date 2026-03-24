@@ -182,6 +182,16 @@ export const useResetPasswordMutation = () => {
   return useMutation(userClient.resetPassword);
 };
 
+export const useResetTeacherPasswordMutation = () => {
+  const { t } = useTranslation();
+
+  return useMutation(userClient.resetTeacherPassword, {
+    onSuccess: () => {
+      toast.success(t('common:successfully-updated'));
+    },
+  });
+};
+
 export const useMakeOrRevokeAdminMutation = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();

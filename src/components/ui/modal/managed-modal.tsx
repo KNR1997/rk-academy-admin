@@ -6,6 +6,9 @@ import Modal from '@/components/ui/modal/modal';
 import StoreNoticeDeleteView from '@/components/store-notice/store-notice-delete-view';
 import EnrollmentPaymentView from '@/components/enrollment-payments/enrollment-payment-view';
 
+const ResetTeacherPasswordView = dynamic(
+  () => import('@/components/user/reset-teacher-password-view'),
+);
 const VideoDeleteView = dynamic(
   () => import('@/components/video/video-delete-view'),
 );
@@ -68,6 +71,8 @@ const ComposerMessage = dynamic(
 
 function renderModal(view: MODAL_VIEWS | undefined, data: any) {
   switch (view) {
+    case 'RESET_TEACHER_PASSWORD':
+      return <ResetTeacherPasswordView />;
     case 'DELETE_SUBJECT':
       return <SubjectDeleteView />;
     case 'DELETE_VIDEO':
