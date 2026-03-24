@@ -19,7 +19,6 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
 import PhoneNumberInput from '@/components/ui/phone-input';
 import PasswordInput from '@/components/ui/password-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
@@ -118,84 +117,67 @@ export default function CreateOrUpdateTeacherForm({ initialValues }: IProps) {
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:student-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <Input
-              label={t('form:input-label-first-name')}
-              {...register('first_name')}
-              error={t(errors.first_name?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-last-name')}
-              {...register('last_name')}
-              error={t(errors.last_name?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-email')}
-              {...register('email')}
-              error={t(errors.email?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-username')}
-              {...register('username')}
-              error={t(errors.username?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <PhoneNumberInput
-              label={t('form:input-label-contact')}
-              {...register('mobile_number')}
-              control={control}
-              error={t(errors.mobile_number?.message!)}
-              required
-            />
-            {!initialValues && (
-              <PasswordInput
-                label={t('form:input-label-password')}
-                {...register('password')}
-                error={t(errors?.password?.message!)}
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label={t('form:input-label-first-name')}
+                {...register('first_name')}
+                error={t(errors.first_name?.message!)}
                 variant="outline"
-                className="mb-4"
+                className="mb-5"
                 required
               />
-              // <Input
-              //   label={t('form:input-label-password')}
-              //   type="password"
-              //   // value={passwordSuggest}
-              //   {...register('password')}
-              //   error={t(errors.password?.message!)}
-              //   variant="outline"
-              //   className="mb-5"
-              //   required
-              // />
-            )}
-            <Input
-              label={t('form:input-label-department')}
-              {...register('department')}
-              error={t(errors.department?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
+              <Input
+                label={t('form:input-label-last-name')}
+                {...register('last_name')}
+                error={t(errors.last_name?.message!)}
+                variant="outline"
+                className="mb-5"
+                required
+              />
+              <Input
+                label={t('form:input-label-email')}
+                {...register('email')}
+                error={t(errors.email?.message!)}
+                variant="outline"
+                className="mb-5"
+                required
+              />
+              <Input
+                label={t('form:input-label-username')}
+                {...register('username')}
+                error={t(errors.username?.message!)}
+                variant="outline"
+                className="mb-5"
+                required
+              />
+              <PhoneNumberInput
+                label={t('form:input-label-contact')}
+                {...register('mobile_number')}
+                control={control}
+                error={t(errors.mobile_number?.message!)}
+                required
+              />
+              {!initialValues && (
+                <PasswordInput
+                  label={t('form:input-label-password')}
+                  {...register('password')}
+                  error={t(errors?.password?.message!)}
+                  variant="outline"
+                  className="mb-4"
+                  required
+                />
+              )}
+              <Input
+                label={t('form:input-label-department')}
+                {...register('department')}
+                error={t(errors.department?.message!)}
+                variant="outline"
+                className="mb-5"
+                required
+              />
+            </div>
           </Card>
         </div>
 

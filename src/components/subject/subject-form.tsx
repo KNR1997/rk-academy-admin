@@ -23,7 +23,6 @@ import Input from '@/components/ui/input';
 import Card from '@/components/common/card';
 import Button from '@/components/ui/button';
 import { EditIcon } from '@/components/icons/edit';
-import Description from '@/components/ui/description';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 
 type FormValues = {
@@ -48,7 +47,6 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: IProps) {
   const [isSlugDisable, setIsSlugDisable] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const isNewTranslation = router?.query?.action === 'translate';
   const isSlugEditable =
     router?.query?.action === 'edit' &&
     router?.locale === Config.defaultLanguage;
@@ -64,9 +62,6 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? {
           ...initialValues,
-          ...(isNewTranslation && {
-            type: null,
-          }),
         }
       : defaultValues,
     //@ts-ignore
@@ -116,65 +111,57 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: IProps) {
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:subject-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label={t('form:input-label-name')}
+                {...register('name')}
+                error={t(errors.name?.message!)}
+                variant="outline"
+                className="mb-5"
+                required
+              />
 
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <Input
-              label={t('form:input-label-name')}
-              {...register('name')}
-              error={t(errors.name?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-
-            {isSlugEditable ? (
-              <div className="relative mb-5">
+              {isSlugEditable ? (
+                <div className="relative mb-5">
+                  <Input
+                    label={t('form:input-label-slug')}
+                    {...register('slug')}
+                    error={t(errors.slug?.message!)}
+                    variant="outline"
+                    disabled={isSlugDisable}
+                  />
+                  <button
+                    className="absolute top-[27px] right-px z-0 flex h-[46px] w-11 items-center justify-center rounded-tr rounded-br border-l border-solid border-border-base bg-white px-2 text-body transition duration-200 hover:text-heading focus:outline-none"
+                    type="button"
+                    title={t('common:text-edit')}
+                    onClick={() => setIsSlugDisable(false)}
+                  >
+                    <EditIcon width={14} />
+                  </button>
+                </div>
+              ) : (
                 <Input
                   label={t('form:input-label-slug')}
                   {...register('slug')}
                   error={t(errors.slug?.message!)}
+                  value={slugAutoSuggest}
                   variant="outline"
-                  disabled={isSlugDisable}
+                  className="mb-5"
+                  disabled
                 />
-                <button
-                  className="absolute top-[27px] right-px z-0 flex h-[46px] w-11 items-center justify-center rounded-tr rounded-br border-l border-solid border-border-base bg-white px-2 text-body transition duration-200 hover:text-heading focus:outline-none"
-                  type="button"
-                  title={t('common:text-edit')}
-                  onClick={() => setIsSlugDisable(false)}
-                >
-                  <EditIcon width={14} />
-                </button>
-              </div>
-            ) : (
+              )}
+
               <Input
-                label={t('form:input-label-slug')}
-                {...register('slug')}
-                error={t(errors.slug?.message!)}
-                value={slugAutoSuggest}
+                label={t('form:input-label-code')}
+                {...register('code')}
+                error={t(errors.code?.message!)}
                 variant="outline"
                 className="mb-5"
-                disabled
+                required
               />
-            )}
-
-            <Input
-              label={t('form:input-label-code')}
-              {...register('code')}
-              error={t(errors.code?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
+            </div>
           </Card>
         </div>
         <StickyFooterPanel className="z-0">

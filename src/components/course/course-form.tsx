@@ -23,7 +23,6 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
 import SelectSubject from '@/components/subject/select-subject';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 
@@ -111,41 +110,34 @@ export default function CreateOrUpdateCourseForm({ initialValues }: IProps) {
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:course-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectSubject
-              control={control}
-              errors={errors}
-              disabled={!!initialValues}
-            />
-            <Input
-              label={t('form:input-label-name')}
-              {...register('name')}
-              error={t(errors.name?.message!)}
-              variant="outline"
-              className="mb-5"
-              disabled
-              value={courseName}
-            />
-            <Input
-              label={t('form:input-label-code')}
-              {...register('code')}
-              type="text"
-              variant="outline"
-              className="mb-4"
-              error={t(errors.code?.message!)}
-              disabled
-              value={courseCode}
-            />
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectSubject
+                control={control}
+                errors={errors}
+                disabled={!!initialValues}
+              />
+              <Input
+                label={t('form:input-label-name')}
+                {...register('name')}
+                error={t(errors.name?.message!)}
+                variant="outline"
+                className="mb-5"
+                disabled
+                value={courseName}
+              />
+              <Input
+                label={t('form:input-label-code')}
+                {...register('code')}
+                type="text"
+                variant="outline"
+                className="mb-4"
+                error={t(errors.code?.message!)}
+                disabled
+                value={courseCode}
+              />
+            </div>
           </Card>
         </div>
         <StickyFooterPanel className="z-0">

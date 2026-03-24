@@ -138,36 +138,28 @@ export default function CreateOrUpdateEnrollmentForm({
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:enrollment-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectStudent
-              control={control}
-              errors={errors}
-              // disabled={!!initialValues}
-            />
-            <SelectCourseOffering
-              control={control}
-              errors={errors}
-              gradeLevel={student?.current_grade?.name}
-            />
-            <div className="mb-5">
-              <SelectInput
-                label={t('form:input-label-status')}
-                name="is_active"
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectStudent
                 control={control}
-                options={activeInactiveStatusOptions}
-                isClearable={true}
+                errors={errors}
+                // disabled={!!initialValues}
               />
+              <SelectCourseOffering
+                control={control}
+                errors={errors}
+                gradeLevel={student?.current_grade?.name}
+              />
+              <div className="mb-5">
+                <SelectInput
+                  label={t('form:input-label-status')}
+                  name="is_active"
+                  control={control}
+                  options={activeInactiveStatusOptions}
+                  isClearable={true}
+                />
+              </div>
             </div>
           </Card>
         </div>

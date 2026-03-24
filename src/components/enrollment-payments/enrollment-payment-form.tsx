@@ -23,7 +23,6 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
 import SelectInput from '@/components/ui/select-input';
 import SelectStudent from '@/components/student/select-student';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
@@ -211,44 +210,36 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:category-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectStudent control={control} errors={errors} />
-            <SelectCourse
-              control={control}
-              errors={errors}
-              studentId={selectedStudent?.id}
-            />
-            <div className="mb-5">
-              <SelectInput
-                label="Payment Month"
-                name="payment_month"
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectStudent control={control} errors={errors} />
+              <SelectCourse
                 control={control}
-                options={currentMonthOption}
-                required
+                errors={errors}
+                studentId={selectedStudent?.id}
               />
-              <ValidationError message={t(errors.payment_month?.message)} />
+              <div className="mb-5">
+                <SelectInput
+                  label="Payment Month"
+                  name="payment_month"
+                  control={control}
+                  options={currentMonthOption}
+                  required
+                />
+                <ValidationError message={t(errors.payment_month?.message)} />
+              </div>
+              <Input
+                label={t('form:input-label-fee')}
+                {...register('fee')}
+                type="number"
+                variant="outline"
+                className="mb-4"
+                required
+                readOnly
+                error={t(errors.fee?.message!)}
+              />
             </div>
-            <Input
-              label={t('form:input-label-fee')}
-              {...register('fee')}
-              type="number"
-              variant="outline"
-              className="mb-4"
-              required
-              readOnly
-              error={t(errors.fee?.message!)}
-            />
           </Card>
         </div>
         <StickyFooterPanel className="z-0">
