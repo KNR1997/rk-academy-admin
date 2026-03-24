@@ -1,3 +1,4 @@
+import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useRef, useState } from 'react';
@@ -9,6 +10,8 @@ import { Enrollment, Student } from '@/types';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // constants
 import { monthOptions } from '@/constants';
+// stores
+import { clearEnrollmentFlowAtom } from '@/store/enrollment.store';
 // hooks
 import { useStudentEnrollmentsQuery } from '@/data/student';
 import { useUpdateEnrollmentMutation } from '@/data/enrollment';
@@ -47,7 +50,7 @@ function SelectCourse({
         control={control}
         //@ts-ignore
         getOptionLabel={(enrollment: Enrollment) =>
-          `${enrollment.course_offering.course.name} - ${enrollment.course_offering.grade_level.name} - Batch ${enrollment.course_offering.batch} `
+          `${enrollment?.course_offering?.course?.name} - ${enrollment?.course_offering?.grade_level?.name} - Batch ${enrollment?.course_offering?.batch} `
         }
         //@ts-ignore
         getOptionValue={(enrollment: Enrollment) => enrollment.id}
@@ -70,8 +73,13 @@ type FormValues = {
 const defaultValues = {};
 
 type IProps = {
-  initialValues?: Enrollment | undefined;
+  initialValues?: {
+    id?: string | null;
+    student?: Student | null;
+    enrollment?: Enrollment | null;
+  };
 };
+
 export default function CreateOrUpdateEnrollmentPaymentForm({
   initialValues,
 }: IProps) {
@@ -79,8 +87,8 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
   const { t } = useTranslation();
   // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const isNewTranslation = router?.query?.action === 'translate';
+  // store actions
+  const clearFlow = useSetAtom(clearEnrollmentFlowAtom);
 
   const d = new Date();
   let month = d.getMonth();
@@ -104,9 +112,6 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
     defaultValues: initialValues
       ? {
           ...initialValues,
-          ...(isNewTranslation && {
-            type: null,
-          }),
         }
       : defaultValues,
     //@ts-ignore
@@ -175,12 +180,13 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
       amount: values.fee,
     };
     const mutationOptions = {
+      onSuccess: () => {
+        clearFlow(null);
+      },
       onError: (error: any) =>
         handleMutationError(error, setError, setErrorMessage),
     };
-    if (!initialValues) {
-      createEnrollmentPayment(input, mutationOptions);
-    } else {
+    if (initialValues?.id) {
       updateEnrollment(
         {
           ...input,
@@ -188,6 +194,8 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
         },
         mutationOptions,
       );
+    } else {
+      createEnrollmentPayment(input, mutationOptions);
     }
   };
 
@@ -261,7 +269,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
               disabled={creating || updating}
               className="text-sm md:text-base"
             >
-              {initialValues
+              {initialValues?.id
                 ? t('form:button-label-update-enrollment-payment')
                 : t('form:button-label-add-enrollment-payment')}
             </Button>

@@ -1,14 +1,20 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useSetAtom } from 'jotai';
+import { toast } from 'react-toastify';
 import { useTranslation } from 'next-i18next';
+import Router, { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Control, FieldErrors, useForm } from 'react-hook-form';
 // form-validations
 import { studentValidationSchema } from './student-validation-schema';
 // types
 import { AcademicYear, GradeLevel, Student } from '@/types';
+// configs
+import { Routes } from '@/config/routes';
 // utils
 import { handleMutationError } from '@/utils/handle-mutation-error';
+// stores
+import { enrollmentFlowStudentAtom  } from '@/store/enrollment.store';
 // hooks
 import {
   useCreateStudentMutation,
@@ -21,9 +27,8 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import SelectInput from '../ui/select-input';
-import Description from '@/components/ui/description';
-import SelectExamYear from '../exam-year/select-exam-year';
+import SelectInput from '@/components/ui/select-input';
+import SelectExamYear from '@/components/exam-year/select-exam-year';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import ValidationError from '@/components/ui/form-validation-error';
 import SelectGradeLevel from '@/components/grade-level/select-grade-level';
@@ -41,7 +46,7 @@ function SelectAcademicYear({
     language: locale,
   });
   return (
-    <div className="mb-5">
+    <div>
       <SelectInput
         label={t('form:input-label-academic-year')}
         name="academic_year"
@@ -94,6 +99,9 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
   // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isNewTranslation = router?.query?.action === 'translate';
+
+  // Get the setter for enrollment student atom
+  const setEnrollmentStudent = useSetAtom(enrollmentFlowStudentAtom );
 
   const {
     register,
@@ -151,6 +159,11 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
       exam_year: values.exam_year.value,
     };
     const mutationOptions = {
+      onSuccess: (data: Student) => {
+        toast.success(t('common:successfully-created'));
+        setEnrollmentStudent(data);
+        Router.push(Routes.enrollment.create);
+      },
       onError: (error: any) =>
         handleMutationError(error, setError, setErrorMessage),
     };
@@ -179,35 +192,26 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:student-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <Input
-              label={t('form:input-label-first-name')}
-              {...register('first_name')}
-              error={t(errors.first_name?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-last-name')}
-              {...register('last_name')}
-              error={t(errors.last_name?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-
-            {/* <Input
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label={t('form:input-label-first-name')}
+                {...register('first_name')}
+                error={t(errors.first_name?.message!)}
+                variant="outline"
+                //dimension="small"
+                required
+              />
+              <Input
+                label={t('form:input-label-last-name')}
+                {...register('last_name')}
+                error={t(errors.last_name?.message!)}
+                variant="outline"
+                //dimension="small"
+                required
+              />
+              {/* <Input
               label={t('form:input-label-username')}
               {...register('username')}
               error={t(errors.username?.message!)}
@@ -215,63 +219,57 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
               className="mb-5"
               required
               /> */}
-            <Input
-              label={t('form:input-label-contact')}
-              {...register('parent_guardian_phone')}
-              error={t(errors.parent_guardian_phone?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            {/* <PhoneNumberInput
+              <Input
+                label={t('form:input-label-contact')}
+                {...register('parent_guardian_phone')}
+                error={t(errors.parent_guardian_phone?.message!)}
+                variant="outline"
+                //dimension="small"
+                required
+              />
+              {/* <PhoneNumberInput
               label={t('form:input-label-contact')}
               {...register('parent_guardian_phone')}
               control={control}
               error={t(errors.parent_guardian_phone?.message!)}
             /> */}
-            {!initialValues && (
+              {!initialValues && (
+                <Input
+                  label={t('form:input-label-password')}
+                  type="password"
+                  {...register('password')}
+                  error={t(errors.password?.message!)}
+                  variant="outline"
+                  //dimension="small"
+                  required
+                />
+              )}
               <Input
-                label={t('form:input-label-password')}
-                type="password"
-                {...register('password')}
-                error={t(errors.password?.message!)}
+                label={t('form:input-label-email')}
+                {...register('email')}
+                error={t(errors.email?.message!)}
                 variant="outline"
-                className="mb-5"
-                required
+                //dimension="small"
               />
-            )}
-            <Input
-              label={t('form:input-label-email')}
-              {...register('email')}
-              error={t(errors.email?.message!)}
-              variant="outline"
-              className="mb-5"
-            />
-            <Input
-              label={t('form:input-label-date-of-birth')}
-              {...register('date_of_birth')}
-              type="date"
-              error={t(errors.date_of_birth?.message!)}
-              variant="outline"
-              className="mb-5"
-            />
+              <Input
+                label={t('form:input-label-date-of-birth')}
+                {...register('date_of_birth')}
+                type="date"
+                error={t(errors.date_of_birth?.message!)}
+                variant="outline"
+                //dimension="small"
+              />
+            </div>
           </Card>
         </div>
 
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:student-guardian-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectGradeLevel control={control} errors={errors} />
-            <SelectAcademicYear control={control} errors={errors} />
-            <SelectExamYear control={control} errors={errors} />
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectGradeLevel control={control} errors={errors} />
+              <SelectAcademicYear control={control} errors={errors} />
+              <SelectExamYear control={control} errors={errors} />
+            </div>
           </Card>
         </div>
 
