@@ -25,7 +25,6 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
 import SelectCourse from '@/components/course/select-course';
 import SelectTeacher from '@/components/teacher/select-teacher';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
@@ -46,6 +45,7 @@ type FormValues = {
 
 const defaultValues = {
   batch: 1,
+  year: new Date().getFullYear(),
 };
 
 type IProps = {
@@ -120,56 +120,50 @@ export default function CreateOrUpdateCourseOfferingForm({
       ) : null}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:category-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectCourse
-              control={control}
-              errors={errors}
-              disabled={!!initialValues}
-            />
-            <SelectTeacher
-              control={control}
-              errors={errors}
-              disabled={!!initialValues}
-            />
-            <SelectGradeLevel control={control} errors={errors} />
-            <Input
-              label={t('form:input-label-year')}
-              {...register('year')}
-              error={t(errors.year?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-batch')}
-              {...register('batch')}
-              error={t(errors.batch?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-fee')}
-              {...register('fee')}
-              type="number"
-              variant="outline"
-              className="mb-4"
-              required
-              error={t(errors.fee?.message!)}
-              {...register('fee', {
-                setValueAs: (v) => (v === '' ? null : Number(v)),
-              })}
-            />
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectCourse
+                control={control}
+                errors={errors}
+                disabled={!!initialValues}
+              />
+              <SelectTeacher
+                control={control}
+                errors={errors}
+                disabled={!!initialValues}
+              />
+              <SelectGradeLevel control={control} errors={errors} />
+              <Input
+                label={t('form:input-label-year')}
+                {...register('year')}
+                error={t(errors.year?.message!)}
+                variant="outline"
+                className="mb-5"
+                required
+                disabled
+              />
+              <Input
+                label={t('form:input-label-batch')}
+                {...register('batch')}
+                error={t(errors.batch?.message!)}
+                variant="outline"
+                className="mb-5"
+                required
+              />
+              <Input
+                label={t('form:input-label-fee')}
+                {...register('fee')}
+                type="number"
+                variant="outline"
+                className="mb-4"
+                required
+                error={t(errors.fee?.message!)}
+                {...register('fee', {
+                  setValueAs: (v) => (v === '' ? null : Number(v)),
+                })}
+              />
+            </div>
           </Card>
         </div>
         <StickyFooterPanel className="z-0">

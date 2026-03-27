@@ -5,13 +5,7 @@ import { Routes } from '@/config/routes';
 // utils
 import { useIsRTL } from '@/utils/locals';
 // types
-import {
-  CourseOffering,
-  Enrollment,
-  EnrollmentStatusType,
-  SortOrder,
-  Student,
-} from '@/types';
+import { Enrollment, EnrollmentStatusType, SortOrder, Student } from '@/types';
 import { MappedPaginatorInfo } from '@/types';
 // components
 import { Table } from '@/components/ui/table';
@@ -28,7 +22,7 @@ export type IProps = {
   onPagination: (key: number) => void;
   onOrdering: (current: any) => void;
 };
-const EnrollmentList = ({
+const CourseOfferingEnrollmentList = ({
   enrollments,
   paginatorInfo,
   onPagination,
@@ -60,14 +54,6 @@ const EnrollmentList = ({
   });
 
   const columns = [
-    // {
-    //   title: t('table:table-item-id'),
-    //   dataIndex: 'id',
-    //   key: 'id',
-    //   align: alignLeft,
-    //   width: 120,
-    //   render: (id: number) => `#${t('table:table-item-id')}: ${id}`,
-    // },
     {
       title: (
         <TitleWithSort
@@ -97,21 +83,6 @@ const EnrollmentList = ({
               ST No. {student?.student_number}
             </span>
           </div>
-        </div>
-      ),
-    },
-    {
-      title: t('table:table-item-course'),
-      dataIndex: 'course_offering',
-      key: 'course_offering',
-      align: alignLeft,
-      width: 150,
-      render: (course_offering: CourseOffering) => (
-        <div
-          className="overflow-hidden truncate whitespace-nowrap"
-          title={course_offering?.course?.name}
-        >
-          {course_offering?.course?.name}
         </div>
       ),
     },
@@ -156,34 +127,6 @@ const EnrollmentList = ({
       ),
     },
     {
-      title: (
-        <TitleWithSort
-          title={t('table:table-item-active')}
-          ascending={
-            sortingObj.sort === SortOrder.Asc &&
-            sortingObj.column === 'is_active'
-          }
-          isActive={sortingObj.column === 'is_active'}
-        />
-      ),
-      width: 150,
-      className: 'cursor-pointer',
-      dataIndex: 'is_active',
-      key: 'is_active',
-      align: 'center',
-      onHeaderCell: () => onHeaderClick('is_active'),
-      render: (is_active: boolean) => (
-        <Badge
-          textKey={is_active ? 'common:text-active' : 'common:text-inactive'}
-          color={
-            is_active
-              ? 'bg-accent/10 !text-accent'
-              : 'bg-status-failed/10 text-status-failed'
-          }
-        />
-      ),
-    },
-    {
       title: t('table:table-item-actions'),
       dataIndex: 'id',
       key: 'actions',
@@ -193,8 +136,12 @@ const EnrollmentList = ({
         <LanguageSwitcher
           slug={id}
           record={record}
-          // deleteModalView="DELETE_ENROLLMENT"
           routes={Routes?.enrollment}
+          whatsappMessage={
+            record.status != EnrollmentStatusType.ACTIVE
+              ? record?.student?.parent_guardian_phone
+              : ''
+          }
         />
       ),
     },
@@ -235,4 +182,4 @@ const EnrollmentList = ({
   );
 };
 
-export default EnrollmentList;
+export default CourseOfferingEnrollmentList;

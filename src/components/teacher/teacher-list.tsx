@@ -14,7 +14,7 @@ import Badge from '@/components/ui/badge/badge';
 import Pagination from '@/components/ui/pagination';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
-import LanguageSwitcher from '@/components/ui/lang-action/action';
+import ActionButtons from '@/components/common/action-buttons';
 
 export type IProps = {
   teachers: Teacher[] | undefined;
@@ -135,12 +135,12 @@ const TeacherList = ({
       align: alignRight,
       width: 120,
       render: (id: string, record: Teacher) => (
-        <LanguageSwitcher
-          slug={id}
-          record={record}
+        <ActionButtons
+          id={id}
+          editUrl={Routes?.teacher.editByIdWithoutLang(record.id)}
           deleteModalView="DELETE_TEACHER"
           deleteBySlug={record.id}
-          routes={Routes?.teacher}
+          resetTeacherPasswordButton={true}
         />
       ),
     },

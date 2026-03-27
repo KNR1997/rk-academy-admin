@@ -13,6 +13,7 @@ import Pagination from '@/components/ui/pagination';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
 import LanguageSwitcher from '@/components/ui/lang-action/action';
+import ActionButtons from '../common/action-buttons';
 
 export type IProps = {
   videos: Video[] | undefined;
@@ -21,7 +22,7 @@ export type IProps = {
   onOrdering: (current: any) => void;
 };
 
-const VideoList = ({
+const MyVideoList = ({
   videos,
   paginatorInfo,
   onPagination,
@@ -84,8 +85,8 @@ const VideoList = ({
             className="overflow-hidden truncate whitespace-nowrap"
             title={courseOffering?.course?.name}
           >
-            {courseOffering?.course?.name} {courseOffering?.grade_level?.name} - B
-            {courseOffering.batch}
+            {courseOffering?.course?.name} {courseOffering?.grade_level?.name} -
+            B{courseOffering.batch}
           </div>
         );
       },
@@ -97,26 +98,22 @@ const VideoList = ({
       align: alignLeft,
       width: 120,
       render: (course_content: CourseContent) => (
-        <div
-          className="overflow-hidden truncate whitespace-nowrap"
-        >
+        <div className="overflow-hidden truncate whitespace-nowrap">
           {course_content?.month}
         </div>
       ),
     },
     {
-      title: t('table:table-item-actions'),
+      title: t('table:table-item-watch'),
       dataIndex: 'id',
       key: 'actions',
       align: alignRight,
       width: 120,
       render: (id: string, record: Video) => (
-        <LanguageSwitcher
-          slug={id}
-          record={record}
-          deleteModalView="DELETE_VIDEO"
-          deleteBySlug={record.id}
-          routes={Routes?.video}
+        <ActionButtons
+          id={id}
+          enablePreviewMode={!!record?.video_url}
+          previewUrl={Routes?.watchVideos.details(record.id)}
         />
       ),
     },
@@ -157,4 +154,4 @@ const VideoList = ({
   );
 };
 
-export default VideoList;
+export default MyVideoList;

@@ -30,6 +30,7 @@ export enum StoreNoticePriorityType {
   Medium = 'medium',
   Low = 'low',
 }
+
 export enum StoreNoticeType {
   all_vendor = 'all_vendor',
   specific_vendor = 'specific_vendor',
@@ -51,13 +52,6 @@ export type QueryOptionsType = {
   sortedBy?: SortOrder;
 };
 
-export enum FlashSaleType {
-  PERCENTAGE = 'percentage',
-  FIXED_RATE = 'fixed_rate',
-  DEFAULT = 'percentage',
-  // WALLET_POINT_GIFT = 'wallet_point_gift',
-  // FREE_SHIPPING = 'free_shipping',
-}
 
 export interface TodayTotalOrderByStatus {
   pending: number;
@@ -70,19 +64,6 @@ export interface TodayTotalOrderByStatus {
   outForDelivery: number;
 }
 
-export enum PaymentStatus {
-  PENDING = 'payment-pending',
-  PROCESSING = 'payment-processing',
-  SUCCESS = 'payment-success',
-  FAILED = 'payment-failed',
-  REVERSAL = 'payment-reversal',
-  COD = 'payment-cash-on-delivery',
-}
-
-export interface NameAndValueType {
-  name: string;
-  value: string;
-}
 export enum Permission {
   SuperAdmin = 'super_admin',
   StoreOwner = 'store_owner',
@@ -134,15 +115,6 @@ export interface AuthResponse {
   tokens: { access: string; refresh: string };
   permissions: string[];
   role: string;
-}
-
-export interface CreateTypeInput {
-  name: string;
-  slug?: string;
-  language?: string;
-  gallery?: AttachmentInput[];
-  icon?: string;
-  banner_text?: string;
 }
 
 export interface Subject {
@@ -294,25 +266,6 @@ export interface Teacher {
   is_active: boolean;
 }
 
-export interface DigitalFile {
-  created_at?: string;
-  id: string;
-  attachment_id: string;
-  file_name: string;
-  updated_at?: string;
-  url: string;
-}
-
-export interface VariationOption {
-  name?: string;
-  value?: string;
-}
-
-export interface VariationOptionInput {
-  name?: string;
-  value?: string;
-}
-
 export interface Attachment {
   thumbnail: string;
   original: string;
@@ -324,10 +277,6 @@ export interface AttachmentInput {
   original: string;
   id?: string;
   file_name?: string;
-}
-
-export interface ConnectTypeBelongsTo {
-  connect?: string;
 }
 
 export interface IImage {
@@ -377,18 +326,6 @@ export interface PaymentInfo {
   bank: string;
 }
 
-export interface PaymentInfoInput {
-  account: number;
-  name: string;
-  email: string;
-  bank: string;
-}
-
-export interface BalanceInput {
-  id?: string;
-  payment_info: PaymentInfoInput;
-}
-
 export interface shopMaintenance {
   image: Attachment;
   title: string;
@@ -396,6 +333,7 @@ export interface shopMaintenance {
   start: Date;
   until: Date;
 }
+
 export interface ShopSettings {
   socials?: ShopSocials[];
   contact: string;
@@ -422,11 +360,6 @@ export interface Location {
   country?: string;
   zip?: string;
   formattedAddress?: string;
-}
-
-export interface ShopSocials {
-  icon?: string;
-  url?: string;
 }
 
 export interface UserAddress {
@@ -531,68 +464,6 @@ export interface StoreNoticeInput {
   expired_at: string;
   type: string;
   received_by?: string[];
-}
-
-export interface FAQs {
-  id: string;
-  translated_languages: string[];
-  language: string;
-  faq_title: string;
-  slug: string;
-  faq_description: string;
-  shop_id?: string;
-  user_id: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
-}
-
-export interface FAQsInput {
-  faq_title: string;
-  faq_description?: string;
-  shop_id?: string;
-  language?: string;
-  slug?: string;
-}
-
-export interface FlashSaleInput {
-  title: string;
-  description: string;
-  start_date: string;
-  end_date: string;
-  language?: string;
-  slug?: string;
-  image?: AttachmentInput;
-  cover_image?: AttachmentInput;
-  type: string;
-  rate: string;
-  sale_status: boolean;
-  sale_builder: any;
-}
-
-export interface TermsAndConditions {
-  id: string;
-  translated_languages: string[];
-  language: string;
-  title: string;
-  slug: string;
-  description: string;
-  shop_id?: string;
-  user_id: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at?: string;
-  is_approved?: boolean;
-}
-
-export interface TermsAndConditionsInput {
-  title: string;
-  description?: string;
-  shop_id?: string;
-}
-
-export interface StoreNoticeUserToNotifyInput {
-  type: string;
 }
 
 export interface NotifyLogs {
@@ -706,14 +577,6 @@ export interface MappedPaginatorInfo {
   hasMorePages: boolean;
 }
 
-export interface CardInput {
-  number: string;
-  expiryMonth: string;
-  expiryYear: string;
-  cvv: string;
-  email?: string;
-}
-
 export interface CreateNotifyLogsInput {
   id: string;
   receiver: string;
@@ -722,17 +585,6 @@ export interface CreateNotifyLogsInput {
   notify_receiver_type: string;
   is_read: boolean;
   notify_text: string;
-}
-
-export interface AbusiveReport {
-  id?: number;
-  user_id?: number;
-  user: User[];
-  model_id: number;
-  model_type: string;
-  message: string;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface CreateAbuseReportInput {
@@ -820,7 +672,7 @@ export interface Conversations {
   participants: {
     id: string;
     user: User;
-  }[]
+  }[];
 }
 
 export interface Message extends LatestMessage {
@@ -971,40 +823,6 @@ export interface SettingsOptions {
   freeShippingAmount?: number;
   isMultiCommissionRate?: boolean;
 }
-
-// *************** OLD Code ***************
-// export interface SettingsOptions {
-//   siteTitle?: string;
-//   siteSubtitle?: string;
-//   currency?: string;
-//   defaultAi?: string;
-//   useOtp?: boolean;
-//   useAi?: boolean;
-//   useGoogleMap?: boolean;
-//   isProductReview?: boolean;
-//   freeShipping?: boolean;
-//   contactDetails?: ContactDetails;
-//   minimumOrderAmount?: number;
-//   freeShippingAmount?: number;
-//   currencyToWalletRatio?: number;
-//   signupPoints?: number;
-//   maxShopDistance?: number;
-//   maximumQuestionLimit?: number;
-//   deliveryTime?: DeliveryTime[];
-//   logo?: Attachment;
-//   taxClass?: string;
-//   shippingClass?: string;
-//   seo?: SeoSettings;
-//   google?: GoogleSettings;
-//   facebook?: FacebookSettings;
-//   paymentGateway?: any;
-//   defaultPaymentGateway?: string;
-//   guestCheckout: boolean;
-//   smsEvent?: SmsEvent;
-//   emailEvent?: EmailEvent;
-//   pushNotification?: PushNotification;
-//   server_info?: ServerInfo;
-// }
 
 export interface Maintenance {
   image: Attachment;
@@ -1179,6 +997,11 @@ export interface ResetPasswordInput {
   password: string;
 }
 
+export interface ResetTeacherPassword {
+  teacher_id: string;
+  password: string;
+}
+
 export declare interface MakeAdminInput {
   user_id: string;
 }
@@ -1320,6 +1143,12 @@ export interface CourseOfferingQueryOptions extends QueryOptions {
   grade_level: string;
 }
 
+export interface CourseOfferingEnrollmentQueryOptions extends QueryOptions {
+  course_offering_id: string;
+  name: string;
+  grade_level: string;
+}
+
 export interface UserQueryOptions extends QueryOptions {
   name: string;
 }
@@ -1342,8 +1171,6 @@ export interface EnrollmentQueryOptions extends QueryOptions {
 export interface MyEnrollmentVideosQueryOptions extends QueryOptions {
   enrollment_id: string;
   name: string;
-  grade_level: string;
-  batch: string;
 }
 
 export interface EnrollmentPaymentQueryOptions extends QueryOptions {
@@ -1352,8 +1179,8 @@ export interface EnrollmentPaymentQueryOptions extends QueryOptions {
 
 export interface EnrollmentPendingPaymentQueryOptions extends QueryOptions {
   name: string;
-  last_payment_month: number | null,
-  last_payment_year: number | null,
+  last_payment_month: number | null;
+  last_payment_year: number | null;
 }
 
 export interface ConversationQueryOptions extends QueryOptions {
@@ -1378,74 +1205,6 @@ export interface InvoiceTranslatedText {
   date: string;
 }
 
-export interface GenerateInvoiceDownloadUrlInput {
-  order_id: string;
-  translated_text?: InvoiceTranslatedText;
-  is_rtl: boolean;
-}
-
-export interface AttributeQueryOptions extends QueryOptions {
-  type: string;
-  name: string;
-  shop_id: string;
-}
-
-export interface AttributeValueQueryOptions extends QueryOptions {
-  type: string;
-  name: string;
-}
-
-export interface TaxQueryOptions extends QueryOptions {
-  name: string;
-}
-
-export interface ShippingQueryOptions extends QueryOptions {
-  name: string;
-}
-
-export interface AuthorQueryOptions extends QueryOptions {
-  type: string;
-  name: string;
-  is_approved?: boolean;
-}
-export interface RefundPolicyQueryOptions extends QueryOptions {
-  title: string;
-  target: string;
-  status: string;
-}
-export interface RefundReasonQueryOptions extends QueryOptions {
-  name: string;
-}
-
-export interface TypeQueryOptions extends QueryOptions {
-  name: string;
-}
-
-export interface AnalyticsQueryOptions extends QueryOptions {
-  days?: number;
-}
-
-export interface ProductQueryOptions extends QueryOptions {
-  type: string;
-  name: string;
-  categories: string;
-  tags: string;
-  author: string;
-  price: string;
-  manufacturer: string;
-  status: string;
-  is_active: string;
-  shop_id: string;
-  min_price: string;
-  max_price: string;
-  rating: string;
-  question: string;
-  user_id: string;
-  flash_sale_builder: boolean;
-  product_type: string;
-  searchedByUser: string;
-}
-
 export interface UserQueryOptions extends QueryOptions {
   name: string;
   search?: string;
@@ -1454,34 +1213,8 @@ export interface UserQueryOptions extends QueryOptions {
   exclude: string | number;
 }
 
-export interface ManufacturerQueryOptions extends QueryOptions {
-  shop_id: string;
-  name: string;
-  is_approved: boolean;
-  type: string;
-}
-
-export interface OrderStatusQueryOptions extends QueryOptions {
-  name: string;
-}
-
 export interface StaffQueryOptions extends Omit<QueryOptions, 'language'> {
   shop_id: string;
-}
-
-export interface WithdrawQueryOptions extends Omit<QueryOptions, 'language'> {
-  name: string;
-  shop_id: string;
-  parent: number | null;
-}
-
-export interface OrderQueryOptions extends QueryOptions {
-  type: string;
-  name: string;
-  shop_id: string;
-  tracking_number: string;
-  refund_reason: string;
-  with: string;
 }
 
 export interface NotifyLogsQueryOptions extends QueryOptions {
@@ -1493,32 +1226,10 @@ export interface NotifyLogsQueryOptions extends QueryOptions {
   is_read?: boolean;
 }
 
-export interface CouponQueryOptions extends QueryOptions {
-  code: string;
-  shop_id: string;
-}
 export interface StoreNoticeQueryOptions extends QueryOptions {
   notice: string;
   shops: string;
   'users.id': string;
-}
-
-export interface FAQsQueryOptions extends QueryOptions {
-  faq_title: string;
-  shop_id: string;
-}
-
-export interface FlashSaleQueryOptions extends QueryOptions {
-  title?: string;
-  shop_id?: string;
-  slug?: string;
-  request_from?: string;
-}
-
-export interface TermsAndConditionsQueryOptions extends QueryOptions {
-  title: string;
-  shop_id: string;
-  is_approved?: boolean;
 }
 
 export interface VendorQueryOptionsType extends QueryOptionsType {
@@ -1537,7 +1248,8 @@ export interface QuestionQueryOptions extends Omit<QueryOptions, 'language'> {
   answer: string;
 }
 
-export interface PendingPaymentQueryOptions extends Omit<QueryOptions, 'language'> {
+export interface PendingPaymentQueryOptions
+  extends Omit<QueryOptions, 'language'> {
   name: string;
   type: string;
   shop_id: string;
@@ -1545,18 +1257,11 @@ export interface PendingPaymentQueryOptions extends Omit<QueryOptions, 'language
   answer: string;
 }
 
-
 export interface ReviewQueryOptions extends Omit<QueryOptions, 'language'> {
   name: string;
   type: string;
   shop_id: string;
   product_id: number;
-}
-
-export interface ShopQueryOptions extends Omit<QueryOptions, 'language'> {
-  name: string;
-  parent: number | null;
-  is_active?: boolean;
 }
 
 export interface GoogleMapLocation {
@@ -1576,10 +1281,6 @@ export interface GoogleMapLocation {
 export interface SettingCurrencyOptions {
   formation?: any;
   fractions?: number;
-}
-
-export interface GenerateDescriptionInput {
-  prompt: string;
 }
 
 export interface ItemProps {
@@ -1602,7 +1303,8 @@ export interface ShopPaginator extends PaginatorInfo<Shop> {}
 
 export interface UserPaginator extends PaginatorInfo<User> {}
 
-export interface PendingPaymentPaginator extends PaginatorInfo<PendingPayment> {}
+export interface PendingPaymentPaginator
+  extends PaginatorInfo<PendingPayment> {}
 
 export interface LicensedDomainPaginator extends PaginatorInfo<Domain> {}
 
@@ -1611,11 +1313,6 @@ export interface StaffPaginator extends PaginatorInfo<User> {}
 export interface NotifyLogsPaginator extends PaginatorInfo<NotifyLogs> {}
 
 export interface StoreNoticePaginator extends PaginatorInfo<StoreNotice> {}
-
-export interface FAQsPaginator extends PaginatorInfo<FAQs> {}
-
-export interface TermsAndConditionsPaginator
-  extends PaginatorInfo<TermsAndConditions> {}
 
 export interface SubjectPaginator extends PaginatorInfo<Subject> {}
 
@@ -1644,26 +1341,13 @@ export interface EnrollmentWithMonthsPaginator
 export interface EnrollmentPaymentPaginator
   extends PaginatorInfo<EnrollmentPayment> {}
 
-export interface TaxPaginator extends PaginatorInfo<Tax> {}
+// export interface TaxPaginator extends PaginatorInfo<Tax> {}
 
-export interface RefundReasonPaginator extends PaginatorInfo<RefundReason> {}
+// export interface RefundReasonPaginator extends PaginatorInfo<RefundReason> {}
 
 export interface ConversionPaginator extends PaginatorInfo<Conversations> {}
 
 export interface MessagePaginator extends PaginatorInfo<Message> {}
-
-export interface FlashSaleProductsRequestInput {
-  title: string;
-  flash_sale_id: string;
-  // requested_product_ids: Product[];
-  note?: string;
-  language?: string;
-}
-
-export interface FlashSaleRequestedProductsQueryOptions
-  extends ProductQueryOptions {
-  vendor_request_id: string;
-}
 
 export interface MessagePaginator extends PaginatorInfo<Message> {}
 
@@ -1687,17 +1371,6 @@ export type MaintenanceFormValues = {
     contactUsTitle: string;
   };
 };
-
-export interface CommissionItem {
-  id?: string;
-  level: string;
-  sub_level: string;
-  description: string;
-  min_balance: number;
-  max_balance: number;
-  commission: number;
-  image: AttachmentInput;
-}
 
 export interface PurposeItem {
   title?: string;
@@ -1733,120 +1406,11 @@ export interface BusinessPurposeItem {
   };
 }
 
-export interface SellingStepItem {
-  id?: string;
-  description: string;
-  title: string;
-  image?: Attachment;
-}
-
-export interface BecomeSeller {
-  language: string;
-  page_options: {
-    page_options: BecomeSellerOptions;
-  };
-  commissions: CommissionItem[];
-}
-
-export interface BecomeSellerOptions {
-  banner: Attachment;
-  sellingStepsTitle: string;
-  sellingStepsDescription: string;
-  sellingStepsItem: SellingStepItem[];
-  purposeTitle: string;
-  purposeDescription: string;
-  purposeItems: BusinessPurposeItem[];
-  commissionTitle: string;
-  commissionDescription: string;
-  faqTitle: string;
-  faqDescription: string;
-  faqItems: { description: string; title: string }[];
-}
-
-export interface UserStory {
-  title: string;
-  description: string;
-  link: string;
-  thumbnail: string;
-}
-
-export interface BecomeSellerOptionsInput {
-  banner: {
-    image: AttachmentInput;
-    title: string;
-    newsTickerTitle?: string;
-    newsTickerURL?: string;
-    description: string;
-    button1Name?: string;
-    button1Link?: string;
-    button2Name?: string;
-    button2Link?: string;
-  };
-  sellingStepsTitle: string;
-  sellingStepsDescription: string;
-  sellingStepsItem: SellingStepItem[];
-  purposeTitle: string;
-  purposeDescription: string;
-  purposeItems: BusinessPurposeItem[];
-  commissionTitle: string;
-  commissionDescription: string;
-  faqTitle: string;
-  faqDescription: string;
-  faqItems: { description: string; title: string }[];
-  isMultiCommissionRate: boolean;
-  defaultCommissionDetails?: string;
-  defaultCommissionRate: number;
-  dashboard: Showcase;
-  sellerOpportunity: Showcase;
-  guidelineTitle: string;
-  guidelineDescription: string;
-  guidelineItems: {
-    title: string;
-    link?: string;
-  }[];
-  userStoryTitle: string;
-  userStoryDescription?: string;
-  userStories: UserStory[];
-  contact: {
-    title: string;
-    description: string;
-  };
-}
-
-export interface BecomeSellerInput {
-  language?: string;
-  page_options: BecomeSellerOptionsInput;
-  commissions: CommissionItem[];
-}
-
 export enum OwnerShipTransferStatus {
   PENDING = 'pending',
   PROCESSING = 'processing',
   APPROVED = 'approved',
   REJECTED = 'rejected',
-}
-
-export interface OwnershipTransferInput {
-  id: string;
-  transaction_identifier: string;
-  from: string;
-  shop_id: string;
-  to: string;
-  message: string;
-  created_by: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
-}
-
-export interface OwnershipTransferQueryOptions extends QueryOptions {
-  transaction_identifier?: string;
-  shop_id?: string;
-  status?: string;
-  type?: string;
-  from?: string;
-  to?: string;
 }
 
 export interface StickerCardProps {
@@ -1862,20 +1426,4 @@ export interface StickerCardProps {
   iconClassName?: string;
   subtitleTransKey?: string;
   iconBgStyle?: { [key: string]: string };
-}
-
-export interface OrderStickerCardProps extends StickerCardProps {
-  key:
-    | 'pending'
-    | 'processing'
-    | 'complete'
-    | 'cancelled'
-    | 'refunded'
-    | 'failed'
-    | 'localFacility'
-    | 'outForDelivery'
-    | 'total_earnings'
-    | 'current_balance'
-    | 'admin_commission_rate'
-    | 'withdrawn_amount';
 }

@@ -111,33 +111,25 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:course-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectCourseOffering
-              control={control}
-              errors={errors}
-              // disabled={!!initialValues}
-            />
-            <div className="mb-5">
-              <SelectInput
-                label="Month"
-                name="month"
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectCourseOffering
                 control={control}
-                options={monthOptions}
-                required
+                errors={errors}
+                // disabled={!!initialValues}
               />
-              <ValidationError message={t(errors.month?.message)} />
-            </div>
-            {/* <Input
+              <div className="mb-5">
+                <SelectInput
+                  label="Month"
+                  name="month"
+                  control={control}
+                  options={monthOptions}
+                  required
+                />
+                <ValidationError message={t(errors.month?.message)} />
+              </div>
+              {/* <Input
               label={t('form:input-label-year')}
               {...register('year')}
               error={t(errors.year?.message!)}
@@ -147,23 +139,24 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
               required
               disabled
             /> */}
-            <Input
-              label={t('form:input-label-title')}
-              {...register('title')}
-              error={t(errors.title?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-video-url')}
-              {...register('video_url')}
-              type="text"
-              variant="outline"
-              className="mb-4"
-              error={t(errors.video_url?.message!)}
-              required
-            />
+              <Input
+                label={t('form:input-label-title')}
+                {...register('title')}
+                error={t(errors.title?.message!)}
+                variant="outline"
+                className="mb-5"
+                required
+              />
+              <Input
+                label={t('form:input-label-video-url')}
+                {...register('video_url')}
+                type="text"
+                variant="outline"
+                className="mb-4"
+                error={t(errors.video_url?.message!)}
+                required
+              />
+            </div>
           </Card>
         </div>
         <StickyFooterPanel className="z-0">

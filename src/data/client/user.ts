@@ -26,6 +26,8 @@ import {
   EnrollmentPaginator,
   MyEnrollmentVideosQueryOptions,
   VideoPaginator,
+  Video,
+  ResetTeacherPassword,
 } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
@@ -60,6 +62,9 @@ export const userClient = {
   },
   resetPassword: (variables: ResetPasswordInput) => {
     return HttpClient.post<any>(API_ENDPOINTS.RESET_PASSWORD, variables);
+  },
+  resetTeacherPassword: (variables: ResetTeacherPassword) => {
+    return HttpClient.post<any>(`admin/teacher/${variables.teacher_id}/reset-password`, variables);
   },
   makeAdmin: (variables: MakeAdminInput) => {
     return HttpClient.post<any>(API_ENDPOINTS.MAKE_ADMIN, variables);
@@ -172,5 +177,8 @@ export const userClient = {
   },
   getMyEnrollment: ({ id }: { id: string }) => {
     return HttpClient.get<Enrollment>(`${API_ENDPOINTS.MY_ENROLLMENTS}/${id}`);
+  },
+  getMyEnrollmentVideo: ({ id }: { id: string }) => {
+    return HttpClient.get<Video>(`${API_ENDPOINTS.STUDENT_WATCH_VIDEO}/${id}`);
   },
 };

@@ -1,13 +1,23 @@
+import { useAtomValue } from 'jotai';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // utils
 import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
+// stores
+import {
+  enrollmentFlowEnrollmentAtom,
+  enrollmentFlowStudentAtom,
+} from '@/store/enrollment.store';
 // components
 import AppLayout from '@/components/layouts/app';
 import CreateOrUpdateEnrollmentPaymentForm from '@/components/enrollment-payments/enrollment-payment-form';
 
 export default function CreateEnrollmentPaymentPage() {
   const { t } = useTranslation();
+  // store states
+  const student = useAtomValue(enrollmentFlowStudentAtom);
+  const enrollment = useAtomValue(enrollmentFlowEnrollmentAtom);
+
   return (
     <>
       <div className="flex border-b border-dashed border-border-base pb-5 md:pb-7">
@@ -15,7 +25,12 @@ export default function CreateEnrollmentPaymentPage() {
           {t('form:form-title-create-enrollment-payment')}
         </h1>
       </div>
-      <CreateOrUpdateEnrollmentPaymentForm />
+      <CreateOrUpdateEnrollmentPaymentForm
+        initialValues={{
+          student: student,
+          enrollment: enrollment,
+        }}
+      />
     </>
   );
 }

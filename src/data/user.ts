@@ -1,33 +1,31 @@
-import { AUTH_CRED } from '@/utils/constants';
-import { Routes } from '@/config/routes';
+import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { API_ENDPOINTS } from './client/api-endpoints';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+// client
 import { userClient } from './client/user';
+import { API_ENDPOINTS } from './client/api-endpoints';
+// configs
+import { Routes } from '@/config/routes';
+// utils
+import { AUTH_CRED } from '@/utils/constants';
+import { mapPaginatorData } from '@/utils/data-mappers';
+import { setEmailVerified } from '@/utils/auth-utils';
+// types
 import {
   User,
-  QueryOptionsType,
   UserPaginator,
   UserQueryOptions,
-  LicensedDomainPaginator,
-  LicenseAdditionalData,
-  CourseQueryOptions,
-  CoursePaginator,
-  Course,
   EnrollmentQueryOptions,
   Enrollment,
   AdminQueryOptions,
   EnrollmentPaginator,
   VideoPaginator,
   MyEnrollmentVideosQueryOptions,
+  Video,
 } from '@/types';
-import { mapPaginatorData } from '@/utils/data-mappers';
-import axios from 'axios';
-import { setEmailVerified } from '@/utils/auth-utils';
-import { type } from 'os';
 
 export const useMeQuery = () => {
   const queryClient = useQueryClient();
@@ -35,6 +33,12 @@ export const useMeQuery = () => {
 
   return useQuery<User, Error>([API_ENDPOINTS.ME], userClient.me, {
     retry: false,
+
+    // staleTime: 5 * 60 * 1000, // 5 minutes
+    // cacheTime: 6 * 60 * 60 * 1000, // 6 hours
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
 
     onSuccess: () => {
       if (router.pathname === Routes.verifyLicense) {
@@ -141,7 +145,6 @@ export const useChangePasswordMutation = () => {
   return useMutation(userClient.changePassword);
 };
 
-
 export const useForgetPasswordMutation = () => {
   return useMutation(userClient.forgetPassword);
 };
@@ -152,7 +155,7 @@ export const useResendVerificationEmail = () => {
       toast.success(t('common:PICKBAZAR_MESSAGE.EMAIL_SENT_SUCCESSFUL'));
     },
     onError: () => {
-      toast(t('common:PICKBAZAR_MESSAGE.EMAIL_SENT_FAILED'));
+      toast.error(t('common:PICKBAZAR_MESSAGE.EMAIL_SENT_FAILED'));
     },
   });
 };
@@ -182,7 +185,15 @@ export const useResetPasswordMutation = () => {
   return useMutation(userClient.resetPassword);
 };
 
+export const useResetTeacherPasswordMutation = () => {
+  const { t } = useTranslation();
 
+  return useMutation(userClient.resetTeacherPassword, {
+    onSuccess: () => {
+      toast.success(t('common:successfully-updated'));
+    },
+  });
+};
 
 export const useMakeOrRevokeAdminMutation = () => {
   const queryClient = useQueryClient();
@@ -257,7 +268,7 @@ export const useUserQuery = ({ id }: { id: string }) => {
     () => userClient.fetchUser({ id }),
     {
       enabled: Boolean(id),
-    }
+    },
   );
 };
 
@@ -267,7 +278,7 @@ export const useUsersQuery = (params: Partial<UserQueryOptions>) => {
     () => userClient.fetchUsers(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -284,7 +295,7 @@ export const useAdminsQuery = (params: Partial<AdminQueryOptions>) => {
     () => userClient.fetchAdmins(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -329,14 +340,15 @@ export const useAdminsQuery = (params: Partial<AdminQueryOptions>) => {
 //   };
 // };
 
-
-export const useMyStaffsQuery = (params: Partial<UserQueryOptions & { shop_id: string }>) => {
+export const useMyStaffsQuery = (
+  params: Partial<UserQueryOptions & { shop_id: string }>,
+) => {
   const { data, isLoading, error } = useQuery<UserPaginator, Error>(
     [API_ENDPOINTS.MY_STAFFS, params],
     () => userClient.getMyStaffs(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -347,13 +359,15 @@ export const useMyStaffsQuery = (params: Partial<UserQueryOptions & { shop_id: s
   };
 };
 
-export const useMyEnrollmentsQuery = (params: Partial<EnrollmentQueryOptions>) => {
+export const useMyEnrollmentsQuery = (
+  params: Partial<EnrollmentQueryOptions>,
+) => {
   const { data, isLoading, error } = useQuery<Enrollment[], Error>(
     [API_ENDPOINTS.MY_ENROLLMENTS, params],
     () => userClient.getMyEnrollments(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -364,13 +378,15 @@ export const useMyEnrollmentsQuery = (params: Partial<EnrollmentQueryOptions>) =
   };
 };
 
-export const useMyEnrollmentsPaginatedQuery = (params: Partial<EnrollmentQueryOptions>) => {
+export const useMyEnrollmentsPaginatedQuery = (
+  params: Partial<EnrollmentQueryOptions>,
+) => {
   const { data, isLoading, error } = useQuery<EnrollmentPaginator, Error>(
     [API_ENDPOINTS.MY_ENROLLMENTS, params],
     () => userClient.getMyEnrollmentsPaginated(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -381,13 +397,15 @@ export const useMyEnrollmentsPaginatedQuery = (params: Partial<EnrollmentQueryOp
   };
 };
 
-export const useMyEnrollmentVideosPaginatedQuery = (params: Partial<MyEnrollmentVideosQueryOptions>) => {
+export const useMyEnrollmentVideosPaginatedQuery = (
+  params: Partial<MyEnrollmentVideosQueryOptions>,
+) => {
   const { data, isLoading, error } = useQuery<VideoPaginator, Error>(
     [API_ENDPOINTS.MY_ENROLLMENTS, params],
     () => userClient.getMyEnrollmentVideosPaginated(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -404,7 +422,7 @@ export const useMyEnrollmentQuery = ({ id }: { id: string }) => {
     () => userClient.getMyEnrollment({ id }),
     {
       enabled: Boolean(id),
-    }
+    },
   );
 };
 
@@ -414,7 +432,7 @@ export const useAllStaffsQuery = (params: Partial<UserQueryOptions>) => {
     () => userClient.getAllStaffs(params),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -425,3 +443,15 @@ export const useAllStaffsQuery = (params: Partial<UserQueryOptions>) => {
   };
 };
 
+export const useMyEnrollmentVideoQuery = ({ id }: { id: string }) => {
+  const { data, error, isLoading } = useQuery<Video, Error>(
+    [API_ENDPOINTS.STUDENT_WATCH_VIDEO, { id }],
+    () => userClient.getMyEnrollmentVideo({ id }),
+  );
+
+  return {
+    video: data,
+    error,
+    isLoading,
+  };
+};

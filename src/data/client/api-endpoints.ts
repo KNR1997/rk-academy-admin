@@ -56,4 +56,5 @@ export const API_ENDPOINTS = {
   MY_STAFFS: '/my-staffs',
   MY_ENROLLMENTS: 'students/me/enrollments',
   ALL_STAFFS: '/all-staffs',
+  STUDENT_WATCH_VIDEO: 'students/me/watch-videos'
 };

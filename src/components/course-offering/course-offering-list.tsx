@@ -14,7 +14,9 @@ import { MappedPaginatorInfo } from '@/types';
 // utils
 import { useIsRTL } from '@/utils/locals';
 // components
+import Link from '@/components/ui/link';
 import { Table } from '@/components/ui/table';
+import { UsersIcon } from '@/components/icons/users';
 import Pagination from '@/components/ui/pagination';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
@@ -147,6 +149,24 @@ const CourseOfferingList = ({
       onHeaderCell: () => onHeaderClick('batch'),
     },
     {
+      title: t('table:table-item-students'),
+      dataIndex: 'batch',
+      key: 'batch',
+      align: 'center',
+      width: 80,
+      render: (batch: string, record: CourseOffering) => (
+        <div className='flex justify-center'>
+          <Link
+            href={`/course-offerings/${record.id}/enrollments`}
+            className="text-base transition duration-200 hover:text-heading"
+            title={t('common:text-edit')}
+          >
+            <UsersIcon width={18} />
+          </Link>
+        </div>
+      ),
+    },
+    {
       title: t('table:table-item-actions'),
       dataIndex: 'id',
       key: 'actions',
@@ -156,7 +176,7 @@ const CourseOfferingList = ({
         <LanguageSwitcher
           slug={id}
           record={record}
-          deleteModalView="DELETE_COURSE"
+          deleteModalView="DELETE_COURSE_OFFERING"
           deleteBySlug={record.id}
           routes={Routes?.courseOffering}
         />

@@ -24,6 +24,7 @@ import { getAuthCredentials } from '@/utils/auth-utils';
 import { approveModalInitialValues } from '@/utils/constants';
 import { EyeOff } from '../icons/eye-off-icon';
 import { Whatsapp } from '../icons/whatsapp-icon';
+import { ResetIcon } from '../icons/reset';
 
 type Props = {
   id: string;
@@ -42,6 +43,7 @@ type Props = {
   showAddWalletPoints?: boolean;
   changeRefundStatus?: boolean;
   showMakeAdminButton?: boolean;
+  resetTeacherPasswordButton?: boolean;
   showReplyQuestion?: boolean;
   customLocale?: string;
   isTermsApproved?: boolean;
@@ -73,6 +75,7 @@ const ActionButtons = ({
   showAddWalletPoints = false,
   changeRefundStatus = false,
   showMakeAdminButton = false,
+  resetTeacherPasswordButton = false,
   showReplyQuestion = false,
   customLocale,
   isTermsApproved,
@@ -120,6 +123,10 @@ const ActionButtons = ({
 
   function handleMakeAdmin() {
     openModal('MAKE_ADMIN', id);
+  }
+
+  function handleResetTeacherPassword() {
+    openModal('RESET_TEACHER_PASSWORD', id);
   }
 
   function handleUpdateRefundStatus() {
@@ -189,6 +196,15 @@ const ActionButtons = ({
           title={t('common:text-make-admin')}
         >
           <AdminIcon width={17} />
+        </button>
+      )}
+      {resetTeacherPasswordButton && (
+        <button
+          onClick={handleResetTeacherPassword}
+          className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
+          title={t('common:text-make-admin')}
+        >
+          <ResetIcon width={17} />
         </button>
       )}
       {showAddWalletPoints && (
@@ -336,17 +352,6 @@ const ActionButtons = ({
           <Eye className="w-5 h-5" />
         </Link>
       )}
-      {deleteModalView &&
-        (role !== STAFF ||
-          router.asPath !== `/${router.query.shop}${Routes.coupon.list}`) && (
-          <button
-            onClick={handleDelete}
-            className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
-            title={t('common:text-delete')}
-          >
-            <TrashIcon width={14} />
-          </button>
-        )}
 
       {/* {deleteModalView && (
         <button

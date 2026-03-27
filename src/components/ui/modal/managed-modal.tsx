@@ -1,9 +1,14 @@
-import StoreNoticeDeleteView from '@/components/store-notice/store-notice-delete-view';
-import Modal from '@/components/ui/modal/modal';
 import dynamic from 'next/dynamic';
+// content
 import { MODAL_VIEWS, useModalAction, useModalState } from './modal.context';
+// components
+import Modal from '@/components/ui/modal/modal';
+import StoreNoticeDeleteView from '@/components/store-notice/store-notice-delete-view';
 import EnrollmentPaymentView from '@/components/enrollment-payments/enrollment-payment-view';
 
+const ResetTeacherPasswordView = dynamic(
+  () => import('@/components/user/reset-teacher-password-view'),
+);
 const VideoDeleteView = dynamic(
   () => import('@/components/video/video-delete-view'),
 );
@@ -12,6 +17,9 @@ const SubjectDeleteView = dynamic(
 );
 const CourseDeleteView = dynamic(
   () => import('@/components/course/course-delete-view'),
+);
+const CourseOfferingDeleteView = dynamic(
+  () => import('@/components/course-offering/course-offering-delete-view'),
 );
 const EnrollmentDeleteView = dynamic(
   () => import('@/components/enrollment/enrollment-delete-view'),
@@ -63,12 +71,16 @@ const ComposerMessage = dynamic(
 
 function renderModal(view: MODAL_VIEWS | undefined, data: any) {
   switch (view) {
+    case 'RESET_TEACHER_PASSWORD':
+      return <ResetTeacherPasswordView />;
     case 'DELETE_SUBJECT':
       return <SubjectDeleteView />;
     case 'DELETE_VIDEO':
       return <VideoDeleteView />;
     case 'DELETE_COURSE':
       return <CourseDeleteView />;
+    case 'DELETE_COURSE_OFFERING':
+      return <CourseOfferingDeleteView />;
     case 'DELETE_ENROLLMENT':
       return <EnrollmentDeleteView />;
     case 'DELETE_TEACHER':

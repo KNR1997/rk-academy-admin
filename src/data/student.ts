@@ -1,33 +1,34 @@
-import Router, { useRouter } from 'next/router';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'next-i18next';
+import Router, { useRouter } from 'next/router';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+// config
+import { Config } from '@/config';
 import { Routes } from '@/config/routes';
 import { API_ENDPOINTS } from './client/api-endpoints';
+// utils
+import { mapPaginatorData } from '@/utils/data-mappers';
+// client
+import { studentClient } from './client/student';
 import {
   Enrollment,
-  EnrollmentPaginator,
   GetParams,
   Student,
   StudentPaginator,
   StudentQueryOptions,
 } from '@/types';
-import { mapPaginatorData } from '@/utils/data-mappers';
-import { studentClient } from './client/student';
-import { Config } from '@/config';
-import { error } from 'console';
 
 export const useCreateStudentMutation = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   return useMutation(studentClient.create, {
-    onSuccess: () => {
-      Router.push(Routes.student.list, undefined, {
-        locale: Config.defaultLanguage,
-      });
-      toast.success(t('common:successfully-created'));
-    },
+    // onSuccess: () => {
+    //   Router.push(Routes.student.list, undefined, {
+    //     locale: Config.defaultLanguage,
+    //   });
+    //   toast.success(t('common:successfully-created'));
+    // },
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
@@ -62,7 +63,7 @@ export const useUpdateStudentMutation = () => {
       await router.push(`${generateRedirectUrl}/${data?.id}/edit`, undefined, {
         locale: Config.defaultLanguage,
       });
-      toast.success(t('common:successfully-updated'));
+      // toast.success(t('common:successfully-updated'));
     },
     // onSuccess: () => {
     //   toast.success(t('common:successfully-updated'));
@@ -116,8 +117,7 @@ export const useStudentEnrollmentsQuery = ({
 }) => {
   const { data, error, isLoading } = useQuery<Enrollment[], Error>(
     [`${API_ENDPOINTS.STUDENTS}/${studentId}/enrollments`],
-    ({ queryKey, pageParam }) =>
-      studentClient.enrollments(studentId),
+    ({ queryKey, pageParam }) => studentClient.enrollments(studentId),
     {
       keepPreviousData: true,
       enabled: !!studentId,

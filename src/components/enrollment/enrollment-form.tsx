@@ -1,65 +1,37 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useSetAtom } from 'jotai';
+import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
+import Router, { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Control, FieldErrors, useForm } from 'react-hook-form';
-// types
-import { CourseOffering, Enrollment, Student } from '@/types';
 // utils
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // form-validations
 import { enrollmentValidationSchema } from './enrollment-validation-schema';
 // constants
 import { activeInactiveStatusOptions } from '@/constants';
+// configs
+import { Routes } from '@/config/routes';
 // hooks
 import { useSettingsQuery } from '@/data/settings';
 import {
   useCreateEnrollmentMutation,
   useUpdateEnrollmentMutation,
 } from '@/data/enrollment';
-import { useCourseOfferingsQuery } from '@/data/course-offering';
+// stores
+import { enrollmentFlowEnrollmentAtom } from '@/store/enrollment.store';
+// types
+import { CourseOffering, Enrollment, Student } from '@/types';
 // components
 import Alert from '@/components/ui/alert';
-import Label from '@/components/ui/label';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
 import SelectInput from '@/components/ui/select-input';
 import SelectStudent from '@/components/student/select-student';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import ValidationError from '@/components/ui/form-validation-error';
-
-function SelectCourseOffering({
-  control,
-  errors,
-  gradeLevel,
-}: {
-  control: Control<FormValues>;
-  errors: FieldErrors;
-  gradeLevel?: string;
-}) {
-  const { t } = useTranslation();
-  const { courseOfferings, loading } = useCourseOfferingsQuery({
-    grade_level: gradeLevel,
-  });
-  return (
-    <div className="mb-5">
-      <Label>{t('form:input-label-courses')}</Label>
-      <SelectInput
-        name="course_offering"
-        control={control}
-        getOptionLabel={(option: any) =>
-          `${option.course.name} ${option.year} - ${option.grade_level.name} - batch ${option.batch}`
-        }
-        getOptionValue={(option: any) => option.id}
-        options={courseOfferings!}
-        isLoading={loading}
-        required
-      />
-      <ValidationError message={t(errors.course_offering?.message)} />
-    </div>
-  );
-}
+import SelectCourseOffering from '@/components/course-offering/select-course-offering';
 
 type FormValues = {
   student: Student;
@@ -67,11 +39,19 @@ type FormValues = {
   is_active: { label: string; value: boolean };
 };
 
-const defaultValues = {};
+const defaultValues = {
+  is_active: activeInactiveStatusOptions.find((option) => option.value == true),
+};
 
 type IProps = {
-  initialValues?: Enrollment | undefined;
+  initialValues?: {
+    id?: string | null;
+    student?: Student | null;
+    course_offering?: CourseOffering | null;
+    is_active?: boolean | null;
+  } | null;
 };
+
 export default function CreateOrUpdateEnrollmentForm({
   initialValues,
 }: IProps) {
@@ -79,6 +59,8 @@ export default function CreateOrUpdateEnrollmentForm({
   const { t } = useTranslation();
   // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // store actions
+  const setEnrollment = useSetAtom(enrollmentFlowEnrollmentAtom);
   const {
     watch,
     handleSubmit,
@@ -94,9 +76,6 @@ export default function CreateOrUpdateEnrollmentForm({
           is_active: activeInactiveStatusOptions.find(
             (option) => option.value == initialValues.is_active,
           ),
-          // ...(isNewTranslation && {
-          //   type: null,
-          // }),
         }
       : defaultValues,
     //@ts-ignore
@@ -111,14 +90,13 @@ export default function CreateOrUpdateEnrollmentForm({
     language: locale!,
   });
 
+  // mutations
   const { mutate: createEnrollment, isLoading: creating } =
     useCreateEnrollmentMutation();
   const { mutate: updateEnrollment, isLoading: updating } =
     useUpdateEnrollmentMutation();
 
   const student = watch('student');
-
-  console.log('student-----------: ', student)
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -127,19 +105,24 @@ export default function CreateOrUpdateEnrollmentForm({
       is_active: values.is_active.value,
     };
     const mutationOptions = {
+      onSuccess: (data: Enrollment) => {
+        toast.success(t('common:successfully-created'));
+        setEnrollment(data);
+        Router.push(Routes.enrollmentPayment.create);
+      },
       onError: (error: any) =>
         handleMutationError(error, setError, setErrorMessage),
     };
-    if (!initialValues) {
-      createEnrollment(input, mutationOptions);
-    } else {
+    if (initialValues?.id) {
       updateEnrollment(
         {
           is_active: values.is_active.value,
-          id: initialValues.id!,
+          id: initialValues.id,
         },
         mutationOptions,
       );
+    } else {
+      createEnrollment(input, mutationOptions);
     }
   };
 
@@ -155,36 +138,30 @@ export default function CreateOrUpdateEnrollmentForm({
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:enrollment-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectStudent
-              control={control}
-              errors={errors}
-              disabled={!!initialValues}
-            />
-            <SelectCourseOffering
-              control={control}
-              errors={errors}
-              gradeLevel={student?.current_grade?.name}
-            />
-            <div className="mb-5">
-              <SelectInput
-                label={t('form:input-label-status')}
-                name="is_active"
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectStudent
                 control={control}
-                options={activeInactiveStatusOptions}
-                isClearable={true}
+                errors={errors}
+                // disabled={!!initialValues}
               />
+              <SelectCourseOffering
+                control={control}
+                errors={errors}
+                gradeLevel={student?.current_grade?.name}
+              />
+              <div className="mb-5">
+                <SelectInput
+                  label={t('form:input-label-status')}
+                  name="is_active"
+                  control={control}
+                  options={activeInactiveStatusOptions}
+                  isClearable={true}
+                  required
+                />
+                <ValidationError message={t(errors.is_active?.message)} />
+              </div>
             </div>
           </Card>
         </div>
@@ -206,7 +183,7 @@ export default function CreateOrUpdateEnrollmentForm({
               disabled={creating || updating}
               className="text-sm md:text-base"
             >
-              {initialValues
+              {initialValues?.id
                 ? t('form:button-label-update-enrollment')
                 : t('form:button-label-add-enrollment')}
             </Button>

@@ -32,7 +32,7 @@ export default function SelectExamYear({
   const examYearOptions = generateExamYearOptions();
 
   return (
-    <div className="mb-5">
+    <div>
       <SelectInput
         label={t('form:input-label-exam-year')}
         name="exam_year"

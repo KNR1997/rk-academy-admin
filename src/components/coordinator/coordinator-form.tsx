@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // types
 import { Coordinator } from '@/types';
 // utils
+import { generatePassword } from '@/utils/generate-password';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // validation schema
 import { coordinatorValidationSchema } from './coordinator-validation-schema';
@@ -19,10 +20,9 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
+import FooterPanel from '@/components/ui/footer-panel';
 import PhoneNumberInput from '@/components/ui/phone-input';
 import PasswordInput from '@/components/ui/password-input';
-import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 
 type FormValues = {
   first_name: string;
@@ -37,7 +37,7 @@ const defaultValues = {
   first_name: '',
   last_name: '',
   email: '',
-  password: '',
+  password: generatePassword(),
 };
 
 type IProps = {
@@ -112,69 +112,65 @@ const CoordinatorCreateForm = ({ initialValues }: IProps) => {
       ) : null}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div className="my-5 flex flex-wrap sm:my-8">
-          <Description
-            title={t('form:form-title-information')}
-            details={t('form:coordinator-form-info-help-text')}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
-          />
-
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <Input
-              label={t('form:input-label-email')}
-              {...register('email')}
-              type="email"
-              variant="outline"
-              className="mb-4"
-              error={t(errors.email?.message!)}
-              required
-            />
-            {!initialValues && (
-              <PasswordInput
-                label={t('form:input-label-password')}
-                {...register('password')}
-                error={t(errors.password?.message!)}
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label={t('form:input-label-email')}
+                {...register('email')}
+                type="email"
                 variant="outline"
-                className="mb-4"
+                error={t(errors.email?.message!)}
                 required
               />
-            )}
-            <Input
-              label={t('form:input-label-first-name')}
-              {...register('first_name')}
-              type="text"
-              variant="outline"
-              className="mb-4"
-              error={t(errors.first_name?.message!)}
-              required
-            />
-            <Input
-              label={t('form:input-label-last-name')}
-              {...register('last_name')}
-              type="text"
-              variant="outline"
-              className="mb-4"
-              error={t(errors.last_name?.message!)}
-              required
-            />
-            <Input
-              label={t('form:input-label-display-name')}
-              {...register('display_name')}
-              type="text"
-              variant="outline"
-              className="mb-4"
-              error={t(errors.display_name?.message!)}
-              required
-            />
-            <PhoneNumberInput
-              label={t('form:input-label-contact')}
-              {...register('mobile_number')}
-              control={control}
-              error={t(errors.mobile_number?.message!)}
-            />
+
+              {!initialValues && (
+                <PasswordInput
+                  label={t('form:input-label-password')}
+                  {...register('password')}
+                  error={t(errors.password?.message!)}
+                  variant="outline"
+                  required
+                />
+              )}
+
+              <Input
+                label={t('form:input-label-first-name')}
+                {...register('first_name')}
+                type="text"
+                variant="outline"
+                error={t(errors.first_name?.message!)}
+                required
+              />
+
+              <Input
+                label={t('form:input-label-last-name')}
+                {...register('last_name')}
+                type="text"
+                variant="outline"
+                error={t(errors.last_name?.message!)}
+                required
+              />
+
+              <Input
+                label={t('form:input-label-display-name')}
+                {...register('display_name')}
+                type="text"
+                variant="outline"
+                error={t(errors.display_name?.message!)}
+                required
+              />
+
+              <PhoneNumberInput
+                label={t('form:input-label-contact')}
+                {...register('mobile_number')}
+                control={control}
+                error={t(errors.mobile_number?.message!)}
+              />
+            </div>
           </Card>
         </div>
-        <StickyFooterPanel className="z-0">
+        <FooterPanel className="z-0">
           <div className="mb-4 text-end">
             <Button
               loading={creating || updating}
@@ -185,7 +181,7 @@ const CoordinatorCreateForm = ({ initialValues }: IProps) => {
                 : t('form:button-label-create-coordinator')}
             </Button>
           </div>
-        </StickyFooterPanel>
+        </FooterPanel>
       </form>
     </>
   );

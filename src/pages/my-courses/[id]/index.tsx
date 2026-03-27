@@ -12,7 +12,7 @@ import Card from '@/components/common/card';
 import Search from '@/components/common/search';
 import Layout from '@/components/layouts/student';
 import Loader from '@/components/ui/loader/loader';
-import VideoList from '@/components/video/video-list';
+import MyVideoList from '@/components/my/video-list';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
 
@@ -27,6 +27,7 @@ export default function MyCoursePage() {
   const { videos, paginatorInfo, loading, error } =
     useMyEnrollmentVideosPaginatedQuery({
       enrollment_id: query.id as string,
+      name: searchTerm,
     });
 
   if (loading) return <Loader text={t('common:text-loading')} />;
@@ -57,7 +58,7 @@ export default function MyCoursePage() {
           </div>
         </div>
       </Card>
-      <VideoList
+      <MyVideoList
         videos={videos}
         paginatorInfo={paginatorInfo}
         onPagination={handlePagination}

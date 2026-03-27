@@ -18,7 +18,7 @@ export default function SelectGradeLevel({
   const { t } = useTranslation();
   const { gradeLevels, loading } = useGradeLevelsQuery({ language: locale });
   return (
-    <div className="mb-5">
+    <div>
       <SelectInput
         label={t('form:input-label-grade-level')}
         name="grade_level"

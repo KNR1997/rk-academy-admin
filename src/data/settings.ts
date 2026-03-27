@@ -1,14 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'next-i18next';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+// contexts
+import { useSettings } from '@/contexts/settings.context';
+// client
 import { API_ENDPOINTS } from './client/api-endpoints';
 import { settingsClient } from './client/settings';
-import { useSettings } from '@/contexts/settings.context';
+// utils
+import { setMaintenanceDetails } from '@/utils/maintenance-utils';
+// types
 import { Settings } from '@/types';
-import {
-  getMaintenanceDetails,
-  setMaintenanceDetails,
-} from '@/utils/maintenance-utils';
 
 export const useUpdateSettingsMutation = () => {
   const { t } = useTranslation();
@@ -38,6 +39,13 @@ export const useSettingsQuery = ({ language }: { language: string }) => {
   const { data, error, isLoading } = useQuery<Settings, Error>(
     [API_ENDPOINTS.SETTINGS, { language }],
     () => settingsClient.all({ language }),
+    {
+      // staleTime: 6 * 60 * 60 * 1000, // 6 hours
+      // cacheTime: 6 * 60 * 60 * 1000, // 6 hours
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+    },
   );
 
   return {

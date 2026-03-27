@@ -1,3 +1,4 @@
+import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useRef, useState } from 'react';
@@ -9,6 +10,8 @@ import { Enrollment, Student } from '@/types';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // constants
 import { monthOptions } from '@/constants';
+// stores
+import { clearEnrollmentFlowAtom } from '@/store/enrollment.store';
 // hooks
 import { useStudentEnrollmentsQuery } from '@/data/student';
 import { useUpdateEnrollmentMutation } from '@/data/enrollment';
@@ -20,7 +23,6 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
 import SelectInput from '@/components/ui/select-input';
 import SelectStudent from '@/components/student/select-student';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
@@ -47,7 +49,7 @@ function SelectCourse({
         control={control}
         //@ts-ignore
         getOptionLabel={(enrollment: Enrollment) =>
-          `${enrollment.course_offering.course.name} - ${enrollment.course_offering.grade_level.name} - Batch ${enrollment.course_offering.batch} `
+          `${enrollment?.course_offering?.course?.name} - ${enrollment?.course_offering?.grade_level?.name} - Batch ${enrollment?.course_offering?.batch} `
         }
         //@ts-ignore
         getOptionValue={(enrollment: Enrollment) => enrollment.id}
@@ -70,8 +72,13 @@ type FormValues = {
 const defaultValues = {};
 
 type IProps = {
-  initialValues?: Enrollment | undefined;
+  initialValues?: {
+    id?: string | null;
+    student?: Student | null;
+    enrollment?: Enrollment | null;
+  };
 };
+
 export default function CreateOrUpdateEnrollmentPaymentForm({
   initialValues,
 }: IProps) {
@@ -79,8 +86,8 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
   const { t } = useTranslation();
   // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const isNewTranslation = router?.query?.action === 'translate';
+  // store actions
+  const clearFlow = useSetAtom(clearEnrollmentFlowAtom);
 
   const d = new Date();
   let month = d.getMonth();
@@ -104,9 +111,6 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
     defaultValues: initialValues
       ? {
           ...initialValues,
-          ...(isNewTranslation && {
-            type: null,
-          }),
         }
       : defaultValues,
     //@ts-ignore
@@ -175,12 +179,13 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
       amount: values.fee,
     };
     const mutationOptions = {
+      onSuccess: () => {
+        clearFlow(null);
+      },
       onError: (error: any) =>
         handleMutationError(error, setError, setErrorMessage),
     };
-    if (!initialValues) {
-      createEnrollmentPayment(input, mutationOptions);
-    } else {
+    if (initialValues?.id) {
       updateEnrollment(
         {
           ...input,
@@ -188,6 +193,8 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
         },
         mutationOptions,
       );
+    } else {
+      createEnrollmentPayment(input, mutationOptions);
     }
   };
 
@@ -203,44 +210,36 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:category-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <SelectStudent control={control} errors={errors} />
-            <SelectCourse
-              control={control}
-              errors={errors}
-              studentId={selectedStudent?.id}
-            />
-            <div className="mb-5">
-              <SelectInput
-                label="Payment Month"
-                name="payment_month"
+        <div className="my-5 sm:my-8">
+          <Card className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <SelectStudent control={control} errors={errors} />
+              <SelectCourse
                 control={control}
-                options={currentMonthOption}
-                required
+                errors={errors}
+                studentId={selectedStudent?.id}
               />
-              <ValidationError message={t(errors.payment_month?.message)} />
+              <div className="mb-5">
+                <SelectInput
+                  label="Payment Month"
+                  name="payment_month"
+                  control={control}
+                  options={currentMonthOption}
+                  required
+                />
+                <ValidationError message={t(errors.payment_month?.message)} />
+              </div>
+              <Input
+                label={t('form:input-label-fee')}
+                {...register('fee')}
+                type="number"
+                variant="outline"
+                className="mb-4"
+                required
+                readOnly
+                error={t(errors.fee?.message!)}
+              />
             </div>
-            <Input
-              label={t('form:input-label-fee')}
-              {...register('fee')}
-              type="number"
-              variant="outline"
-              className="mb-4"
-              required
-              readOnly
-              error={t(errors.fee?.message!)}
-            />
           </Card>
         </div>
         <StickyFooterPanel className="z-0">
@@ -261,7 +260,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
               disabled={creating || updating}
               className="text-sm md:text-base"
             >
-              {initialValues
+              {initialValues?.id
                 ? t('form:button-label-update-enrollment-payment')
                 : t('form:button-label-add-enrollment-payment')}
             </Button>
