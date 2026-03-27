@@ -63,7 +63,7 @@ export const useUpdateStudentMutation = () => {
       await router.push(`${generateRedirectUrl}/${data?.id}/edit`, undefined, {
         locale: Config.defaultLanguage,
       });
-      toast.success(t('common:successfully-updated'));
+      // toast.success(t('common:successfully-updated'));
     },
     // onSuccess: () => {
     //   toast.success(t('common:successfully-updated'));

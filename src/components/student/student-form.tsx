@@ -12,9 +12,10 @@ import { AcademicYear, GradeLevel, Student } from '@/types';
 // configs
 import { Routes } from '@/config/routes';
 // utils
+import { generatePassword } from '@/utils/generate-password';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // stores
-import { enrollmentFlowStudentAtom  } from '@/store/enrollment.store';
+import { enrollmentFlowStudentAtom } from '@/store/enrollment.store';
 // hooks
 import {
   useCreateStudentMutation,
@@ -28,9 +29,10 @@ import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
 import SelectInput from '@/components/ui/select-input';
-import SelectExamYear from '@/components/exam-year/select-exam-year';
+import PasswordInput from '@/components/ui/password-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import ValidationError from '@/components/ui/form-validation-error';
+import SelectExamYear from '@/components/exam-year/select-exam-year';
 import SelectGradeLevel from '@/components/grade-level/select-grade-level';
 
 function SelectAcademicYear({
@@ -84,7 +86,7 @@ const defaultValues = {
   last_name: '',
   email: '',
   // username: '',
-  password: '',
+  password: generatePassword(),
   date_of_birth: null,
   parent_guardian_name: '',
   parent_guardian_phone: '',
@@ -101,7 +103,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
   const isNewTranslation = router?.query?.action === 'translate';
 
   // Get the setter for enrollment student atom
-  const setEnrollmentStudent = useSetAtom(enrollmentFlowStudentAtom );
+  const setEnrollmentStudent = useSetAtom(enrollmentFlowStudentAtom);
 
   const {
     register,
@@ -234,13 +236,12 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
               error={t(errors.parent_guardian_phone?.message!)}
             /> */}
               {!initialValues && (
-                <Input
+                <PasswordInput
                   label={t('form:input-label-password')}
-                  type="password"
                   {...register('password')}
-                  error={t(errors.password?.message!)}
                   variant="outline"
-                  //dimension="small"
+                  error={t(errors.password?.message!)}
+                  className="mb-5"
                   required
                 />
               )}

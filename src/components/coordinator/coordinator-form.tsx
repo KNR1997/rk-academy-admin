@@ -6,6 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // types
 import { Coordinator } from '@/types';
 // utils
+import { generatePassword } from '@/utils/generate-password';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // validation schema
 import { coordinatorValidationSchema } from './coordinator-validation-schema';
@@ -36,7 +37,7 @@ const defaultValues = {
   first_name: '',
   last_name: '',
   email: '',
-  password: '',
+  password: generatePassword(),
 };
 
 type IProps = {

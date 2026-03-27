@@ -1,22 +1,23 @@
-import { AUTH_CRED } from '@/utils/constants';
-import { Routes } from '@/config/routes';
+import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
-import { API_ENDPOINTS } from './client/api-endpoints';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+// client
 import { userClient } from './client/user';
+import { API_ENDPOINTS } from './client/api-endpoints';
+// configs
+import { Routes } from '@/config/routes';
+// utils
+import { AUTH_CRED } from '@/utils/constants';
+import { mapPaginatorData } from '@/utils/data-mappers';
+import { setEmailVerified } from '@/utils/auth-utils';
+// types
 import {
   User,
-  QueryOptionsType,
   UserPaginator,
   UserQueryOptions,
-  LicensedDomainPaginator,
-  LicenseAdditionalData,
-  CourseQueryOptions,
-  CoursePaginator,
-  Course,
   EnrollmentQueryOptions,
   Enrollment,
   AdminQueryOptions,
@@ -25,10 +26,6 @@ import {
   MyEnrollmentVideosQueryOptions,
   Video,
 } from '@/types';
-import { mapPaginatorData } from '@/utils/data-mappers';
-import axios from 'axios';
-import { setEmailVerified } from '@/utils/auth-utils';
-import { type } from 'os';
 
 export const useMeQuery = () => {
   const queryClient = useQueryClient();
@@ -36,6 +33,12 @@ export const useMeQuery = () => {
 
   return useQuery<User, Error>([API_ENDPOINTS.ME], userClient.me, {
     retry: false,
+
+    // staleTime: 5 * 60 * 1000, // 5 minutes
+    // cacheTime: 6 * 60 * 60 * 1000, // 6 hours
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
 
     onSuccess: () => {
       if (router.pathname === Routes.verifyLicense) {

@@ -8,6 +8,7 @@ import { Teacher } from '@/types';
 // form-validations
 import { teacherValidationSchema } from './teacher-validation-schema';
 // utils
+import { generatePassword } from '@/utils/generate-password';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // hooks
 import {
@@ -19,7 +20,6 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import PhoneNumberInput from '@/components/ui/phone-input';
 import PasswordInput from '@/components/ui/password-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 
@@ -38,7 +38,7 @@ const defaultValues = {
   last_name: '',
   email: '',
   username: '',
-  password: '',
+  password: generatePassword(),
   department: '',
 };
 
@@ -152,11 +152,11 @@ export default function CreateOrUpdateTeacherForm({ initialValues }: IProps) {
                 className="mb-5"
                 required
               />
-              <PhoneNumberInput
+              <Input
                 label={t('form:input-label-contact')}
                 {...register('mobile_number')}
-                control={control}
                 error={t(errors.mobile_number?.message!)}
+                variant="outline"
                 required
               />
               {!initialValues && (

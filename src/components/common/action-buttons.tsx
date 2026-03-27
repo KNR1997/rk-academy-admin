@@ -24,6 +24,7 @@ import { getAuthCredentials } from '@/utils/auth-utils';
 import { approveModalInitialValues } from '@/utils/constants';
 import { EyeOff } from '../icons/eye-off-icon';
 import { Whatsapp } from '../icons/whatsapp-icon';
+import { ResetIcon } from '../icons/reset';
 
 type Props = {
   id: string;
@@ -203,7 +204,7 @@ const ActionButtons = ({
           className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
           title={t('common:text-make-admin')}
         >
-          <AdminIcon width={17} />
+          <ResetIcon width={17} />
         </button>
       )}
       {showAddWalletPoints && (

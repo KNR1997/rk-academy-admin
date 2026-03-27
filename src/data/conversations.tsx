@@ -7,8 +7,15 @@ import {
 } from 'react-query';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'next-i18next';
+// configs
 import { Routes } from '@/config/routes';
 import { API_ENDPOINTS } from './client/api-endpoints';
+// utils
+import { mapPaginatorData } from '@/utils/data-mappers';
+import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
+// client
+import { conversationsClient } from './client/conversations';
+// types
 import {
   MessageQueryOptions,
   ConversionPaginator,
@@ -16,13 +23,11 @@ import {
   MessagePaginator,
   Conversations,
 } from '@/types';
-import { mapPaginatorData } from '@/utils/data-mappers';
-import { conversationsClient } from './client/conversations';
+// components
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
 
 export const useConversationsQuery = (
-  options: Partial<ConversationQueryOptions>
+  options: Partial<ConversationQueryOptions>,
 ) => {
   const {
     data,
@@ -38,12 +43,16 @@ export const useConversationsQuery = (
     [API_ENDPOINTS.CONVERSIONS, options],
     ({ queryKey, pageParam }) =>
       conversationsClient.allConversation(
-        Object.assign({}, queryKey[1], pageParam)
+        Object.assign({}, queryKey[1], pageParam),
       ),
     {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+
       getNextPageParam: ({ current_page, last_page }) =>
         last_page > current_page && { page: current_page + 1 },
-    }
+    },
   );
 
   function handleLoadMore() {
@@ -74,13 +83,14 @@ export const useCreateConversations = () => {
   const { closeModal } = useModalAction();
   const queryClient = useQueryClient();
   const { permissions } = getAuthCredentials();
-  let permission = hasAccess(adminOnly, permissions);
+  // let permission = hasAccess(adminOnly, permissions);
   return useMutation(conversationsClient.create, {
     onSuccess: (data) => {
       if (data?.id) {
-        const routes = permission
-          ? Routes?.message?.details(data?.id)
-          : Routes?.shopMessage?.details(data?.id);
+        // const routes = permission
+        //   ? Routes?.message?.details(data?.id)
+        //   : Routes?.shopMessage?.details(data?.id);
+        const routes = Routes?.message?.details(data?.id);
         toast.success(t('common:successfully-created'));
         router.push(`${routes}`);
         closeModal();
@@ -115,7 +125,7 @@ export const useMessagesQuery = (options: Partial<MessageQueryOptions>) => {
       getNextPageParam: ({ current_page, last_page }) =>
         last_page > current_page && { page: current_page + 1 },
       enabled: !!options.slug,
-    }
+    },
   );
 
   function handleLoadMore() {
@@ -147,7 +157,7 @@ export const useConversationQuery = ({ id }: { id: string }) => {
     {
       keepPreviousData: true,
       enabled: !!id,
-    }
+    },
   );
 
   return {

@@ -500,6 +500,7 @@
   "group-settings": "Select group related settings",
   "group-settings-help-text": "Please make sure you selected the necessary settings",
   "input-label-add-wallet-points": "Add Wallet Points",
+  "input-label-reset-password": "Reset Password",
   "input-label-enrollment-payment-fee": "Enrollment payment fee",
   "input-label-wallet-currency-ratio": "Wallet Currency Ratio",
   "input-label-signup-points": "Sign Up Points",

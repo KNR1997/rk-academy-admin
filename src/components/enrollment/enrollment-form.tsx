@@ -27,10 +27,10 @@ import { CourseOffering, Enrollment, Student } from '@/types';
 import Alert from '@/components/ui/alert';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import Description from '@/components/ui/description';
 import SelectInput from '@/components/ui/select-input';
 import SelectStudent from '@/components/student/select-student';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
+import ValidationError from '@/components/ui/form-validation-error';
 import SelectCourseOffering from '@/components/course-offering/select-course-offering';
 
 type FormValues = {
@@ -49,7 +49,7 @@ type IProps = {
     student?: Student | null;
     course_offering?: CourseOffering | null;
     is_active?: boolean | null;
-  };
+  } | null;
 };
 
 export default function CreateOrUpdateEnrollmentForm({
@@ -158,7 +158,9 @@ export default function CreateOrUpdateEnrollmentForm({
                   control={control}
                   options={activeInactiveStatusOptions}
                   isClearable={true}
+                  required
                 />
+                <ValidationError message={t(errors.is_active?.message)} />
               </div>
             </div>
           </Card>

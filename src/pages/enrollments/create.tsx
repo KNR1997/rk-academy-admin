@@ -22,7 +22,9 @@ export default function CreateEnrollmentPage() {
         </h1>
       </div>
       <CreateOrUpdateEnrollmentForm
-        initialValues={{ student: enrollmentStudent }}
+        initialValues={
+          enrollmentStudent ? { student: enrollmentStudent } : null
+        }
       />
     </>
   );
