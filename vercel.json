@@ -1,6 +1,6 @@
 {
   "env": {
-    "NEXT_PUBLIC_REST_API_ENDPOINT": "https://rk-apiserver-latest.onrender.com/api",
+    "NEXT_PUBLIC_REST_API_ENDPOINT": "https://api.rukshanict.lk/api",
     "NEXT_PUBLIC_SHOP_URL": "",
     "NEXT_PUBLIC_GOOGLE_MAP_API_KEY": "",
     "NEXT_PUBLIC_AUTH_TOKEN_KEY": "AUTH_CRED",
@@ -21,7 +21,7 @@
   },
   "build": {
     "env": {
-      "NEXT_PUBLIC_REST_API_ENDPOINT": "https://rk-apiserver-latest.onrender.com/api",
+      "NEXT_PUBLIC_REST_API_ENDPOINT": "https://api.rukshanict.lk/api",
       "NEXT_PUBLIC_SHOP_URL": "",
       "NEXT_PUBLIC_GOOGLE_MAP_API_KEY": "",
       "NEXT_PUBLIC_AUTH_TOKEN_KEY": "AUTH_CRED",
