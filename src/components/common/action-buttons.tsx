@@ -202,7 +202,7 @@ const ActionButtons = ({
         <button
           onClick={handleResetTeacherPassword}
           className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
-          title={t('common:text-make-admin')}
+          title={t('common:text-reset-password')}
         >
           <ResetIcon width={17} />
         </button>
