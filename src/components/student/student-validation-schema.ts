@@ -14,10 +14,7 @@ export const studentValidationSchema = yup.object().shape({
   // parent_guardian_name: yup.string().required('form:error-guardian-name-required'),
   parent_guardian_phone: yup
     .string()
-    .matches(
-      /^07\d{8}$/,
-      'Phone number must be exactly 10 digits starting with 07',
-    )
+    .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits')
     .required('form:error-contact-number-required'),
   grade_level: yup.object().required('form:error-grade-level-required'),
   academic_year: yup.object().required('form:error-academic-year-required'),

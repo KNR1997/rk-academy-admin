@@ -12,5 +12,8 @@ export const teacherValidationSchema = yup.object().shape({
   username: yup.string().required('form:error-username-required'),
   // date_of_birth: yup.string().required('form:error-birthday-required'),
   department: yup.string().required('form:error-department-required'),
-  mobile_number: yup.string().max(19, 'maximum 19 digit').required('form:error-contact-number-required')
+  mobile_number: yup
+    .string()
+    .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits')
+    .required('form:error-contact-number-required'),
 });
