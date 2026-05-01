@@ -52,22 +52,10 @@ export const useUpdateSubjectMutation = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation(subjectClient.update, {
-    onSuccess: async (data) => {
-      const generateRedirectUrl = router.query.shop
-        ? `/${router.query.shop}${Routes.subject.list}`
-        : Routes.subject.list;
-      await router.push(
-        `${generateRedirectUrl}/${data?.slug}/edit`,
-        undefined,
-        {
-          locale: Config.defaultLanguage,
-        }
-      );
+    onSuccess: () => {
+      Router.push(Routes.subject.list);
       toast.success(t('common:successfully-updated'));
     },
-    // onSuccess: () => {
-    //   toast.success(t('common:successfully-updated'));
-    // },
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.SUBJECTS);
@@ -78,7 +66,7 @@ export const useUpdateSubjectMutation = () => {
 export const useSubjectQuery = ({ slug, language }: GetParams) => {
   const { data, error, isLoading } = useQuery<Subject, Error>(
     [API_ENDPOINTS.SUBJECTS, { slug, language }],
-    () => subjectClient.get({ slug, language })
+    () => subjectClient.get({ slug, language }),
   );
 
   return {
@@ -95,7 +83,7 @@ export const useSubjectsQuery = (options: Partial<SubjectQueryOptions>) => {
       subjectClient.paginated(Object.assign({}, queryKey[1], pageParam)),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
