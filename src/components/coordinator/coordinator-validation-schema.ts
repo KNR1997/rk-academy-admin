@@ -14,11 +14,12 @@ export const coordinatorValidationSchema = yup.object().shape({
     then: (schema) => schema.notRequired(),
     otherwise: (schema) => schema.required('form:error-password-required'),
   }),
-  // password: yup
-  //   .string()
-  //   .required('form:error-password-required')
-  //   .matches(passwordRules, {
-  //     message:
-  //       'Please create a stronger password. hint: Min 8 characters, 1 Upper case letter, 1 Lower case letter, 1 Numeric digit.',
-  //   }),
+  mobile_number: yup
+    .string()
+    .nullable()
+    .notRequired()
+    .matches(/^[0-9]{10}$/, {
+      message: 'Mobile number must be exactly 10 digits',
+      excludeEmptyString: true,
+    }),
 });

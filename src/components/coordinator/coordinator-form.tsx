@@ -161,11 +161,11 @@ const CoordinatorCreateForm = ({ initialValues }: IProps) => {
                 required
               />
 
-              <PhoneNumberInput
+              <Input
                 label={t('form:input-label-contact')}
                 {...register('mobile_number')}
-                control={control}
                 error={t(errors.mobile_number?.message!)}
+                variant="outline"
               />
             </div>
           </Card>
