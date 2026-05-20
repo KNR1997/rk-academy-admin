@@ -323,6 +323,12 @@ export const siteSettings = {
         icon: 'DiaryIcon',
         permissions: studentOnly,
       },
+      {
+        href: Routes.myEnrollmentPayments.list,
+        label: 'sidebar-nav-item-my-payments',
+        icon: 'TransactionsIcon',
+        permissions: studentOnly,
+      },
     ],
 
     shop: {

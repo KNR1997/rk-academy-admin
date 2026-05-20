@@ -1,10 +1,6 @@
-import Router from 'next/router';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'next-i18next';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-// configs
-import { Config } from '@/config';
-import { Routes } from '@/config/routes';
 // utils
 import { mapPaginatorData } from '@/utils/data-mappers';
 // client
@@ -17,6 +13,7 @@ import {
   EnrollmentPaginator,
   EnrollmentQueryOptions,
   EnrollmentWithMonthsPaginator,
+  EnrollmentAnalyticsQueryOptions,
 } from '@/types';
 
 export const useCreateEnrollmentMutation = () => {
@@ -55,12 +52,12 @@ export const useUpdateEnrollmentMutation = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   return useMutation(enrollmentClient.update, {
-    onSuccess: () => {
-      Router.push(Routes.enrollment.list, undefined, {
-        locale: Config.defaultLanguage,
-      });
-      toast.success(t('common:successfully-updated'));
-    },
+    // onSuccess: () => {
+    //   Router.push(Routes.enrollment.list, undefined, {
+    //     locale: Config.defaultLanguage,
+    //   });
+    //   toast.success(t('common:successfully-updated'));
+    // },
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.ENROLLMENTS);
@@ -71,7 +68,7 @@ export const useUpdateEnrollmentMutation = () => {
 export const useEnrollmentQuery = ({ slug, language }: GetParams) => {
   const { data, error, isLoading } = useQuery<Enrollment, Error>(
     [API_ENDPOINTS.ENROLLMENTS, { slug, language }],
-    () => enrollmentClient.get({ slug, language })
+    () => enrollmentClient.get({ slug, language }),
   );
 
   return {
@@ -81,14 +78,16 @@ export const useEnrollmentQuery = ({ slug, language }: GetParams) => {
   };
 };
 
-export const useEnrollmentsQuery = (options: Partial<EnrollmentQueryOptions>) => {
+export const useEnrollmentsQuery = (
+  options: Partial<EnrollmentQueryOptions>,
+) => {
   const { data, error, isLoading } = useQuery<EnrollmentPaginator, Error>(
     [API_ENDPOINTS.ENROLLMENTS, options],
     ({ queryKey, pageParam }) =>
       enrollmentClient.paginated(Object.assign({}, queryKey[1], pageParam)),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -99,14 +98,21 @@ export const useEnrollmentsQuery = (options: Partial<EnrollmentQueryOptions>) =>
   };
 };
 
-export const useEnrollmentsWithMonthsQuery = (options: Partial<EnrollmentQueryOptions>) => {
-  const { data, error, isLoading } = useQuery<EnrollmentWithMonthsPaginator, Error>(
+export const useEnrollmentsWithMonthsQuery = (
+  options: Partial<EnrollmentQueryOptions>,
+) => {
+  const { data, error, isLoading } = useQuery<
+    EnrollmentWithMonthsPaginator,
+    Error
+  >(
     [API_ENDPOINTS.ENROLLMENTS, options],
     ({ queryKey, pageParam }) =>
-      enrollmentClient.enrollmentWithMonthPaginated(Object.assign({}, queryKey[1], pageParam)),
+      enrollmentClient.enrollmentWithMonthPaginated(
+        Object.assign({}, queryKey[1], pageParam),
+      ),
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -115,4 +121,12 @@ export const useEnrollmentsWithMonthsQuery = (options: Partial<EnrollmentQueryOp
     error,
     loading: isLoading,
   };
+};
+
+export const useEnrollmentAnalyticsQuery = (
+  options: Partial<EnrollmentAnalyticsQueryOptions>,
+) => {
+  return useQuery([`${API_ENDPOINTS.ENROLLMENTS}/analytics`, options], () =>
+    enrollmentClient.analytics(options),
+  );
 };

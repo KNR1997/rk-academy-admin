@@ -10,7 +10,10 @@ import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // types
 import { GradeLevel } from '@/types';
 // hooks
-import { useEnrollmentsWithMonthsQuery } from '@/data/enrollment';
+import {
+  useEnrollmentAnalyticsQuery,
+  useEnrollmentsWithMonthsQuery,
+} from '@/data/enrollment';
 // components
 import Card from '@/components/common/card';
 import Search from '@/components/common/search';
@@ -37,6 +40,11 @@ export default function Enrollments() {
   const [searchTerm, setSearchTerm] = useState('');
   const [ordering, setOrdering] = useState('-created_at');
   // query
+  const { data: enrollmentAnaylytics, isLoading: loadingeEnrollmentAnalytics } =
+    useEnrollmentAnalyticsQuery({
+      grade_level: grade,
+    });
+
   const { enrollmentsWithMonths, paginatorInfo, loading, error } =
     useEnrollmentsWithMonthsQuery({
       limit: 20,
@@ -120,7 +128,7 @@ export default function Enrollments() {
             subtitleTransKey="sticker-card-subtitle-order"
             icon={<ChecklistIcon className="h-8 w-8" />}
             color="#865DFF"
-            price={12}
+            price={enrollmentAnaylytics?.active_students}
           />
           <AnalyticCard
             titleTransKey="Growth"

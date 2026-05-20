@@ -1,6 +1,8 @@
 import {
   CreateEnrollmentInput,
   Enrollment,
+  EnrollmentAnalyticsQueryOptions,
+  EnrollmentAnalyticsResponse,
   EnrollmentPaginator,
   EnrollmentQueryOptions,
   EnrollmentWithMonthsPaginator,
@@ -14,7 +16,11 @@ export const enrollmentClient = {
   ...crudFactory<Enrollment, QueryOptions, CreateEnrollmentInput>(
     API_ENDPOINTS.ENROLLMENTS,
   ),
-  paginated: ({ name, grade_level, ...params }: Partial<EnrollmentQueryOptions>) => {
+  paginated: ({
+    name,
+    grade_level,
+    ...params
+  }: Partial<EnrollmentQueryOptions>) => {
     return HttpClient.get<EnrollmentPaginator>(API_ENDPOINTS.ENROLLMENTS, {
       searchJoin: 'and',
       self,
@@ -35,6 +41,16 @@ export const enrollmentClient = {
         self,
         ...params,
         search: HttpClient.formatSearchParams({ name, batch, grade_level }),
+      },
+    );
+  },
+  analytics({
+    grade_level,
+  }: Partial<EnrollmentAnalyticsQueryOptions>) {
+    return HttpClient.get<EnrollmentAnalyticsResponse>(
+      `${API_ENDPOINTS.ENROLLMENTS}/analytics`,
+      {
+        grade_level,
       },
     );
   },

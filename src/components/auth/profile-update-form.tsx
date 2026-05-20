@@ -129,11 +129,19 @@ export default function ProfileUpdate({ me }: any) {
               className="mb-5"
               required
             />
-            <PhoneNumberInput
+            {/* <PhoneNumberInput
               label={t('form:input-label-contact')}
               {...register('mobile_number')}
               control={control}
               error={t(errors.mobile_number?.message!)}
+            /> */}
+            <Input
+              label={t('form:input-label-contact')}
+              {...register('mobile_number')}
+              error={t(errors.mobile_number?.message!)}
+              variant="outline"
+              //dimension="small"
+              required
             />
           </Card>
           <div className="w-full text-end">

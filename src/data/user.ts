@@ -25,6 +25,7 @@ import {
   VideoPaginator,
   MyEnrollmentVideosQueryOptions,
   Video,
+  EnrollmentPaymentPaginator,
 } from '@/types';
 
 export const useMeQuery = () => {
@@ -183,6 +184,19 @@ export const useVerifyForgetPasswordTokenMutation = () => {
 
 export const useResetPasswordMutation = () => {
   return useMutation(userClient.resetPassword);
+};
+
+export const useResetUserPasswordMutation = () => {
+  const { t } = useTranslation();
+
+  return useMutation(userClient.resetUserPassword, {
+    onSuccess: () => {
+      toast.success(t('common:successfully-updated'));
+    },
+    onError: () => {
+      toast.error(t('common:PICKBAZAR_MESSAGE.SOMETHING_WENT_WRONG'));
+    }
+  });
 };
 
 export const useResetTeacherPasswordMutation = () => {
@@ -391,6 +405,25 @@ export const useMyEnrollmentsPaginatedQuery = (
 
   return {
     myEnrollments: data?.data ?? [],
+    paginatorInfo: mapPaginatorData(data as any),
+    loading: isLoading,
+    error,
+  };
+};
+
+export const useMyEnrollmentPaymentsPaginatedQuery = (
+  params: Partial<EnrollmentQueryOptions>,
+) => {
+  const { data, isLoading, error } = useQuery<EnrollmentPaymentPaginator, Error>(
+    [API_ENDPOINTS.MY_ENROLLMENT_PAYMENTS, params],
+    () => userClient.getMyEnrollmentPaymentsPaginated(params),
+    {
+      keepPreviousData: true,
+    },
+  );
+
+  return {
+    myEnrollmentPayments: data?.data ?? [],
     paginatorInfo: mapPaginatorData(data as any),
     loading: isLoading,
     error,

@@ -55,6 +55,7 @@ export const API_ENDPOINTS = {
   ENROLLED_COURSES: 'enrolled-courses',
   MY_STAFFS: '/my-staffs',
   MY_ENROLLMENTS: 'students/me/enrollments',
+  MY_ENROLLMENT_PAYMENTS: 'students/me/enrollment-payments',
   ALL_STAFFS: '/all-staffs',
   STUDENT_WATCH_VIDEO: 'students/me/watch-videos'
 };

@@ -2,6 +2,7 @@ import React from 'react';
 
 export type MODAL_VIEWS =
   | 'RESET_TEACHER_PASSWORD'
+  | 'RESET_PASSWORD'
   | 'DELETE_PRODUCT'
   | 'DELETE_VIDEO'
   | 'DELETE_COURSE'

@@ -9,6 +9,9 @@ export const Routes = {
   myCourses: {
     ...routesFactory('/my-courses'),
   },
+  myEnrollmentPayments: {
+    ...routesFactory('/my-enrollment-payments'),
+  },
   profile: '/profile',
   settings: '/settings',
   paymentSettings: '/settings/payment',

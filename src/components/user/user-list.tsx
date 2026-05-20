@@ -147,6 +147,7 @@ const UserList = ({
                 userStatus={true}
                 isUserActive={is_active}
                 showMakeAdminButton={true}
+                resetPasswordButton={true}
               />
             )}
           </>

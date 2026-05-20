@@ -28,6 +28,7 @@ import {
   VideoPaginator,
   Video,
   ResetTeacherPassword,
+  ResetUserPasswordInput,
 } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
@@ -62,6 +63,9 @@ export const userClient = {
   },
   resetPassword: (variables: ResetPasswordInput) => {
     return HttpClient.post<any>(API_ENDPOINTS.RESET_PASSWORD, variables);
+  },
+  resetUserPassword: ({ user_id, input }: { user_id: string, input: ResetUserPasswordInput}) => {
+    return HttpClient.post<any>(`admin/users/${user_id}/reset-password`, input);
   },
   resetTeacherPassword: (variables: ResetTeacherPassword) => {
     return HttpClient.post<any>(`admin/teacher/${variables.teacher_id}/reset-password`, variables);
@@ -154,6 +158,19 @@ export const userClient = {
   }: Partial<EnrollmentQueryOptions>) => {
     return HttpClient.get<EnrollmentPaginator>(
       `${API_ENDPOINTS.MY_ENROLLMENTS}/`,
+      {
+        searchJoin: 'and',
+        ...params,
+        search: HttpClient.formatSearchParams({ name }),
+      },
+    );
+  },
+  getMyEnrollmentPaymentsPaginated: ({
+    name,
+    ...params
+  }: Partial<EnrollmentQueryOptions>) => {
+    return HttpClient.get<EnrollmentPaymentPaginator>(
+      `${API_ENDPOINTS.MY_ENROLLMENT_PAYMENTS}/`,
       {
         searchJoin: 'and',
         ...params,

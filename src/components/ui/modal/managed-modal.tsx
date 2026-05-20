@@ -9,6 +9,9 @@ import EnrollmentPaymentView from '@/components/enrollment-payments/enrollment-p
 const ResetTeacherPasswordView = dynamic(
   () => import('@/components/user/reset-teacher-password-view'),
 );
+const ResetPasswordView = dynamic(
+  () => import('@/components/user/reset-password-view'),
+);
 const VideoDeleteView = dynamic(
   () => import('@/components/video/video-delete-view'),
 );
@@ -73,6 +76,8 @@ function renderModal(view: MODAL_VIEWS | undefined, data: any) {
   switch (view) {
     case 'RESET_TEACHER_PASSWORD':
       return <ResetTeacherPasswordView />;
+    case 'RESET_PASSWORD':
+      return <ResetPasswordView />;
     case 'DELETE_SUBJECT':
       return <SubjectDeleteView />;
     case 'DELETE_VIDEO':

@@ -6,6 +6,19 @@ export type NextPageWithLayout<P = {}> = NextPage<P> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode;
 };
 
+export interface ApiErrorResponse {
+  success: false;
+  code: string;
+  message: string;
+  errors?: Record<
+    string,
+    {
+      message: string;
+      code: string;
+    }[]
+  >;
+}
+
 export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc',
@@ -997,6 +1010,10 @@ export interface ResetPasswordInput {
   password: string;
 }
 
+export interface ResetUserPasswordInput {
+  password: string;
+}
+
 export interface ResetTeacherPassword {
   teacher_id: string;
   password: string;
@@ -1168,6 +1185,10 @@ export interface EnrollmentQueryOptions extends QueryOptions {
   batch: string;
 }
 
+export interface EnrollmentAnalyticsQueryOptions extends QueryOptions {
+  grade_level: string;
+}
+
 export interface MyEnrollmentVideosQueryOptions extends QueryOptions {
   enrollment_id: string;
   name: string;
@@ -1295,6 +1316,10 @@ export interface AnalyticsResponse {
   active_enrollment_count: number;
 }
 
+export interface EnrollmentAnalyticsResponse {
+  active_students: number;
+}
+
 export interface PendingPayment {
   student: Student;
 }
@@ -1334,6 +1359,8 @@ export interface CourseOfferingPaginator
   extends PaginatorInfo<CourseOffering> {}
 
 export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
+
+export interface EnrollmentPaymentPaginator extends PaginatorInfo<EnrollmentPayment> {}
 
 export interface EnrollmentWithMonthsPaginator
   extends PaginatorInfo<EnrollmentWithMonth> {}
