@@ -1,11 +1,7 @@
 import { toast } from 'react-toastify';
 import { useTranslation } from 'next-i18next';
-import Router, { useRouter } from 'next/router';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-// config
-import { Config } from '@/config';
-import { Routes } from '@/config/routes';
 import { API_ENDPOINTS } from './client/api-endpoints';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 // utils
 import { mapPaginatorData } from '@/utils/data-mappers';
 // client
@@ -23,12 +19,9 @@ export const useCreateStudentMutation = () => {
   const { t } = useTranslation();
 
   return useMutation(studentClient.create, {
-    // onSuccess: () => {
-    //   Router.push(Routes.student.list, undefined, {
-    //     locale: Config.defaultLanguage,
-    //   });
-    //   toast.success(t('common:successfully-created'));
-    // },
+    onSuccess: () => {
+      toast.success(t('common:successfully-created'));
+    },
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
@@ -53,29 +46,16 @@ export const useDeleteStudentMutation = () => {
 
 export const useUpdateStudentMutation = () => {
   const { t } = useTranslation();
-  const router = useRouter();
   const queryClient = useQueryClient();
+
   return useMutation(studentClient.update, {
-    onSuccess: async (data) => {
-      const generateRedirectUrl = router.query.shop
-        ? `/${router.query.shop}${Routes.student.list}`
-        : Routes.student.list;
-      await router.push(`${generateRedirectUrl}/${data?.id}/edit`, undefined, {
-        locale: Config.defaultLanguage,
-      });
-      // toast.success(t('common:successfully-updated'));
+    onSuccess: () => {
+      toast.success(t('common:successfully-updated'));
     },
-    // onSuccess: () => {
-    //   toast.success(t('common:successfully-updated'));
-    // },
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.STUDENTS);
     },
-    // onError: (error: any) => {
-    //   console.log('error: ', error)
-    //   toast.error(error?.response?.data?.error)
-    // }
   });
 };
 
