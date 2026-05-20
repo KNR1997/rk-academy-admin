@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useSetAtom } from 'jotai';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'next-i18next';
 import Router, { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Control, FieldErrors, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 // form-validations
 import { studentValidationSchema } from './student-validation-schema';
 // types
@@ -21,54 +20,22 @@ import {
   useCreateStudentMutation,
   useUpdateStudentMutation,
 } from '@/data/student';
-import { useSettingsQuery } from '@/data/settings';
-import { useAcademicYearsQuery } from '@/data/academic-year';
 // components
 import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import SelectInput from '@/components/ui/select-input';
 import PasswordInput from '@/components/ui/password-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
-import ValidationError from '@/components/ui/form-validation-error';
 import SelectExamYear from '@/components/exam-year/select-exam-year';
 import SelectGradeLevel from '@/components/grade-level/select-grade-level';
-
-function SelectAcademicYear({
-  control,
-  errors,
-}: {
-  control: Control<FormValues>;
-  errors: FieldErrors;
-}) {
-  const { locale } = useRouter();
-  const { t } = useTranslation();
-  const { academicYears, loading } = useAcademicYearsQuery({
-    language: locale,
-  });
-  return (
-    <div>
-      <SelectInput
-        label={t('form:input-label-academic-year')}
-        name="academic_year"
-        control={control}
-        getOptionLabel={(option: any) => option.name}
-        getOptionValue={(option: any) => option.id}
-        options={academicYears!}
-        isLoading={loading}
-        required
-      />
-      <ValidationError message={t(errors.academic_year?.message)} />
-    </div>
-  );
-}
+import SelectAcademicYear from '@/components/academic-year/select-acadenic-year';
 
 type FormValues = {
   first_name: string;
   last_name: string;
   email: string;
-  // username: string;
+  student_number: string;
   password: string;
   date_of_birth: string;
   parent_guardian_name: string;
@@ -85,7 +52,7 @@ const defaultValues = {
   first_name: '',
   last_name: '',
   email: '',
-  // username: '',
+  // student_number: '',
   password: generatePassword(),
   date_of_birth: null,
   parent_guardian_name: '',
@@ -133,14 +100,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
     context: { isEditMode: !!initialValues },
   });
 
-  const { locale } = router;
-  const {
-    // @ts-ignore
-    settings: { options },
-  } = useSettingsQuery({
-    language: locale!,
-  });
-
   const { mutate: createStudent, isLoading: creating } =
     useCreateStudentMutation();
   const { mutate: updateStudent, isLoading: updating } =
@@ -162,9 +121,10 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
     };
     const mutationOptions = {
       onSuccess: (data: Student) => {
-        toast.success(t('common:successfully-created'));
-        setEnrollmentStudent(data);
-        Router.push(Routes.enrollment.create);
+        if (!initialValues) {
+          setEnrollmentStudent(data);
+          Router.push(Routes.enrollment.create);
+        }
       },
       onError: (error: any) =>
         handleMutationError(error, setError, setErrorMessage),
@@ -213,14 +173,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                 //dimension="small"
                 required
               />
-              {/* <Input
-              label={t('form:input-label-username')}
-              {...register('username')}
-              error={t(errors.username?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-              /> */}
               <Input
                 label={t('form:input-label-contact')}
                 {...register('parent_guardian_phone')}
@@ -229,12 +181,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                 //dimension="small"
                 required
               />
-              {/* <PhoneNumberInput
-              label={t('form:input-label-contact')}
-              {...register('parent_guardian_phone')}
-              control={control}
-              error={t(errors.parent_guardian_phone?.message!)}
-            /> */}
               {!initialValues && (
                 <PasswordInput
                   label={t('form:input-label-password')}
@@ -260,6 +206,15 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                 variant="outline"
                 //dimension="small"
               />
+              {initialValues && (
+                <Input
+                  label={t('form:input-label-student-number')}
+                  {...register('student_number')}
+                  error={t(errors.student_number?.message!)}
+                  variant="outline"
+                  disabled
+                />
+              )}
             </div>
           </Card>
         </div>
@@ -274,35 +229,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
           </Card>
         </div>
 
-        {/* <div className="flex flex-wrap my-5 sm:my-8">
-          <Description
-            title={t('form:input-label-description')}
-            details={`${
-              initialValues
-                ? t('form:item-description-edit')
-                : t('form:item-description-add')
-            } ${t('form:student-academic-description-helper-text')}`}
-            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
-          />
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <Input
-              label={t('form:input-label-parent-guardian-name')}
-              {...register('parent_guardian_name')}
-              error={t(errors.parent_guardian_name?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-            <Input
-              label={t('form:input-label-parent-guardian-phone')}
-              {...register('parent_guardian_phone')}
-              error={t(errors.parent_guardian_phone?.message!)}
-              variant="outline"
-              className="mb-5"
-              required
-            />
-          </Card>
-        </div> */}
         <StickyFooterPanel className="z-0">
           <div className="text-end">
             {initialValues && (
