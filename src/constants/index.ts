@@ -39,3 +39,10 @@ export const activeInactiveStatusOptions = [
     value: false,
   },
 ];
+
+export const roleOptions = [
+  { value: '20', label: 'Admin' },
+  { value: '15', label: 'Teacher' },
+  { value: '12', label: 'Coordinator' },
+  { value: '10', label: 'Student' },
+];

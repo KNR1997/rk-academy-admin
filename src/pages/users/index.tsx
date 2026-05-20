@@ -11,6 +11,7 @@ import Layout from '@/components/layouts/admin';
 import Search from '@/components/common/search';
 import UserList from '@/components/user/user-list';
 import Loader from '@/components/ui/loader/loader';
+import RoleFilter from '@/components/user/role-filter';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
 
@@ -18,6 +19,7 @@ export default function AllUsersPage() {
   const { t } = useTranslation();
   // states
   const [page, setPage] = useState(1);
+  const [role, setRole] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [ordering, setOrdering] = useState('created_at');
   // query
@@ -25,6 +27,7 @@ export default function AllUsersPage() {
     limit: 20,
     page,
     name: searchTerm,
+    role: role,
     ordering,
   });
 
@@ -51,6 +54,13 @@ export default function AllUsersPage() {
           <Search
             onSearch={handleSearch}
             placeholderText={t('form:input-placeholder-search-name')}
+          />
+          <RoleFilter
+            className="md:ms-6"
+            onRoleFilter={(option: {name: string; value: string}) => {
+              setRole(option?.value);
+              setPage(1);
+            }}
           />
         </div>
       </Card>

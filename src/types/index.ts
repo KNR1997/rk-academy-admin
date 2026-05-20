@@ -1168,6 +1168,7 @@ export interface CourseOfferingEnrollmentQueryOptions extends QueryOptions {
 
 export interface UserQueryOptions extends QueryOptions {
   name: string;
+  role: string;
 }
 
 export interface AdminQueryOptions extends QueryOptions {
