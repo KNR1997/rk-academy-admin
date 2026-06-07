@@ -14,13 +14,12 @@ import { activeInactiveStatusOptions } from '@/constants';
 // configs
 import { Routes } from '@/config/routes';
 // hooks
-import { useSettingsQuery } from '@/data/settings';
 import {
   useCreateEnrollmentMutation,
   useUpdateEnrollmentMutation,
 } from '@/data/enrollment';
 // stores
-import { enrollmentFlowEnrollmentAtom } from '@/store/enrollment.store';
+import { enrollmentFlowEnrollmentAtom, enrollmentFlowStudentAtom } from '@/store/enrollment.store';
 // types
 import { CourseOffering, Enrollment, Student } from '@/types';
 // components
@@ -61,8 +60,9 @@ export default function CreateOrUpdateEnrollmentForm({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // store actions
   const setEnrollment = useSetAtom(enrollmentFlowEnrollmentAtom);
+  const setEnrollmentStudent = useSetAtom(enrollmentFlowStudentAtom);
+
   const {
-    watch,
     handleSubmit,
     setError,
     control,
@@ -82,21 +82,11 @@ export default function CreateOrUpdateEnrollmentForm({
     resolver: yupResolver(enrollmentValidationSchema),
   });
 
-  const { locale } = router;
-  const {
-    // @ts-ignore
-    settings: { options },
-  } = useSettingsQuery({
-    language: locale!,
-  });
-
   // mutations
   const { mutate: createEnrollment, isLoading: creating } =
     useCreateEnrollmentMutation();
   const { mutate: updateEnrollment, isLoading: updating } =
     useUpdateEnrollmentMutation();
-
-  const student = watch('student');
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -108,6 +98,7 @@ export default function CreateOrUpdateEnrollmentForm({
       onSuccess: (data: Enrollment) => {
         toast.success(t('common:successfully-created'));
         setEnrollment(data);
+        setEnrollmentStudent(data.student);
         Router.push(Routes.enrollmentPayment.create);
       },
       onError: (error: any) =>
@@ -149,7 +140,7 @@ export default function CreateOrUpdateEnrollmentForm({
               <SelectCourseOffering
                 control={control}
                 errors={errors}
-                gradeLevel={student?.current_grade?.name}
+                // gradeLevel={student?.current_grade?.name}
               />
               <div className="mb-5">
                 <SelectInput
