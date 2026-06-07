@@ -20,8 +20,8 @@ export default function SelectAcademicYear({
   return (
     <div>
       <SelectInput
-        label={t('form:input-label-grade-level')}
-        name="grade_level"
+        label={t('form:input-label-academic-year')}
+        name="academic_year"
         control={control}
         getOptionLabel={(option: any) => option.name}
         getOptionValue={(option: any) => option.id}
