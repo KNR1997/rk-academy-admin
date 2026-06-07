@@ -29,7 +29,6 @@ import PasswordInput from '@/components/ui/password-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import SelectExamYear from '@/components/exam-year/select-exam-year';
 import SelectGradeLevel from '@/components/grade-level/select-grade-level';
-import SelectAcademicYear from '@/components/academic-year/select-acadenic-year';
 
 type FormValues = {
   first_name: string;
@@ -116,7 +115,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
       // parent_guardian_name: values.parent_guardian_name,
       parent_guardian_phone: values.parent_guardian_phone,
       current_grade: values.grade_level.id,
-      current_academic_year: values.academic_year.id,
       exam_year: values.exam_year.value,
     };
     const mutationOptions = {
@@ -223,7 +221,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
           <Card className="w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <SelectGradeLevel control={control} errors={errors} />
-              <SelectAcademicYear control={control} errors={errors} />
               <SelectExamYear control={control} errors={errors} />
             </div>
           </Card>

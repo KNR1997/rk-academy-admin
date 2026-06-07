@@ -526,7 +526,6 @@ export interface CreateStudentInput {
   // parent_guardian_name: string;
   // parent_guardian_phone: string;
   current_grade: string;
-  current_academic_year: string;
 }
 
 export interface CreateTeacherInput {

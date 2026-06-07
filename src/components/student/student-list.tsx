@@ -114,21 +114,21 @@ const StudentList = ({
         </div>
       ),
     },
-    {
-      title: t('table:table-item-acedemic-year'),
-      dataIndex: 'current_academic_year',
-      key: 'current_academic_year',
-      align: 'center',
-      width: 120,
-      render: (current_academic_year: AcademicYear) => (
-        <div
-          className="overflow-hidden truncate whitespace-nowrap"
-          title={current_academic_year?.name}
-        >
-          {current_academic_year?.name}
-        </div>
-      ),
-    },
+    // {
+    //   title: t('table:table-item-acedemic-year'),
+    //   dataIndex: 'current_academic_year',
+    //   key: 'current_academic_year',
+    //   align: 'center',
+    //   width: 120,
+    //   render: (current_academic_year: AcademicYear) => (
+    //     <div
+    //       className="overflow-hidden truncate whitespace-nowrap"
+    //       title={current_academic_year?.name}
+    //     >
+    //       {current_academic_year?.name}
+    //     </div>
+    //   ),
+    // },
     {
       title: (
         <TitleWithSort
