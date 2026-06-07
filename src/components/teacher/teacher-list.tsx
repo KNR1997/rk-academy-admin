@@ -140,7 +140,7 @@ const TeacherList = ({
           editUrl={Routes?.teacher.editByIdWithoutLang(record.id)}
           deleteModalView="DELETE_TEACHER"
           deleteBySlug={record.id}
-          resetTeacherPasswordButton={true}
+          // resetTeacherPasswordButton={true}
         />
       ),
     },

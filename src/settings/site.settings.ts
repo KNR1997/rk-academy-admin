@@ -331,80 +331,80 @@ export const siteSettings = {
       },
     ],
 
-    shop: {
-      root: {
-        href: '',
-        label: 'text-main',
-        icon: 'DashboardIcon',
-        childMenu: [
-          {
-            href: (shop: string) => `${Routes.dashboard}${shop}`,
-            label: 'sidebar-nav-item-dashboard',
-            icon: 'DashboardIcon',
-            permissions: adminOwnerAndStaffOnly,
-          },
-        ],
-      },
+    // shop: {
+    //   root: {
+    //     href: '',
+    //     label: 'text-main',
+    //     icon: 'DashboardIcon',
+    //     childMenu: [
+    //       {
+    //         href: (shop: string) => `${Routes.dashboard}${shop}`,
+    //         label: 'sidebar-nav-item-dashboard',
+    //         icon: 'DashboardIcon',
+    //         permissions: adminOwnerAndStaffOnly,
+    //       },
+    //     ],
+    //   },
 
-      feedback: {
-        href: '',
-        label: 'text-feedback-control',
-        icon: 'SettingsIcon',
-        childMenu: [
-          {
-            href: (shop: string) => `/${shop}${Routes.reviews.list}`,
-            label: 'sidebar-nav-item-reviews',
-            icon: 'ReviewIcon',
-            permissions: adminAndOwnerOnly,
-          },
-          {
-            href: (shop: string) => `/${shop}${Routes.question.list}`,
-            label: 'sidebar-nav-item-questions',
-            icon: 'QuestionIcon',
-            permissions: adminAndOwnerOnly,
-          },
-        ],
-      },
+    //   feedback: {
+    //     href: '',
+    //     label: 'text-feedback-control',
+    //     icon: 'SettingsIcon',
+    //     childMenu: [
+    //       {
+    //         href: (shop: string) => `/${shop}${Routes.reviews.list}`,
+    //         label: 'sidebar-nav-item-reviews',
+    //         icon: 'ReviewIcon',
+    //         permissions: adminAndOwnerOnly,
+    //       },
+    //       {
+    //         href: (shop: string) => `/${shop}${Routes.question.list}`,
+    //         label: 'sidebar-nav-item-questions',
+    //         icon: 'QuestionIcon',
+    //         permissions: adminAndOwnerOnly,
+    //       },
+    //     ],
+    //   },
 
-      user: {
-        href: '',
-        label: 'text-user-control',
-        icon: 'SettingsIcon',
-        childMenu: [
-          {
-            href: (shop: string) => `/${shop}${Routes.staff.list}`,
-            label: 'sidebar-nav-item-staffs',
-            icon: 'UsersIcon',
-            permissions: adminAndOwnerOnly,
-          },
-        ],
-      },
-    },
+    //   user: {
+    //     href: '',
+    //     label: 'text-user-control',
+    //     icon: 'SettingsIcon',
+    //     childMenu: [
+    //       {
+    //         href: (shop: string) => `/${shop}${Routes.staff.list}`,
+    //         label: 'sidebar-nav-item-staffs',
+    //         icon: 'UsersIcon',
+    //         permissions: adminAndOwnerOnly,
+    //       },
+    //     ],
+    //   },
+    // },
 
-    staff: {
-      root: {
-        href: '',
-        label: 'text-main',
-        icon: 'DashboardIcon',
-        childMenu: [
-          {
-            href: (shop: string) => `${Routes.dashboard}${shop}`,
-            label: 'sidebar-nav-item-dashboard',
-            icon: 'DashboardIcon',
-            permissions: adminOwnerAndStaffOnly,
-          },
-        ],
-      },
-    },
+    // staff: {
+    //   root: {
+    //     href: '',
+    //     label: 'text-main',
+    //     icon: 'DashboardIcon',
+    //     childMenu: [
+    //       {
+    //         href: (shop: string) => `${Routes.dashboard}${shop}`,
+    //         label: 'sidebar-nav-item-dashboard',
+    //         icon: 'DashboardIcon',
+    //         permissions: adminOwnerAndStaffOnly,
+    //       },
+    //     ],
+    //   },
+    // },
 
-    ownerDashboard: [
-      {
-        href: Routes.dashboard,
-        label: 'sidebar-nav-item-dashboard',
-        icon: 'DashboardIcon',
-        permissions: ownerAndStaffOnly,
-      },
-    ],
+    // ownerDashboard: [
+    //   {
+    //     href: Routes.dashboard,
+    //     label: 'sidebar-nav-item-dashboard',
+    //     icon: 'DashboardIcon',
+    //     permissions: ownerAndStaffOnly,
+    //   },
+    // ],
 
     coordinatorDashboard: [
       {

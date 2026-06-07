@@ -24,7 +24,7 @@ export default function RoleFilter({ onRoleFilter, className }: Props) {
           getOptionLabel={(option: any) => option.label}
           //@ts-ignore
           getOptionValue={(option: any) => option.value}
-          placeholder={t('common:filter-by-grade-placeholder')}
+          placeholder={t('common:filter-by-role-placeholder')}
           onChange={onRoleFilter}
           isClearable={true}
         />

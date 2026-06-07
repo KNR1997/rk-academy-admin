@@ -97,10 +97,10 @@ export interface QueryOptions {
   sortedBy?: SortOrder;
 }
 
-export interface ShopSocialInput {
-  icon?: string;
-  url?: string;
-}
+// export interface ShopSocialInput {
+//   icon?: string;
+//   url?: string;
+// }
 
 export interface PaginatorInfo<T> {
   current_page: number;
@@ -299,89 +299,89 @@ export interface IImage {
   original: string;
 }
 
-export interface Shop {
-  id?: string;
-  owner_id?: number;
-  owner?: User;
-  staffs?: User[];
-  is_active?: boolean;
-  orders_count?: number;
-  products_count?: number;
-  balance?: Balance;
-  name?: string;
-  slug?: string;
-  description?: string;
-  cover_image: IImage;
-  logo: IImage;
-  address?: UserAddress;
-  settings?: ShopSettings;
-  created_at?: string;
-  updated_at?: string;
-  ownership_history?: {
-    status: OwnerShipTransferStatus;
-  };
-}
+// export interface Shop {
+//   id?: string;
+//   owner_id?: number;
+//   owner?: User;
+//   staffs?: User[];
+//   is_active?: boolean;
+//   orders_count?: number;
+//   products_count?: number;
+//   balance?: Balance;
+//   name?: string;
+//   slug?: string;
+//   description?: string;
+//   cover_image: IImage;
+//   logo: IImage;
+//   address?: UserAddress;
+//   settings?: ShopSettings;
+//   created_at?: string;
+//   updated_at?: string;
+//   ownership_history?: {
+//     status: OwnerShipTransferStatus;
+//   };
+// }
 
-export interface Balance {
-  id?: string;
-  admin_commission_rate?: number;
-  shop?: Shop;
-  total_earnings?: number;
-  withdrawn_amount?: number;
-  current_balance?: number;
-  payment_info?: PaymentInfo;
-}
+// export interface Balance {
+//   id?: string;
+//   admin_commission_rate?: number;
+//   shop?: Shop;
+//   total_earnings?: number;
+//   withdrawn_amount?: number;
+//   current_balance?: number;
+//   payment_info?: PaymentInfo;
+// }
 
-export interface PaymentInfo {
-  account: number;
-  name: string;
-  email: string;
-  bank: string;
-}
+// export interface PaymentInfo {
+//   account: number;
+//   name: string;
+//   email: string;
+//   bank: string;
+// }
 
-export interface shopMaintenance {
-  image: Attachment;
-  title: string;
-  description: string;
-  start: Date;
-  until: Date;
-}
+// export interface shopMaintenance {
+//   image: Attachment;
+//   title: string;
+//   description: string;
+//   start: Date;
+//   until: Date;
+// }
 
-export interface ShopSettings {
-  socials?: ShopSocials[];
-  contact: string;
-  location: Location;
-  website: string;
-  notifications: {
-    email: string;
-    enable: boolean;
-  };
-  askForAQuote: {
-    enable: boolean;
-    content: string;
-    quote: string;
-  };
-  isShopUnderMaintenance?: string;
-  shopMaintenance: shopMaintenance;
-}
+// export interface ShopSettings {
+//   socials?: ShopSocials[];
+//   contact: string;
+//   location: Location;
+//   website: string;
+//   notifications: {
+//     email: string;
+//     enable: boolean;
+//   };
+//   askForAQuote: {
+//     enable: boolean;
+//     content: string;
+//     quote: string;
+//   };
+//   isShopUnderMaintenance?: string;
+//   shopMaintenance: shopMaintenance;
+// }
 
-export interface Location {
-  lat?: number;
-  lng?: number;
-  city?: string;
-  state?: string;
-  country?: string;
-  zip?: string;
-  formattedAddress?: string;
-}
+// export interface Location {
+//   lat?: number;
+//   lng?: number;
+//   city?: string;
+//   state?: string;
+//   country?: string;
+//   zip?: string;
+//   formattedAddress?: string;
+// }
 
-export interface UserAddress {
-  country?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  street_address?: string;
-}
+// export interface UserAddress {
+//   country?: string;
+//   city?: string;
+//   state?: string;
+//   zip?: string;
+//   street_address?: string;
+// }
 
 export interface MakeAdminInput {
   user_id: string;
@@ -394,14 +394,14 @@ export interface User {
   last_name: string;
   full_name: string;
   display_name: string;
-  shops: Shop[];
-  managed_shop: Shop;
+  // shops: Shop[];
+  // managed_shop: Shop;
   is_active: boolean;
   email: string;
   created_at: string;
   updated_at: string;
   profile?: Profile;
-  address: Address[];
+  // address: Address[];
   email_verified: boolean;
 }
 
@@ -409,13 +409,13 @@ export interface Domain {
   id: String;
   url: String;
 }
-export interface LicenseAdditionalData {
-  quotaExceeded: boolean;
-  supportValid: boolean;
-  licenseValid: boolean;
-  licenseRemaining: string;
-  purchaseUrl: string;
-}
+// export interface LicenseAdditionalData {
+//   quotaExceeded: boolean;
+//   supportValid: boolean;
+//   licenseValid: boolean;
+//   licenseRemaining: string;
+//   purchaseUrl: string;
+// }
 
 export interface UpdateUser {
   display_name?: string;
@@ -428,24 +428,24 @@ export interface Profile {
   avatar?: Attachment;
   bio?: string;
   contact?: string;
-  socials?: Social[];
+  // socials?: Social[];
   customer?: User;
 }
 
-export interface Social {
-  type?: string;
-  link?: string;
-}
+// export interface Social {
+//   type?: string;
+//   link?: string;
+// }
 
-export interface Address {
-  id: string;
-  title?: string;
-  default?: boolean;
-  address?: UserAddress;
-  type?: string;
-  customer?: User;
-  location: GoogleMapLocation;
-}
+// export interface Address {
+//   id: string;
+//   title?: string;
+//   default?: boolean;
+//   address?: UserAddress;
+//   type?: string;
+//   customer?: User;
+//   location: GoogleMapLocation;
+// }
 
 export interface StoreNotice {
   id: string;
@@ -457,7 +457,7 @@ export interface StoreNotice {
   expired_at: string;
   type?: string;
   is_read?: boolean;
-  shops?: Shop[];
+  // shops?: Shop[];
   users?: User[];
   received_by?: string;
   created_by: string;
@@ -600,11 +600,11 @@ export interface CreateNotifyLogsInput {
   notify_text: string;
 }
 
-export interface CreateAbuseReportInput {
-  model_id: string;
-  model_type: string;
-  message: string;
-}
+// export interface CreateAbuseReportInput {
+//   model_id: string;
+//   model_type: string;
+//   message: string;
+// }
 
 export interface CreateMessageInput {
   message: string;
@@ -656,15 +656,15 @@ export interface ContactDetails {
   website?: string;
 }
 
-export interface Location {
-  lat?: number;
-  lng?: number;
-  city?: string;
-  state?: string;
-  country?: string;
-  zip?: string;
-  formattedAddress?: string;
-}
+// export interface Location {
+//   lat?: number;
+//   lng?: number;
+//   city?: string;
+//   state?: string;
+//   country?: string;
+//   zip?: string;
+//   formattedAddress?: string;
+// }
 
 export interface LatestMessage {
   body: string;
@@ -865,7 +865,7 @@ export interface SettingsOptionsInput {
   useCashOnDelivery?: boolean;
   paymentGateway?: any;
   defaultPaymentGateway?: string;
-  contactDetails?: ContactDetailsInput;
+  // contactDetails?: ContactDetailsInput;
   minimumOrderAmount?: number;
   freeShippingAmount?: number;
   currencyToWalletRatio?: number;
@@ -974,13 +974,13 @@ export interface DeliveryTimeInput {
   description?: string;
 }
 
-export interface ContactDetailsInput {
-  socials?: ShopSocialInput[];
-  contact?: string;
-  location?: LocationInput;
-  website?: string;
-  emailAddress?: string;
-}
+// export interface ContactDetailsInput {
+//   socials?: ShopSocialInput[];
+//   contact?: string;
+//   // location?: LocationInput;
+//   website?: string;
+//   emailAddress?: string;
+// }
 
 export interface RegisterInput {
   email: string;
@@ -1053,62 +1053,62 @@ export declare type TransferShopOwnershipInput = {
   message?: string;
 };
 
-export interface LocationInput {
-  lat?: number;
-  lng?: number;
-  street_number?: string;
-  route?: string;
-  street_address?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  zip?: string;
-  formattedAddress?: string;
-}
+// export interface LocationInput {
+//   lat?: number;
+//   lng?: number;
+//   street_number?: string;
+//   route?: string;
+//   street_address?: string;
+//   city?: string;
+//   state?: string;
+//   country?: string;
+//   zip?: string;
+//   formattedAddress?: string;
+// }
 
-export interface shopMaintenanceInput {
-  image: Attachment;
-  title: string;
-  description: string;
-  start: Date;
-  until: Date;
-}
+// export interface shopMaintenanceInput {
+//   image: Attachment;
+//   title: string;
+//   description: string;
+//   start: Date;
+//   until: Date;
+// }
 
-export interface ShopSettingsInput {
-  socials?: ShopSocialInput[];
-  contact?: string;
-  location?: LocationInput;
-  website?: string;
-  isShopUnderMaintenance?: string;
-  shopMaintenance: shopMaintenanceInput;
-}
+// export interface ShopSettingsInput {
+//   socials?: ShopSocialInput[];
+//   contact?: string;
+//   location?: LocationInput;
+//   website?: string;
+//   isShopUnderMaintenance?: string;
+//   shopMaintenance: shopMaintenanceInput;
+// }
 
-export interface ReplyQuestion {
-  question?: string;
-  answer: string;
-}
+// export interface ReplyQuestion {
+//   question?: string;
+//   answer: string;
+// }
 
-export interface RefundReason {
-  id: string;
-  name: string;
-  slug: string;
-  language: string;
-  translated_languages: Array<string>;
-  created_at?: string;
-  updated_at?: string;
-  deleted_at?: string;
-}
+// export interface RefundReason {
+//   id: string;
+//   name: string;
+//   slug: string;
+//   language: string;
+//   translated_languages: Array<string>;
+//   created_at?: string;
+//   updated_at?: string;
+//   deleted_at?: string;
+// }
 
-export interface SocialInput {
-  type?: string;
-  link?: string;
-}
+// export interface SocialInput {
+//   type?: string;
+//   link?: string;
+// }
 
 export interface UserProfileInput {
   id: string;
   avatar?: AttachmentInput;
   bio?: string;
-  socials?: SocialInput[];
+  // socials?: SocialInput[];
   contact?: string;
 }
 
@@ -1325,7 +1325,7 @@ export interface PendingPayment {
   student: Student;
 }
 
-export interface ShopPaginator extends PaginatorInfo<Shop> {}
+// export interface ShopPaginator extends PaginatorInfo<Shop> {}
 
 export interface UserPaginator extends PaginatorInfo<User> {}
 
@@ -1415,24 +1415,24 @@ export interface SellerFaqItem {
   description?: string;
 }
 
-export interface Showcase {
-  title: string;
-  description: string;
-  buttonName: string;
-  buttonLink: string;
-  button2Name: string;
-  button2Link: string;
-  image: AttachmentInput;
-}
+// export interface Showcase {
+//   title: string;
+//   description: string;
+//   buttonName: string;
+//   buttonLink: string;
+//   button2Name: string;
+//   button2Link: string;
+//   image: AttachmentInput;
+// }
 
-export interface BusinessPurposeItem {
-  id?: string;
-  description: string;
-  title: string;
-  icon: {
-    value: string;
-  };
-}
+// export interface BusinessPurposeItem {
+//   id?: string;
+//   description: string;
+//   title: string;
+//   icon: {
+//     value: string;
+//   };
+// }
 
 export enum OwnerShipTransferStatus {
   PENDING = 'pending',

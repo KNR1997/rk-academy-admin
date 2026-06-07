@@ -1,23 +1,17 @@
-import usePrice from '@/utils/use-price';
 import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
+// icons
+import { ChecklistIcon } from '@/components/icons/summary/checklist';
+// components
+import Loader from '@/components/ui/loader/loader';
+import StickerCard from '@/components/widgets/sticker-card';
+import { useMyEnrollmentsPaginatedQuery } from '@/data/user';
 
 export default function StudentDashboard() {
   const { t } = useTranslation();
-  const { locale } = useRouter();
-  const [page, setPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeTimeFrame, setActiveTimeFrame] = useState(1);
+  // query
+  const { paginatorInfo, loading } = useMyEnrollmentsPaginatedQuery({});
 
-  let salesByYear: number[] = Array.from({ length: 12 }, (_) => 0);
-
-  const timeFrame = [
-    { name: t('text-today'), day: 1 },
-    { name: t('text-weekly'), day: 7 },
-    { name: t('text-monthly'), day: 30 },
-    { name: t('text-yearly'), day: 365 },
-  ];
+  if (loading) return <Loader text={t('common:text-loading')} />;
 
   return (
     <div className="grid gap-7 md:gap-8 lg:grid-cols-2 2xl:grid-cols-12">
@@ -28,15 +22,15 @@ export default function StudentDashboard() {
           </h3>
         </div>
 
-        {/* <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           <StickerCard
-            titleTransKey="sticker-card-title-rev"
+            titleTransKey="sticker-card-title-course"
             subtitleTransKey="sticker-card-subtitle-rev"
-            icon={<EaringIcon className="h-8 w-8" />}
+            icon={<ChecklistIcon className="h-8 w-8" />}
             color="#1EAE98"
-            price={total_revenue}
+            price={paginatorInfo?.total}
           />
-          <StickerCard
+          {/* <StickerCard
             titleTransKey="sticker-card-title-student"
             subtitleTransKey="sticker-card-subtitle-order"
             icon={<CustomersIcon className="h-8 w-8" />}
@@ -54,8 +48,8 @@ export default function StudentDashboard() {
             icon={<BasketIcon className="h-8 w-8" />}
             color="#E157A0"
             price={data?.active_enrollment_count}
-          />
-        </div> */}
+          /> */}
+        </div>
       </div>
 
       {/* <div className="col-span-full rounded-lg bg-light p-6 md:p-7">

@@ -83,6 +83,7 @@
   "input-label-collapse-logo": "Collapse Logo",
   "input-label-display-name": "Display Name",
   "input-label-email": "Email",
+  "input-label-student-number": "Student Number",
   "input-label-token": "Put your token you got from email",
   "input-label-password": "Password",
   "input-label-bio": "Bio",
