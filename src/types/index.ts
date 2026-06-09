@@ -558,16 +558,10 @@ export interface CreateEnrollmentInput {
   is_active?: boolean;
 }
 
-export interface PaymentItem {
-  payment_month: number;
-  payment_year: number;
-  amount: number;
-}
-
 export interface CreateEnrollmentPaymentInput {
   enrollment_id: string;
   student: string;
-  payments: PaymentItem[];
+  amount: number;
 }
 
 export interface CreateWithdrawInput {

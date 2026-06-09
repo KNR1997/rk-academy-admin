@@ -1,13 +1,11 @@
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'next-i18next';
-import { yupResolver } from '@hookform/resolvers/yup';
-// hooks
-import { useCreateEnrollmentPaymentMutation } from '@/data/enrollment-payment';
-// components
-import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import { useModalState } from '@/components/ui/modal/modal.context';
+import Input from '@/components/ui/input';
+import { useTranslation } from 'next-i18next';
+import * as Yup from 'yup';
+import { useCreateEnrollmentPaymentMutation } from '@/data/enrollment-payment';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 type FormValues = {
   payment_month: number;
@@ -35,7 +33,6 @@ const EnrollmentPaymentView = () => {
     defaultValues: data
       ? {
           payment_month: data.month,
-          amount: data.fee,
         }
       : '',
     //@ts-ignore
@@ -56,14 +53,11 @@ const EnrollmentPaymentView = () => {
 
     const input = {
       student: data.studentId,
+      course_offering: data.courseOfferingId,
+      amount: amount,
+      payment_month: data.month,
+      payment_year: currentYear,
       enrollment_id: data.enrollmentId,
-      payments: [
-        {
-          payment_month: data.month,
-          payment_year: currentYear,
-          amount: amount,
-        },
-      ],
     };
     const mutationOptions = { onError: handleMutationError };
 

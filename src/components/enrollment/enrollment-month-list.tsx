@@ -80,17 +80,12 @@ const EnrollmentMonthList = ({
   const handleMonthClick = (
     month: number,
     courseOfferingId: string,
-    baseFee: number,
     studentId: string,
     enrollmentId: string,
   ) => {
-    const expectedFee =
-      month < new Date().getMonth() + 1 ? baseFee - 500 : baseFee;
-
     openModal('ENROLLMENT_PAYMENT_VIEW', {
       month,
       courseOfferingId,
-      fee: expectedFee,
       studentId,
       enrollmentId,
     });
@@ -112,7 +107,6 @@ const EnrollmentMonthList = ({
               handleMonthClick(
                 m.number,
                 record.course_offering.id,
-                record.course_offering.fee,
                 record.student.id,
                 record.id,
               )
