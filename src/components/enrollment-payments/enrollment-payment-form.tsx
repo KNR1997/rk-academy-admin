@@ -1,9 +1,14 @@
 import { useSetAtom } from 'jotai';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Control, FieldErrors, useForm, useWatch } from 'react-hook-form';
+import {
+  Control,
+  FieldErrors,
+  useFieldArray,
+  useForm,
+  useWatch,
+} from 'react-hook-form';
 // types
 import { Enrollment, Student } from '@/types';
 // utils
@@ -14,7 +19,6 @@ import { monthOptions } from '@/constants';
 import { clearEnrollmentFlowAtom } from '@/store/enrollment.store';
 // hooks
 import { useStudentEnrollmentsQuery } from '@/data/student';
-import { useUpdateEnrollmentMutation } from '@/data/enrollment';
 import { useCreateEnrollmentPaymentMutation } from '@/data/enrollment-payment';
 // form-validations
 import { enrollmentPaymentValidationSchema } from './enrollment-payment-validation-schema';
@@ -62,14 +66,25 @@ function SelectCourse({
   );
 }
 
+interface PaymentItem {
+  payment_month: { label: string; value: number } | null;
+  fee: number | null;
+}
+
 type FormValues = {
   student: Student;
   enrollment: Enrollment | null;
-  payment_month: { label: string; value: number } | null;
-  fee: number | null;
+  payments: PaymentItem[];
 };
 
-const defaultValues = {};
+const defaultValues = {
+  payments: [
+    {
+      payment_month: null,
+      fee: null,
+    },
+  ],
+};
 
 type IProps = {
   initialValues?: {
@@ -82,19 +97,11 @@ type IProps = {
 export default function CreateOrUpdateEnrollmentPaymentForm({
   initialValues,
 }: IProps) {
-  const router = useRouter();
   const { t } = useTranslation();
   // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // store actions
   const clearFlow = useSetAtom(clearEnrollmentFlowAtom);
-
-  const d = new Date();
-  let month = d.getMonth();
-
-  const currentMonthOption = monthOptions.filter(
-    (monthOption) => monthOption.value == month + 1,
-  );
 
   const {
     register,
@@ -102,8 +109,6 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
     setValue,
     setError,
     control,
-    reset,
-    resetField,
     formState: { errors },
   } = useForm<FormValues>({
     // shouldUnregister: true,
@@ -117,14 +122,18 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
     resolver: yupResolver(enrollmentPaymentValidationSchema),
   });
 
+  const {
+    fields: paymentFields,
+    append: appendPayment,
+    remove: removePayment,
+  } = useFieldArray({
+    control,
+    name: 'payments',
+  });
+
   const selectedStudent = useWatch({
     control,
     name: 'student',
-  });
-
-  const currentFee = useWatch({
-    control,
-    name: 'fee',
   });
 
   const selectedEnrollment = useWatch({
@@ -132,52 +141,58 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
     name: 'enrollment',
   });
 
+  const payments = useWatch({
+    control,
+    name: 'payments',
+  });
+
+  const totalFee =
+    payments?.reduce((sum, payment) => sum + (Number(payment?.fee) || 0), 0) ??
+    0;
+
   useEffect(() => {
-    if (selectedEnrollment?.course_offering?.fee) {
-      setValue('fee', selectedEnrollment.course_offering.fee, {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    } else {
-      setValue('fee', 0);
-    }
-  }, [selectedEnrollment, setValue]);
+    const baseFee = selectedEnrollment?.course_offering?.fee;
 
-  const prevStudentIdRef = useRef<string | undefined>();
+    if (!baseFee) return;
 
-  // Reset course field when student changes
-  useEffect(() => {
-    const currentStudentId = selectedStudent?.id;
+    payments?.forEach((payment, index) => {
+      const month = payment?.payment_month?.value;
+      if (!month) return;
 
-    if (
-      prevStudentIdRef.current &&
-      prevStudentIdRef.current !== currentStudentId
-    ) {
-      setValue('enrollment', null);
-      setValue('payment_month', null);
-      setValue('fee', null);
-    }
+      const expectedFee =
+        month < new Date().getMonth() + 1 ? baseFee - 500 : baseFee;
 
-    prevStudentIdRef.current = currentStudentId;
-  }, [selectedStudent, reset, currentFee]);
+      // Prevent unnecessary setValue calls
+      if (payment.fee !== expectedFee) {
+        setValue(`payments.${index}.fee`, expectedFee, {
+          shouldValidate: false,
+          shouldDirty: true,
+        });
+      }
+    });
+  }, [payments, selectedEnrollment, setValue]);
 
+  // mutations
   const { mutate: createEnrollmentPayment, isLoading: creating } =
     useCreateEnrollmentPaymentMutation();
-  const { mutate: updateEnrollment, isLoading: updating } =
-    useUpdateEnrollmentMutation();
 
   const onSubmit = async (values: FormValues) => {
     const currentYear = new Date().getFullYear();
 
-    if (!values.enrollment || !values.payment_month || !values.fee) return;
+    if (!selectedEnrollment) return;
+
+    const payments = values.payments.map((item) => ({
+      payment_month: item.payment_month!.value,
+      payment_year: currentYear,
+      amount: item.fee!,
+    }));
 
     const input = {
       student: values.student.id,
-      enrollment_id: values.enrollment.id,
-      payment_month: values.payment_month.value,
-      payment_year: currentYear,
-      amount: values.fee,
+      enrollment_id: selectedEnrollment?.id,
+      payments,
     };
+
     const mutationOptions = {
       onSuccess: () => {
         clearFlow(null);
@@ -185,17 +200,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
       onError: (error: any) =>
         handleMutationError(error, setError, setErrorMessage),
     };
-    if (initialValues?.id) {
-      updateEnrollment(
-        {
-          ...input,
-          id: initialValues.id!,
-        },
-        mutationOptions,
-      );
-    } else {
-      createEnrollmentPayment(input, mutationOptions);
-    }
+    createEnrollmentPayment(input, mutationOptions);
   };
 
   return (
@@ -219,45 +224,85 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
                 errors={errors}
                 studentId={selectedStudent?.id}
               />
-              <div className="mb-5">
-                <SelectInput
-                  label="Payment Month"
-                  name="payment_month"
-                  control={control}
-                  options={currentMonthOption}
-                  required
-                />
-                <ValidationError message={t(errors.payment_month?.message)} />
+              <div className="col-span-full">
+                {paymentFields.map((field, index) => (
+                  <div
+                    key={field.id}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-4 border-b pb-4 mb-4"
+                  >
+                    <div>
+                      <SelectInput
+                        label="Payment Month"
+                        name={`payments.${index}.payment_month`}
+                        control={control}
+                        options={monthOptions}
+                        required
+                      />
+                      <ValidationError
+                        message={
+                          t(
+                            errors?.payments?.[index]?.payment_month
+                              ?.message as string,
+                          ) || ''
+                        }
+                      />
+                    </div>
+
+                    <Input
+                      label={t('form:input-label-fee')}
+                      {...register(`payments.${index}.fee`)}
+                      type="number"
+                      variant="outline"
+                      error={
+                        t(errors?.payments?.[index]?.fee?.message as string) ||
+                        ''
+                      }
+                    />
+
+                    <div className="flex">
+                      <button
+                        type="button"
+                        className="text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
+                        onClick={() => removePayment(index)}
+                        disabled={paymentFields.length === 1}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={!selectedEnrollment}
+                  onClick={() =>
+                    appendPayment({
+                      payment_month: null,
+                      fee: selectedEnrollment?.course_offering?.fee ?? 0,
+                    })
+                  }
+                >
+                  Add Month
+                </Button>
               </div>
-              <Input
-                label={t('form:input-label-fee')}
-                {...register('fee')}
-                type="number"
-                variant="outline"
-                className="mb-4"
-                required
-                readOnly
-                error={t(errors.fee?.message!)}
-              />
             </div>
           </Card>
         </div>
         <StickyFooterPanel className="z-0">
           <div className="text-end">
-            {initialValues && (
-              <Button
-                variant="outline"
-                onClick={router.back}
-                className="text-sm me-4 md:text-base"
-                type="button"
-              >
-                {t('form:button-label-back')}
-              </Button>
-            )}
+            <Button
+              variant="outline"
+              className="text-sm me-4 md:text-base"
+              type="button"
+              disabled
+            >
+              Total: Rs. {totalFee.toLocaleString()}
+            </Button>
 
             <Button
-              loading={creating || updating}
-              disabled={creating || updating}
+              loading={creating}
+              disabled={creating}
               className="text-sm md:text-base"
             >
               {initialValues?.id

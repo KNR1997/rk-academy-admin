@@ -11,6 +11,7 @@ import Avatar from '@/components/common/avatar';
 import Pagination from '@/components/ui/pagination';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
+import usePrice from '@/utils/use-price';
 
 export type IProps = {
   enrollmentPayments: EnrollmentPayment[] | undefined;
@@ -67,7 +68,9 @@ const EnrollmentPaymentList = ({
             sortingObj.sort === SortOrder.Asc &&
             sortingObj.column === 'enrollment__student__user__first_name'
           }
-          isActive={sortingObj.column === 'enrollment__student__user__first_name'}
+          isActive={
+            sortingObj.column === 'enrollment__student__user__first_name'
+          }
         />
       ),
       className: 'cursor-pointer',
@@ -76,7 +79,8 @@ const EnrollmentPaymentList = ({
       align: alignLeft,
       width: 250,
       ellipsis: true,
-      onHeaderCell: () => onHeaderClick('enrollment__student__user__first_name'),
+      onHeaderCell: () =>
+        onHeaderClick('enrollment__student__user__first_name'),
       render: (
         enrollment: Enrollment,
         { profile, email }: { profile: any; email: string },
@@ -123,6 +127,23 @@ const EnrollmentPaymentList = ({
           {record.payment_year}-{payment_month}
         </div>
       ),
+    },
+    {
+      title: t('table:table-item-amount'),
+      dataIndex: 'amount',
+      key: 'amount',
+      align: alignLeft,
+      width: 150,
+      render: function Render(value: number, record: EnrollmentPayment) {
+        const { price } = usePrice({
+          amount: Number(value),
+        });
+        return (
+          <span className="whitespace-nowrap" title={price}>
+            {price}
+          </span>
+        );
+      },
     },
     // {
     //   title: t('table:table-item-actions'),
