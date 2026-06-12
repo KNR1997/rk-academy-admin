@@ -138,7 +138,7 @@ const TeacherList = ({
         <ActionButtons
           id={id}
           editUrl={Routes?.teacher.editByIdWithoutLang(record.id)}
-          deleteModalView="DELETE_TEACHER"
+          // deleteModalView="DELETE_TEACHER"
           deleteBySlug={record.id}
           // resetTeacherPasswordButton={true}
         />

@@ -147,7 +147,7 @@ const CoordinatorList = ({
         <LanguageSwitcher
           slug={slug}
           record={record}
-          deleteModalView="DELETE_COORDINATOR"
+          // deleteModalView="DELETE_COORDINATOR"
           routes={Routes?.coordinator}
         />
       ),

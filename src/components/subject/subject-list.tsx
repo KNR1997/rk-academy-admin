@@ -123,7 +123,7 @@ const SubjectList = ({
         <LanguageSwitcher
           slug={slug}
           record={record}
-          deleteModalView="DELETE_SUBJECT"
+          // deleteModalView="DELETE_SUBJECT"
           deleteBySlug={record.slug}
           routes={Routes?.subject}
         />

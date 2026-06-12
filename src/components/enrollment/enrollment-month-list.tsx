@@ -214,7 +214,7 @@ const EnrollmentMonthList = ({
           slug={id}
           record={record}
           routes={Routes?.enrollment}
-          deleteModalView="DELETE_ENROLLMENT"
+          // deleteModalView="DELETE_ENROLLMENT"
         />
       ),
     },

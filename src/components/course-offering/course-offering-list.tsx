@@ -176,7 +176,7 @@ const CourseOfferingList = ({
         <LanguageSwitcher
           slug={id}
           record={record}
-          deleteModalView="DELETE_COURSE_OFFERING"
+          // deleteModalView="DELETE_COURSE_OFFERING"
           deleteBySlug={record.id}
           routes={Routes?.courseOffering}
         />
