@@ -368,7 +368,7 @@ const ActionButtons = ({
         </Link>
       )}
 
-      {/* {deleteModalView && (
+      {deleteModalView && (
         <button
           onClick={handleDelete}
           className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
@@ -376,7 +376,7 @@ const ActionButtons = ({
         >
           <TrashIcon width={14} />
         </button>
-      )} */}
+      )}
 
       {flashSaleVendorRequestApproveButton &&
         (isFlashSaleVendorRequestApproved ? (
