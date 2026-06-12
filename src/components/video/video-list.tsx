@@ -84,8 +84,8 @@ const VideoList = ({
             className="overflow-hidden truncate whitespace-nowrap"
             title={courseOffering?.course?.name}
           >
-            {courseOffering?.course?.name} {courseOffering?.grade_level?.name} - B
-            {courseOffering.batch}
+            {courseOffering?.course?.name} {courseOffering?.grade_level?.name} -
+            B{courseOffering.batch}
           </div>
         );
       },
@@ -97,12 +97,17 @@ const VideoList = ({
       align: alignLeft,
       width: 120,
       render: (course_content: CourseContent) => (
-        <div
-          className="overflow-hidden truncate whitespace-nowrap"
-        >
+        <div className="overflow-hidden truncate whitespace-nowrap">
           {course_content?.month}
         </div>
       ),
+    },
+    {
+      title: t('table:table-item-date'),
+      dataIndex: 'video_date',
+      key: 'video_date',
+      align: alignLeft,
+      width: 120,
     },
     {
       title: t('table:table-item-actions'),

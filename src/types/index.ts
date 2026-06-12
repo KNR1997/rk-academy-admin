@@ -164,6 +164,7 @@ export interface CreateVideo {
   month: number;
   year: number;
   course_offering_id: string;
+  video_date?: string;
 }
 
 export interface Coordinator {

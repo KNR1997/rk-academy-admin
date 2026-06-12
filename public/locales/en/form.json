@@ -163,6 +163,7 @@
   "input-label-serial": "Serial",
   "input-label-code": "Code",
   "input-label-video-url": "Video url",
+  "input-label-video-date": "Video date",
   "input-label-amount": "Amount",
   "input-label-minimum-cart-amount": "Minimum cart amount",
   "input-label-serial-help-text": "The order status should follow(ex: 1-[9])",
