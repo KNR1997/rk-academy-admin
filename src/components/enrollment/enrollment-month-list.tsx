@@ -77,22 +77,42 @@ const EnrollmentMonthList = ({
     { key: 'dec', label: 'Dec', number: 12 },
   ];
 
-  const handleMonthClick = (
-    month: number,
-    courseOfferingId: string,
-    baseFee: number,
-    studentId: string,
-    enrollmentId: string,
-  ) => {
-    const expectedFee =
-      month < new Date().getMonth() + 1 ? baseFee - 500 : baseFee;
+  const handleMonthClick = (month: number, record: EnrollmentWithMonth) => {
+    // Get all paid month numbers from the months object
+    const alreadyPaidMonthNumbers = Object.entries(record.months)
+      .filter(([_, monthData]) => {
+        // Check if monthData exists and has a paid status
+        // Assuming MonthData has a 'paid' boolean or 'status' field
+        // Adjust this condition based on your actual MonthData structure
+        return monthData !== undefined && monthData.paid === true;
+        // Or if MonthData has a status field: return monthData?.status === 'PAID'
+      })
+      .map(([monthKey]) => {
+        // Convert month abbreviation to month number (1-12)
+        const monthMap: { [key: string]: number } = {
+          jan: 1,
+          feb: 2,
+          mar: 3,
+          apr: 4,
+          may: 5,
+          jun: 6,
+          jul: 7,
+          aug: 8,
+          sep: 9,
+          oct: 10,
+          nov: 11,
+          dec: 12,
+        };
+        return monthMap[monthKey];
+      });
 
     openModal('ENROLLMENT_PAYMENT_VIEW', {
       month,
-      courseOfferingId,
-      fee: expectedFee,
-      studentId,
-      enrollmentId,
+      courseOfferingId: record.course_offering.id,
+      fee: record.course_offering.fee,
+      studentId: record.student.id,
+      enrollmentId: record.id,
+      alreadyPaidMonthNumbers: alreadyPaidMonthNumbers,
     });
   };
 
@@ -111,10 +131,11 @@ const EnrollmentMonthList = ({
             onClick={() =>
               handleMonthClick(
                 m.number,
-                record.course_offering.id,
-                record.course_offering.fee,
-                record.student.id,
-                record.id,
+                record,
+                // record.course_offering.id,
+                // record.course_offering.fee,
+                // record.student.id,
+                // record.id,
               )
             }
             className="text-gray-500 hover:text-blue-600"
