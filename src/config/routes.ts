@@ -70,6 +70,9 @@ export const Routes = {
     ...routesFactory('/enrollment-payments'),
     pendingPayments: '/enrollment-payments/pending-payments'
   },
+  invoice: {
+    ...routesFactory('/invoices'),
+  },
   staff: {
     ...routesFactory('/staffs'),
   },

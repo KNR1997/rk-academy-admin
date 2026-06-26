@@ -4,8 +4,13 @@ import { MODAL_VIEWS, useModalAction, useModalState } from './modal.context';
 // components
 import Modal from '@/components/ui/modal/modal';
 import StoreNoticeDeleteView from '@/components/store-notice/store-notice-delete-view';
-import EnrollmentPaymentView from '@/components/enrollment-payments/enrollment-payment-view';
 
+const EnrollmentPaymentView = dynamic(
+  () => import('@/components/enrollment-payments/enrollment-payment-view'),
+);
+const PaymentView = dynamic(
+  () => import('@/components/payment/payment-view'),
+);
 const ResetTeacherPasswordView = dynamic(
   () => import('@/components/user/reset-teacher-password-view'),
 );
@@ -94,6 +99,8 @@ function renderModal(view: MODAL_VIEWS | undefined, data: any) {
       return <CoordinatorDeleteView />;
     case 'ENROLLMENT_PAYMENT_VIEW':
       return <EnrollmentPaymentView />;
+    case 'PAYMENT_VIEW':
+      return <PaymentView />;
     case 'DELETE_STORE_NOTICE':
       return <StoreNoticeDeleteView />;
     case 'BAN_CUSTOMER':

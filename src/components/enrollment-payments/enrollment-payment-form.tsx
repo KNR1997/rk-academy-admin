@@ -10,7 +10,11 @@ import {
   useWatch,
 } from 'react-hook-form';
 // types
-import { Enrollment, Student } from '@/types';
+import {
+  Enrollment,
+  EnrollmentCharge,
+  Student,
+} from '@/types';
 // utils
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // constants
@@ -181,16 +185,22 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
 
     if (!selectedEnrollment) return;
 
-    const payments = values.payments.map((item) => ({
-      payment_month: item.payment_month!.value,
-      payment_year: currentYear,
+    const payments: EnrollmentCharge[] = values.payments.map((item) => ({
+      description: `${item?.payment_month?.label} ${currentYear} Tuition`,
+      billing_month: item.payment_month!.value,
+      billing_year: currentYear,
       amount: item.fee!,
     }));
+
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
 
     const input = {
       student: values.student.id,
       enrollment_id: selectedEnrollment?.id,
-      payments,
+      issue_date: formattedDate,
+      due_date: formattedDate,
+      charges: payments,
     };
 
     const mutationOptions = {

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 // utils
 import { useIsRTL } from '@/utils/locals';
+import { getMonthNameFromArray } from '@/utils/get-month-name';
+
 // configs
 import { Routes } from '@/config/routes';
 // types
@@ -96,11 +98,14 @@ const VideoList = ({
       key: 'course_content',
       align: alignLeft,
       width: 120,
-      render: (course_content: CourseContent) => (
-        <div className="overflow-hidden truncate whitespace-nowrap">
-          {course_content?.month}
-        </div>
-      ),
+      render: (course_content: CourseContent) => {
+        const monthName = getMonthNameFromArray(course_content.month);
+        return (
+          <div className="overflow-hidden truncate whitespace-nowrap">
+            {monthName}
+          </div>
+        );
+      },
     },
     {
       title: t('table:table-item-date'),

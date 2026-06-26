@@ -1,4 +1,3 @@
-import YouTube from 'react-youtube';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -14,6 +13,7 @@ import Loader from '@/components/ui/loader/loader';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
 import { NoDataFound } from '@/components/icons/no-data-found';
+import { useEnrollmentQuery } from '@/data/enrollment';
 
 export default function WatchVideo() {
   const { query } = useRouter();
@@ -26,23 +26,21 @@ export default function WatchVideo() {
   if (isLoading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
 
-  const onPlayerReady = (event: any) => {
-    // Access the player instance and control playback
-    event.target.pauseVideo();
-  };
+  // const onPlayerReady = (event: any) => {
+  //   // Access the player instance and control playback
+  //   event.target.pauseVideo();
+  // };
 
-  const opts = {
-    width: '100%',
-    height: '640',
-    playerVars: {
-      autoplay: 1,
-    },
-  };
+  // const opts = {
+  //   width: '100%',
+  //   height: '640',
+  //   playerVars: {
+  //     autoplay: 1,
+  //   },
+  // };
 
   const videoId = extractYoutubeVideoId(video?.video_url);
-
   const isValidYouTubeId = (id: string) => id && id.length === 11;
-
   const title = `${video?.course_content?.course_offering?.course?.name} - ${video?.title}`;
 
   return (
@@ -55,14 +53,39 @@ export default function WatchVideo() {
         </div>
       </Card>
 
-      {isValidYouTubeId(videoId) ? (
+      {/* {videoId ? (
+        <YouTube
+          videoId={videoId}
+          opts={{
+            width: '100%',
+            height: '640',
+            playerVars: {
+              autoplay: 1,
+            },
+          }}
+        />
+      ) : (
+        <div>No valid YouTube video found.</div>
+      )} */}
+
+      {/* <div className="video-container">
+        <Video src={getStarted} />
+      </div> */}
+
+      {videoId && isValidYouTubeId(videoId) ? (
         <div className="mb-6">
-          {/* <Video src="https://www.w3schools.com/html/mov_bbb.mp4" controls  /> */}
-          <YouTube
+          <iframe
+            className="w-full aspect-video"
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+          {/* <YouTube
             videoId={videoId}
             opts={opts}
             onReady={onPlayerReady}
-          />
+          /> */}
         </div>
       ) : (
         <div className="flex flex-col items-center py-7">

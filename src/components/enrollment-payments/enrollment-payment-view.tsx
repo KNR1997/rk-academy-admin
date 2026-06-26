@@ -147,16 +147,25 @@ const EnrollmentPaymentView = () => {
       const { amount: monthAmount } = calculateMonthFee(month.value, data.fee);
 
       return {
-        payment_month: month.value,
-        payment_year: currentYear,
+        description: `${month.label} ${currentYear} Tuition`,
+        billing_month: month.value,
+        billing_year: currentYear,
         amount: monthAmount,
+        // payment_month: month.value,
+        // payment_year: currentYear,
       };
     });
 
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+  
     const input = {
       student: data.studentId,
       enrollment_id: data.enrollmentId,
-      payments: payments,
+      issue_date: formattedDate,
+      due_date: formattedDate,
+      charges: payments,
+      // payments: payments,
     };
     const mutationOptions = {
       onError: (error: any) =>

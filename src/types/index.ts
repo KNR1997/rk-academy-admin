@@ -151,6 +151,77 @@ export interface Course {
   fee: number;
 }
 
+export interface CreatePaymentInput {
+  invoice_id: string;
+  amount: number;
+  payment_method: string;
+}
+
+export interface Payment {
+  id: string;
+  payment_number: string;
+  invoice: string;
+  amount: number;
+  payment_date: string;
+  payment_method: string;
+  transaction_reference: string;
+  notes: string;
+  status: string;
+}
+
+export interface InvoiceLineItem {
+  id: string;
+  charge: string;
+  description: string;
+  quantity: number;
+  unit_price: string;
+  line_total: string;
+}
+
+export interface Payment {
+  id: string;
+  payment_number: string;
+  invoice: string;
+  amount: number;
+  payment_date: string;
+  payment_method: string;
+  transaction_reference: string;
+  notes: string;
+  status: string;
+}
+
+export interface CreateInvoiceInput {
+  id: string;
+  invoice_number: string;
+  enrollment: string;
+  issue_date: number;
+  due_date: string;
+  subtotal: string;
+  discount_amount: string;
+  tax_amount: string;
+  total_amount: string;
+  notes: string;
+  status: string;
+  payment: Payment;
+  line_items: InvoiceLineItem[]
+}
+
+export interface Invoice {
+  id: string;
+  invoice_number: string;
+  issue_date: number;
+  due_date: string;
+  subtotal: string;
+  discount_amount: string;
+  tax_amount: string;
+  total_amount: string;
+  notes: string;
+  status: string;
+  payment: Payment;
+  line_items: InvoiceLineItem[];
+  enrollment: Enrollment;
+}
+
 export interface Video {
   id: string;
   title: string;
@@ -203,9 +274,9 @@ export interface Enrollment {
   id: string;
   student: Student;
   course_offering: CourseOffering;
-  status: EnrollmentStatusType;
-  last_payment_month: number;
-  last_payment_year: number;
+  // status: EnrollmentStatusType;
+  // last_payment_month: number;
+  // last_payment_year: number;
   is_active: boolean;
 }
 
@@ -565,10 +636,19 @@ export interface PaymentItem {
   amount: number;
 }
 
+export interface EnrollmentCharge {
+  description: string;
+  amount: number;
+  billing_month: number;
+  billing_year: number;
+}
+
 export interface CreateEnrollmentPaymentInput {
-  enrollment_id: string;
   student: string;
-  payments: PaymentItem[];
+  enrollment_id: string;
+  issue_date: string;
+  due_date: string;
+  charges: EnrollmentCharge[];
 }
 
 export interface CreateWithdrawInput {
@@ -1153,6 +1233,14 @@ export interface CourseQueryOptions extends QueryOptions {
   name: string;
 }
 
+export interface PaymentQueryOptions extends QueryOptions {
+  payment_number: string;
+}
+
+export interface InvoiceQueryOptions extends QueryOptions {
+  invoice_number: string;
+}
+
 export interface VideoQueryOptions extends QueryOptions {
   name: string;
 }
@@ -1358,6 +1446,8 @@ export interface TeacherPaginator extends PaginatorInfo<Teacher> {}
 
 export interface CoursePaginator extends PaginatorInfo<Course> {}
 
+export interface InvoicePaginator extends PaginatorInfo<Invoice> {}
+
 export interface VideoPaginator extends PaginatorInfo<Video> {}
 
 export interface CoordinatorPaginator extends PaginatorInfo<Coordinator> {}
@@ -1368,6 +1458,8 @@ export interface CourseOfferingPaginator
 export interface EnrollmentPaginator extends PaginatorInfo<Enrollment> {}
 
 export interface EnrollmentPaymentPaginator extends PaginatorInfo<EnrollmentPayment> {}
+
+export interface EnrollmentChargePaginator extends PaginatorInfo<EnrollmentCharge> {}
 
 export interface EnrollmentWithMonthsPaginator
   extends PaginatorInfo<EnrollmentWithMonth> {}
@@ -1445,6 +1537,40 @@ export enum OwnerShipTransferStatus {
   PROCESSING = 'processing',
   APPROVED = 'approved',
   REJECTED = 'rejected',
+}
+
+export enum OrderStatus {
+  PENDING = 'order-pending',
+  PROCESSING = 'order-processing',
+  COMPLETED = 'order-completed',
+  CANCELLED = 'order-cancelled',
+  REFUNDED = 'order-refunded',
+  FAILED = 'order-failed',
+  AT_LOCAL_FACILITY = 'order-at-local-facility',
+  OUT_FOR_DELIVERY = 'order-out-for-delivery',
+}
+
+export enum PaymentStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
+export enum PaymentGateway {
+  STRIPE = 'STRIPE',
+  COD = 'CASH_ON_DELIVERY',
+  CASH = 'CASH',
+  FULL_WALLET_PAYMENT = 'FULL_WALLET_PAYMENT',
+  PAYPAL = 'PAYPAL',
+  MOLLIE = 'MOLLIE',
+  RAZORPAY = 'RAZORPAY',
+  PAYMONGO = 'PAYMONGO',
+  PAYSTACK = 'PAYSTACK',
+  XENDIT = 'XENDIT',
+  SSLCOMMERZ = 'SSLCOMMERZ',
+  IYZICO = 'IYZICO',
+  BKASH = 'BKASH',
+  FLUTTERWAVE = 'FLUTTERWAVE',
 }
 
 export interface StickerCardProps {

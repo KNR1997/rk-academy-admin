@@ -57,12 +57,12 @@ Axios.interceptors.response.use(
         return await handleTokenRefresh(error);
       } catch (refreshError) {
         Cookies.remove(AUTH_TOKEN_KEY);
-        Router.push("/login");
+        Router.push('/login');
         return Promise.reject(refreshError);
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 function formatBooleanSearchParam(key: string, value: boolean) {
@@ -94,11 +94,22 @@ interface SearchParamOptions {
   grade: string;
   batch: string;
   grade_level: string;
+  payment_number: string;
+  invoice_number: string;
 }
 
 export class HttpClient {
   static async get<T>(url: string, params?: unknown) {
     const response = await Axios.get<T>(url, { params });
+    return response.data;
+  }
+
+  // Add a new method specifically for blob downloads
+  static async download<T>(url: string, params?: unknown): Promise<Blob> {
+    const response = await Axios.get(url, {
+      params,
+      responseType: 'blob', // Important: this tells axios to return blob
+    });
     return response.data;
   }
 
@@ -137,9 +148,9 @@ export class HttpClient {
         ].includes(k)
           ? `${k}.slug:${v}`
           : ['is_approved'].includes(k)
-          ? formatBooleanSearchParam(k, v as boolean)
-          // : `${k}:${v}`,
-          : `${v}`,
+            ? formatBooleanSearchParam(k, v as boolean)
+            : // : `${k}:${v}`,
+              `${v}`,
       )
       .join(';');
   }

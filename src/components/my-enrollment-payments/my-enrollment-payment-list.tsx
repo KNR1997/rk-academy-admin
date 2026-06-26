@@ -1,10 +1,13 @@
+import dayjs from 'dayjs';
 import { useState } from 'react';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { useTranslation } from 'next-i18next';
 // utils
 import { useIsRTL } from '@/utils/locals';
 // types
 import { MappedPaginatorInfo } from '@/types';
-import { Enrollment, EnrollmentPayment, SortOrder } from '@/types';
+import { Enrollment, EnrollmentCharge, SortOrder } from '@/types';
 // components
 import { Table } from '@/components/ui/table';
 import Avatar from '@/components/common/avatar';
@@ -13,14 +16,14 @@ import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
 
 export type IProps = {
-  enrollmentPayments: EnrollmentPayment[] | undefined;
+  enrollmentCharges: EnrollmentCharge[] | undefined;
   paginatorInfo: MappedPaginatorInfo | null;
   onPagination: (key: number) => void;
   onOrdering: (current: any) => void;
 };
 
-const MyEnrollmentPaymentList = ({
-  enrollmentPayments,
+const MyEnrollmentChargeList = ({
+  enrollmentCharges,
   paginatorInfo,
   onPagination,
   onOrdering,
@@ -114,31 +117,34 @@ const MyEnrollmentPaymentList = ({
     },
     {
       title: t('table:table-item-payment-month'),
-      dataIndex: 'payment_month',
-      key: 'payment_month',
+      dataIndex: 'billing_month',
+      key: 'billing_month',
       align: alignLeft,
       width: 150,
-      render: (payment_month: number, record: EnrollmentPayment) => (
+      render: (billing_month: number, record: EnrollmentCharge) => (
         <div className="overflow-hidden truncate whitespace-nowrap">
-          {record.payment_year}-{payment_month}
+          {record.billing_year}-{billing_month}
         </div>
       ),
     },
-    // {
-    //   title: t('table:table-item-actions'),
-    //   dataIndex: 'id',
-    //   key: 'actions',
-    //   align: alignRight,
-    //   width: 120,
-    //   render: (id: string, record: EnrollmentPayment) => (
-    //     <LanguageSwitcher
-    //       slug={id}
-    //       record={record}
-    //       // deleteModalView="DELETE_ENROLLMENT"
-    //       routes={Routes?.enrollmentPayment}
-    //     />
-    //   ),
-    // },
+    {
+      title: t('table:table-item-date'),
+      className: 'cursor-pointer',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      align: alignLeft,
+      width: 160,
+      onHeaderCell: () => onHeaderClick('created_at'),
+      render: (date: string) => {
+        dayjs.extend(utc);
+        dayjs.extend(timezone);
+        return (
+          <span className="whitespace-nowrap">
+            {dayjs.utc(date).tz(dayjs.tz.guess()).format('MMM D, YYYY h:mm A')}
+          </span>
+        );
+      },
+    },
   ];
 
   return (
@@ -156,7 +162,7 @@ const MyEnrollmentPaymentList = ({
               <p className="text-[13px]">{t('table:empty-table-sorry-text')}</p>
             </div>
           )}
-          data={enrollmentPayments}
+          data={enrollmentCharges}
           rowKey="id"
           scroll={{ x: 1000 }}
         />
@@ -176,4 +182,4 @@ const MyEnrollmentPaymentList = ({
   );
 };
 
-export default MyEnrollmentPaymentList;
+export default MyEnrollmentChargeList;

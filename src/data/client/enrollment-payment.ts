@@ -5,6 +5,7 @@ import {
   EnrollmentPaymentPaginator,
   EnrollmentPaymentQueryOptions,
   EnrollmentPendingPaymentQueryOptions,
+  Invoice,
   QueryOptions,
 } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
@@ -15,6 +16,9 @@ export const enrollmentPaymentClient = {
   ...crudFactory<EnrollmentPayment, QueryOptions, CreateEnrollmentPaymentInput>(
     API_ENDPOINTS.ENROLLMENT_PAYMENTS,
   ),
+  create(data: CreateEnrollmentPaymentInput) {
+    return HttpClient.post<Invoice>(`${API_ENDPOINTS.ENROLLMENT_PAYMENTS}/`, data);
+  },
   paginated: ({ name, ...params }: Partial<EnrollmentPaymentQueryOptions>) => {
     return HttpClient.get<EnrollmentPaymentPaginator>(
       API_ENDPOINTS.ENROLLMENT_PAYMENTS,

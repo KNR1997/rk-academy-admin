@@ -43,3 +43,10 @@ __generated__
 # PWA
 workbox-*.js
 sw.js
+
+# next-video
+videos/*
+!videos/*.json
+!videos/*.js
+!videos/*.ts
+public/_next-video

@@ -169,25 +169,37 @@ export const siteSettings = {
               },
             ],
           },
+          // {
+          //   href: '',
+          //   label: 'sidebar-nav-item-enrollment-payments',
+          //   icon: 'TaxesIcon',
+          //   childMenu: [
+          //     {
+          //       href: Routes.enrollmentPayment.list,
+          //       label: 'text-all-payments',
+          //       icon: 'TaxesIcon',
+          //     },
+          //     {
+          //       href: Routes.enrollmentPayment.create,
+          //       label: 'text-add-payments',
+          //       icon: 'TaxesIcon',
+          //     },
+          //     {
+          //       href: Routes.enrollmentPayment.pendingPayments,
+          //       label: 'text-pending-payments',
+          //       icon: 'PendingIcon',
+          //     },
+          //   ],
+          // },
           {
             href: '',
-            label: 'sidebar-nav-item-enrollment-payments',
+            label: 'sidebar-nav-item-invoices',
             icon: 'TaxesIcon',
             childMenu: [
               {
-                href: Routes.enrollmentPayment.list,
-                label: 'text-all-payments',
-                icon: 'TaxesIcon',
-              },
-              {
-                href: Routes.enrollmentPayment.create,
-                label: 'text-add-payments',
-                icon: 'TaxesIcon',
-              },
-              {
-                href: Routes.enrollmentPayment.pendingPayments,
-                label: 'text-pending-payments',
-                icon: 'PendingIcon',
+                href: Routes.invoice.list,
+                label: 'text-all-invoices',
+                icon: 'TagIcon',
               },
             ],
           },

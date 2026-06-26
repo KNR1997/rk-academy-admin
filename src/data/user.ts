@@ -26,6 +26,7 @@ import {
   MyEnrollmentVideosQueryOptions,
   Video,
   EnrollmentPaymentPaginator,
+  EnrollmentChargePaginator,
 } from '@/types';
 
 export const useMeQuery = () => {
@@ -411,10 +412,10 @@ export const useMyEnrollmentsPaginatedQuery = (
   };
 };
 
-export const useMyEnrollmentPaymentsPaginatedQuery = (
+export const useMyEnrollmentChargesPaginatedQuery = (
   params: Partial<EnrollmentQueryOptions>,
 ) => {
-  const { data, isLoading, error } = useQuery<EnrollmentPaymentPaginator, Error>(
+  const { data, isLoading, error } = useQuery<EnrollmentChargePaginator, Error>(
     [API_ENDPOINTS.MY_ENROLLMENT_PAYMENTS, params],
     () => userClient.getMyEnrollmentPaymentsPaginated(params),
     {
@@ -423,7 +424,7 @@ export const useMyEnrollmentPaymentsPaginatedQuery = (
   );
 
   return {
-    myEnrollmentPayments: data?.data ?? [],
+    myEnrollmentCharges: data?.data ?? [],
     paginatorInfo: mapPaginatorData(data as any),
     loading: isLoading,
     error,

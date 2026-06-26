@@ -71,26 +71,26 @@ const MyVideoList = ({
       width: 150,
       onHeaderCell: () => onHeaderClick('title'),
     },
-    {
-      title: t('table:table-item-course-offering'),
-      className: 'cursor-content',
-      dataIndex: 'course_content',
-      key: 'course_content',
-      align: alignLeft,
-      width: 150,
-      render: (course_content: CourseContent) => {
-        const courseOffering = course_content?.course_offering;
-        return (
-          <div
-            className="overflow-hidden truncate whitespace-nowrap"
-            title={courseOffering?.course?.name}
-          >
-            {courseOffering?.course?.name} {courseOffering?.grade_level?.name} -
-            B{courseOffering.batch}
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: t('table:table-item-course-offering'),
+    //   className: 'cursor-content',
+    //   dataIndex: 'course_content',
+    //   key: 'course_content',
+    //   align: alignLeft,
+    //   width: 150,
+    //   render: (course_content: CourseContent) => {
+    //     const courseOffering = course_content?.course_offering;
+    //     return (
+    //       <div
+    //         className="overflow-hidden truncate whitespace-nowrap"
+    //         title={courseOffering?.course?.name}
+    //       >
+    //         {courseOffering?.course?.name} {courseOffering?.grade_level?.name} -
+    //         B{courseOffering.batch}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       title: t('table:table-item-month'),
       dataIndex: 'course_content',

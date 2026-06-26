@@ -12,10 +12,10 @@ export const studentValidationSchema = yup.object().shape({
   // username: yup.string().required('form:error-username-required'),
   // date_of_birth: yup.string().required('form:error-birthday-required'),
   // parent_guardian_name: yup.string().required('form:error-guardian-name-required'),
-  parent_guardian_phone: yup
-    .string()
-    .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits')
-    .required('form:error-contact-number-required'),
+  // parent_guardian_phone: yup
+  //   .string()
+  //   .matches(/^[0-9]{10}$/, 'Phone number must be exactly 10 digits')
+  //   .required('form:error-contact-number-required'),
   grade_level: yup.object().required('form:error-grade-level-required'),
-  academic_year: yup.object().required('form:error-academic-year-required'),
+  exam_year: yup.object().required('form:error-exam-year-required'),
 });

@@ -11,6 +11,7 @@ import {
   EnrollmentPayment,
   EnrollmentPendingPaymentQueryOptions,
   EnrollmentPaginator,
+  Invoice,
 } from '@/types';
 import { mapPaginatorData } from '@/utils/data-mappers';
 import { enrollmentPaymentClient } from './client/enrollment-payment';
@@ -18,15 +19,16 @@ import { Config } from '@/config';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 
 export const useCreateEnrollmentPaymentMutation = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const { closeModal } = useModalAction();
 
   return useMutation(enrollmentPaymentClient.create, {
-    onSuccess: () => {
-      Router.push(Routes.enrollmentPayment.list, undefined, {
-        locale: Config.defaultLanguage,
-      });
+    onSuccess: (data: Invoice) => {
+      if (data?.id) {
+        router.push(`${Routes.invoice.list}/${data?.id}`);
+      }
       toast.success(t('common:successfully-created'));
       closeModal();
     },

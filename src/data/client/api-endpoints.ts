@@ -11,6 +11,8 @@ export const API_ENDPOINTS = {
   STUDENTS: 'students',
   GRADE_LEVEL: 'grade-levels',
   COURSES: 'courses',
+  PAYMENTS: 'payments',
+  INVOICES: 'invoices',
   VIDEOS: 'videos',
   COORDINATORS: 'coordinators',
   COURSE_OFFERING: 'course-offerings',

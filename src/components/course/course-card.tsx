@@ -16,10 +16,16 @@ type CourseCardProps = {
 
 const CourseCard: React.FC<CourseCardProps> = ({ enrollment }) => {
   const courseOffering = enrollment?.course_offering;
+  const courseOfferingName = `${courseOffering.course.name} ${courseOffering.year} - ${courseOffering.grade_level.name}`;
 
   return (
     <Link
-      href={Routes.myCourses.details(enrollment?.id)}
+      href={{
+        pathname: Routes.myCourses.details(enrollment.id),
+        query: {
+          course: courseOfferingName,
+        },
+      }}
       className="overflow-hidden rounded-lg bg-white"
     >
       <div
@@ -69,13 +75,16 @@ const CourseCard: React.FC<CourseCardProps> = ({ enrollment }) => {
       <ul className="mt-4 grid grid-cols-4 divide-x divide-[#E7E7E7] px-2 pb-7 text-center">
         <li>
           <Badge
-            text={enrollment?.status}
-            color={
-              enrollment?.status == EnrollmentStatusType.LOCKED
-                ? 'bg-yellow-400/10 text-yellow-500'
-                : 'bg-accent bg-opacity-10 !text-accent'
+            textKey={
+              enrollment?.is_active
+                ? 'common:text-paid'
+                : 'common:text-pending-payments'
             }
-            className="capitalize"
+            color={
+              enrollment?.is_active
+                ? 'bg-accent/10 !text-accent'
+                : 'bg-status-pending/10 text-status-pending'
+            }
           />
         </li>
       </ul>
