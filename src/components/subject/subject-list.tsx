@@ -96,22 +96,39 @@ const SubjectList = ({
         );
       },
     },
+    // {
+    //   title: (
+    //     <TitleWithSort
+    //       title={t('table:table-item-slug')}
+    //       ascending={
+    //         sortingObj.sort === SortOrder.Asc && sortingObj.column === 'slug'
+    //       }
+    //       isActive={sortingObj.column === 'slug'}
+    //     />
+    //   ),
+    //   className: 'cursor-pointer',
+    //   dataIndex: 'slug',
+    //   key: 'slug',
+    //   align: alignLeft,
+    //   width: 150,
+    //   onHeaderCell: () => onHeaderClick('slug'),
+    // },
     {
       title: (
         <TitleWithSort
-          title={t('table:table-item-slug')}
+          title={t('table:table-item-code')}
           ascending={
-            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'slug'
+            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'code'
           }
-          isActive={sortingObj.column === 'slug'}
+          isActive={sortingObj.column === 'code'}
         />
       ),
       className: 'cursor-pointer',
-      dataIndex: 'slug',
-      key: 'slug',
+      dataIndex: 'code',
+      key: 'code',
       align: alignLeft,
       width: 150,
-      onHeaderCell: () => onHeaderClick('slug'),
+      onHeaderCell: () => onHeaderClick('code'),
     },
     {
       title: t('table:table-item-actions'),
