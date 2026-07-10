@@ -11,6 +11,7 @@ import { useAnalyticsQuery } from '@/data/dashboard';
 // components
 import Loader from '@/components/ui/loader/loader';
 import StickerCard from '@/components/widgets/sticker-card';
+import ColumnChart from '@/components/widgets/column-chart';
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -22,6 +23,13 @@ export default function Dashboard() {
       amount: data?.total_revenue!,
     },
   );
+
+  let salesByYear: number[] = Array.from({ length: 12 }, (_) => 0);
+  if (!!data?.enrollments_by_month?.length) {
+    salesByYear = data.enrollments_by_month.map((item: any) =>
+      item.total.toFixed(2),
+    );
+  }
 
   if (loading) return <Loader text={t('common:text-loading')} />;
 
@@ -62,6 +70,28 @@ export default function Dashboard() {
             price={data?.active_enrollment_count}
           />
         </div>
+      </div>
+
+      <div className="lg:col-span-full 2xl:col-span-8">
+        <ColumnChart
+          widgetTitle={t('common:enrollment-history')}
+          colors={['#6073D4']}
+          series={salesByYear}
+          categories={[
+            t('common:january'),
+            t('common:february'),
+            t('common:march'),
+            t('common:april'),
+            t('common:may'),
+            t('common:june'),
+            t('common:july'),
+            t('common:august'),
+            t('common:september'),
+            t('common:october'),
+            t('common:november'),
+            t('common:december'),
+          ]}
+        />
       </div>
     </div>
   );
