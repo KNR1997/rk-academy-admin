@@ -25,7 +25,7 @@ export default function CourseOfferings() {
   // states
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
-  const [ordering, setOrdering] = useState('created_at');
+  const [ordering, setOrdering] = useState('-created_at');
   // query
   const { courseOfferings, paginatorInfo, loading, error } =
     useCourseOfferingsQuery({

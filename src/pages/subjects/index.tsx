@@ -24,7 +24,7 @@ export default function Subjects() {
   // states
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
-  const [ordering, setOrdering] = useState('created_at');
+  const [ordering, setOrdering] = useState('-created_at');
   // query
   const { subjects, paginatorInfo, loading, error } = useSubjectsQuery({
     limit: 20,
