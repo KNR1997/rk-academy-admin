@@ -5,7 +5,6 @@ import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 // types
 import {
-  Course,
   CourseOffering,
   CourseType,
   GradeLevel,
@@ -26,11 +25,12 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import SelectCourse from '@/components/course/select-course';
+import SelectInput from '@/components/ui/select-input';
+import SelectSubject from '@/components/subject/select-subject';
 import SelectTeacher from '@/components/teacher/select-teacher';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
+import ValidationError from '@/components/ui/form-validation-error';
 import SelectGradeLevel from '@/components/grade-level/select-grade-level';
-import SelectSubject from '../subject/select-subject';
 
 type FormValues = {
   name: string;
@@ -38,7 +38,7 @@ type FormValues = {
   code: string;
   batch: number;
   fee: number;
-  year: number;
+  year: { label: string; value: number };
   subject: Subject;
   teacher: Teacher;
   grade_level: GradeLevel;
@@ -47,7 +47,7 @@ type FormValues = {
 
 const defaultValues = {
   batch: 1,
-  year: new Date().getFullYear(),
+  // year: new Date().getFullYear(),
 };
 
 type IProps = {
@@ -88,7 +88,7 @@ export default function CreateOrUpdateCourseOfferingForm({
       subject: values.subject.id,
       teacher: values.teacher.id,
       grade_level: values.grade_level.id,
-      year: values.year,
+      year: values.year.value,
       batch: values.batch,
       fee: values.fee,
     };
@@ -108,6 +108,24 @@ export default function CreateOrUpdateCourseOfferingForm({
       );
     }
   };
+
+  // Generate 5 years starting from current year
+  const generateExamYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+
+    for (let i = 0; i < 5; i++) {
+      const year = currentYear + i;
+      years.push({
+        label: year.toString(),
+        value: year,
+      });
+    }
+
+    return years;
+  };
+
+  const yearOptions = generateExamYearOptions();
 
   return (
     <>
@@ -141,7 +159,17 @@ export default function CreateOrUpdateCourseOfferingForm({
                 disabled={!!initialValues}
               />
               <SelectGradeLevel control={control} errors={errors} />
-              <Input
+              <div>
+                <SelectInput
+                  label={t('form:input-label-year')}
+                  name="year"
+                  control={control}
+                  options={yearOptions}
+                  required
+                />
+                <ValidationError message={t(errors.year?.message)} />
+              </div>
+              {/* <Input
                 label={t('form:input-label-year')}
                 {...register('year')}
                 error={t(errors.year?.message!)}
@@ -149,7 +177,7 @@ export default function CreateOrUpdateCourseOfferingForm({
                 className="mb-5"
                 required
                 disabled
-              />
+              /> */}
               <Input
                 label={t('form:input-label-batch')}
                 {...register('batch')}

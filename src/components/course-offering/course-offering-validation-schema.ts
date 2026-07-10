@@ -6,5 +6,5 @@ export const subjectValidationSchema = yup.object().shape({
   grade_level: yup.object().required('form:error-grade-required'),
   teacher: yup.object().required('form:error-teacher-required'),
   fee: yup.string().required('form:error-fee-required'),
-  year: yup.string().required('form:error-year-required'),
+  year: yup.object().required('form:error-year-required'),
 });
