@@ -20,7 +20,7 @@ export default function SelectGradeLevel({
   return (
     <div>
       <SelectInput
-        label={t('form:input-label-grade-level')}
+        label="Grade"
         name="grade_level"
         control={control}
         getOptionLabel={(option: any) => option.name}
