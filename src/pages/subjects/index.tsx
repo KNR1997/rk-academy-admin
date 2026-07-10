@@ -4,6 +4,10 @@ import { useRouter } from 'next/router';
 import { Routes } from '@/config/routes';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+// utils
+import { adminOnly } from '@/utils/auth-utils';
+// hooks
+import { useSubjectsQuery } from '@/data/subject';
 // components
 import Card from '@/components/common/card';
 import Layout from '@/components/layouts/admin';
@@ -13,10 +17,6 @@ import LinkButton from '@/components/ui/link-button';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
 import SubjectList from '@/components/subject/subject-list';
-// utils
-import { adminOnly } from '@/utils/auth-utils';
-// hooks
-import { useSubjectsQuery } from '@/data/subject';
 
 export default function Subjects() {
   const { locale } = useRouter();
