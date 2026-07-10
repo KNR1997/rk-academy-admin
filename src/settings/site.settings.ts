@@ -84,23 +84,23 @@ export const siteSettings = {
               },
             ],
           },
-          {
-            href: '',
-            label: 'sidebar-nav-item-courses',
-            icon: 'InventoryIcon',
-            childMenu: [
-              {
-                href: Routes.course.list,
-                label: 'text-all-courses',
-                icon: 'InventoryIcon',
-              },
-              {
-                href: Routes.course.create,
-                label: 'text-add-all-courses',
-                icon: 'InventoryIcon',
-              },
-            ],
-          },
+          // {
+          //   href: '',
+          //   label: 'sidebar-nav-item-courses',
+          //   icon: 'InventoryIcon',
+          //   childMenu: [
+          //     {
+          //       href: Routes.course.list,
+          //       label: 'text-all-courses',
+          //       icon: 'InventoryIcon',
+          //     },
+          //     {
+          //       href: Routes.course.create,
+          //       label: 'text-add-all-courses',
+          //       icon: 'InventoryIcon',
+          //     },
+          //   ],
+          // },
           {
             href: '',
             label: 'sidebar-nav-item-course-offerings',

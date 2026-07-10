@@ -48,9 +48,9 @@ export const Routes = {
   subject: {
     ...routesFactory('/subjects'),
   },
-  course: {
-    ...routesFactory('/courses'),
-  },
+  // course: {
+  //   ...routesFactory('/courses'),
+  // },
   coordinator: {
     ...routesFactory('/coordinators'),
   },
