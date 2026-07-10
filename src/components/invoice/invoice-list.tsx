@@ -67,15 +67,16 @@ const InvoiceList = ({
       width: 200,
     },
     {
-      title: (
-        <TitleWithSort
-          title={t('table:table-item-student')}
-          ascending={
-            sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
-          }
-          isActive={sortingObj.column === 'id'}
-        />
-      ),
+      // title: (
+      //   <TitleWithSort
+      //     title={t('table:table-item-student')}
+      //     ascending={
+      //       sortingObj.sort === SortOrder.Asc && sortingObj.column === 'id'
+      //     }
+      //     isActive={sortingObj.column === 'id'}
+      //   />
+      // ),
+      title: t('table:table-item-student'),
       className: 'cursor-pointer',
       dataIndex: 'enrollment',
       key: 'enrollment',
@@ -106,17 +107,18 @@ const InvoiceList = ({
     //   align: 'center',
     // },
     {
-      title: (
-        <TitleWithSort
-          title={t('table:table-item-total')}
-          ascending={
-            sortingObj?.sort === SortOrder?.Asc &&
-            sortingObj?.column === 'total'
-          }
-          isActive={sortingObj?.column === 'total'}
-          className="cursor-pointer"
-        />
-      ),
+      // title: (
+      //   <TitleWithSort
+      //     title={t('table:table-item-total')}
+      //     ascending={
+      //       sortingObj?.sort === SortOrder?.Asc &&
+      //       sortingObj?.column === 'total'
+      //     }
+      //     isActive={sortingObj?.column === 'total'}
+      //     className="cursor-pointer"
+      //   />
+      // ),
+      title: t('table:table-item-total'),
       dataIndex: 'subtotal',
       key: 'subtotal',
       align: 'center',

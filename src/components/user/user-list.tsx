@@ -100,7 +100,11 @@ const UserList = ({
       align: 'center',
       width: 150,
       render: (role_name: string) => (
-        <Badge text={t(role_name)} color={RoleColor(role_name)} />
+        <Badge
+          text={t(role_name)}
+          color={RoleColor(role_name)}
+          className="capitalize"
+        />
       ),
     },
     {
@@ -146,7 +150,7 @@ const UserList = ({
                 id={id}
                 userStatus={true}
                 isUserActive={is_active}
-                showMakeAdminButton={true}
+                // showMakeAdminButton={true}
                 resetPasswordButton={true}
               />
             )}

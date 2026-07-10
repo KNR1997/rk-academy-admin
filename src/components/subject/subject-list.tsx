@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import { siteSettings } from '@/settings/site.settings';
 // config
 import { Routes } from '@/config/routes';
 // types
@@ -11,7 +12,6 @@ import { useIsRTL } from '@/utils/locals';
 // components
 import { Table } from '@/components/ui/table';
 import Pagination from '@/components/ui/pagination';
-import { siteSettings } from '@/settings/site.settings';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
 import LanguageSwitcher from '@/components/ui/lang-action/action';
@@ -29,7 +29,6 @@ const SubjectList = ({
   onOrdering,
 }: IProps) => {
   const { t } = useTranslation();
-  const rowExpandable = (record: any) => record.children?.length;
   const { alignLeft, alignRight } = useIsRTL();
   const [sortingObj, setSortingObj] = useState<{
     sort: SortOrder;
@@ -55,14 +54,6 @@ const SubjectList = ({
   });
 
   const columns = [
-    // {
-    //   title: t('table:table-item-id'),
-    //   dataIndex: 'id',
-    //   key: 'id',
-    //   align: alignLeft,
-    //   width: 120,
-    //   render: (id: number) => `#${t('table:table-item-id')}: ${id}`,
-    // },
     {
       title: (
         <TitleWithSort
@@ -96,23 +87,6 @@ const SubjectList = ({
         );
       },
     },
-    // {
-    //   title: (
-    //     <TitleWithSort
-    //       title={t('table:table-item-slug')}
-    //       ascending={
-    //         sortingObj.sort === SortOrder.Asc && sortingObj.column === 'slug'
-    //       }
-    //       isActive={sortingObj.column === 'slug'}
-    //     />
-    //   ),
-    //   className: 'cursor-pointer',
-    //   dataIndex: 'slug',
-    //   key: 'slug',
-    //   align: alignLeft,
-    //   width: 150,
-    //   onHeaderCell: () => onHeaderClick('slug'),
-    // },
     {
       title: (
         <TitleWithSort
@@ -140,7 +114,6 @@ const SubjectList = ({
         <LanguageSwitcher
           slug={slug}
           record={record}
-          // deleteModalView="DELETE_SUBJECT"
           deleteBySlug={record.slug}
           routes={Routes?.subject}
         />
