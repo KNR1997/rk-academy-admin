@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 // utils
+import usePrice from '@/utils/use-price';
 import { useIsRTL } from '@/utils/locals';
 // types
 import { MappedPaginatorInfo } from '@/types';
@@ -11,7 +12,6 @@ import Avatar from '@/components/common/avatar';
 import Pagination from '@/components/ui/pagination';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
-import usePrice from '@/utils/use-price';
 
 export type IProps = {
   enrollmentPayments: EnrollmentPayment[] | undefined;
@@ -108,9 +108,9 @@ const EnrollmentPaymentList = ({
         return (
           <div
             className="overflow-hidden truncate whitespace-nowrap"
-            title={courseOffering?.course?.name}
+            title={courseOffering?.subject?.name}
           >
-            {courseOffering?.course?.name} - {courseOffering?.grade_level.name}{' '}
+            {courseOffering?.subject?.name} - {courseOffering?.grade_level.name}{' '}
             - B{courseOffering?.batch}
           </div>
         );
