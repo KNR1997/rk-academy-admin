@@ -5,10 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 // types
 import { Subject } from '@/types';
-// config
-import { Config } from '@/config';
 // utils
-import { formatSlug } from '@/utils/use-slug';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // hooks
 import {
@@ -22,18 +19,17 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Card from '@/components/common/card';
 import Button from '@/components/ui/button';
-import { EditIcon } from '@/components/icons/edit';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 
 type FormValues = {
   name: string;
-  slug: string;
+  // slug: string;
   code: string;
 };
 
 const defaultValues = {
   name: '',
-  slug: '',
+  // slug: '',
   code: '',
 };
 
@@ -44,16 +40,11 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
   // states
-  const [isSlugDisable, setIsSlugDisable] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const isSlugEditable =
-    router?.query?.action === 'edit' &&
-    router?.locale === Config.defaultLanguage;
   const {
     register,
     handleSubmit,
-    watch,
     setError,
     formState: { errors },
   } = useForm<FormValues>({
@@ -68,8 +59,6 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: IProps) {
     resolver: yupResolver(subjectValidationSchema),
   });
 
-  const slugAutoSuggest = formatSlug(watch('name'));
-
   const { mutate: createSubject, isLoading: creating } =
     useCreateSubjectMutation();
   const { mutate: updateSubject, isLoading: updating } =
@@ -78,7 +67,7 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: IProps) {
   const onSubmit = async (values: FormValues) => {
     const input = {
       name: values.name,
-      slug: slugAutoSuggest,
+      // slug: slugAutoSuggest,
       code: values.code,
     };
     const mutationOptions = {
@@ -123,7 +112,7 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: IProps) {
                 required
               />
 
-              {isSlugEditable ? (
+              {/* {isSlugEditable ? (
                 <div className="relative mb-5">
                   <Input
                     label={t('form:input-label-slug')}
@@ -151,7 +140,7 @@ export default function CreateOrUpdateSubjectForm({ initialValues }: IProps) {
                   className="mb-5"
                   disabled
                 />
-              )}
+              )} */}
 
               <Input
                 label={t('form:input-label-code')}

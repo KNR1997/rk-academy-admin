@@ -567,7 +567,8 @@ export interface ReadAllNotifyLogs {
 
 export interface CreateSubjectInput {
   name: string;
-  slug: string;
+  code: string;
+  // slug: string;
 }
 
 export interface CreateAcademicYearInput {
