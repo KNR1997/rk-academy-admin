@@ -8,6 +8,7 @@ import {
   CourseOffering,
   GradeLevel,
   SortOrder,
+  Subject,
   Teacher,
 } from '@/types';
 import { MappedPaginatorInfo } from '@/types';
@@ -63,26 +64,26 @@ const CourseOfferingList = ({
     {
       title: (
         <TitleWithSort
-          title={t('table:table-item-course')}
+          title={t('table:table-item-subject')}
           ascending={
             sortingObj.sort === SortOrder.Asc &&
-            sortingObj.column === 'course__name'
+            sortingObj.column === 'subject__name'
           }
-          isActive={sortingObj.column === 'course__name'}
+          isActive={sortingObj.column === 'subject__name'}
         />
       ),
-      dataIndex: 'course',
-      key: 'course',
+      dataIndex: 'subject',
+      key: 'subject',
       align: alignLeft,
       width: 120,
       ellipsis: true,
-      onHeaderCell: () => onHeaderClick('course__name'),
-      render: (course: Course) => (
+      onHeaderCell: () => onHeaderClick('subject__name'),
+      render: (subject: Subject) => (
         <div
           className="overflow-hidden truncate whitespace-nowrap"
-          title={course?.name}
+          title={subject?.name}
         >
-          {course?.name}
+          {subject?.name}
         </div>
       ),
     },

@@ -45,7 +45,7 @@ export default function SelectCourseOffering({
         label={t('form:input-label-course-offering')}
         loadOptions={fetchAsyncOptions}
         getOptionLabel={(option: CourseOffering) =>
-          `${option.course.name} ${option?.grade_level?.name} - Batch ${option.batch}`
+          `${option.subject?.name} ${option?.grade_level?.name} - Batch ${option.batch}`
         }
         getOptionValue={(option: CourseOffering) => option.id}
         disabled={disabled}

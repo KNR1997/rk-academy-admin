@@ -256,7 +256,7 @@ export interface CreateCoordinatorInput {
 
 export interface CourseOffering {
   id: string;
-  course: Course;
+  subject: Subject | null;
   teacher: Teacher;
   batch: number;
   fee: number;
@@ -616,7 +616,7 @@ export interface CreateCourseInput {
 }
 
 export interface CreateCourseOfferingInput {
-  course: string;
+  subject: string;
   teacher: string;
   grade_level: string;
   year: number;
@@ -1409,6 +1409,7 @@ export interface AnalyticsResponse {
   student_count: number;
   enrollment_count: number;
   active_enrollment_count: number;
+  enrollments_by_month: {month: string, total: number}[]
 }
 
 export interface EnrollmentAnalyticsResponse {

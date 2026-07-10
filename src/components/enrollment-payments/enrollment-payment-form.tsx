@@ -57,7 +57,7 @@ function SelectCourse({
         control={control}
         //@ts-ignore
         getOptionLabel={(enrollment: Enrollment) =>
-          `${enrollment?.course_offering?.course?.name} - ${enrollment?.course_offering?.grade_level?.name} - Batch ${enrollment?.course_offering?.batch} `
+          `${enrollment?.course_offering?.subject?.name} - ${enrollment?.course_offering?.grade_level?.name} - Batch ${enrollment?.course_offering?.batch} `
         }
         //@ts-ignore
         getOptionValue={(enrollment: Enrollment) => enrollment.id}

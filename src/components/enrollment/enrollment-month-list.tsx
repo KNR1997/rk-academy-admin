@@ -184,9 +184,9 @@ const EnrollmentMonthList = ({
       render: (courseOffering: CourseOffering) => (
         <div
           className="flex flex-col whitespace-nowrap font-medium ms-2"
-          title={courseOffering?.course?.name}
+          title={courseOffering?.subject?.name}
         >
-          {courseOffering?.course?.name} - B{courseOffering?.batch}
+          {courseOffering?.subject?.name} - B{courseOffering?.batch}
           <span className="text-[13px] font-normal text-gray-500/80">
             G{courseOffering?.grade_level.level}
           </span>
@@ -194,16 +194,17 @@ const EnrollmentMonthList = ({
       ),
     },
     {
-      title: (
-        <TitleWithSort
-          title={t('table:table-item-status')}
-          ascending={
-            sortingObj.sort === SortOrder.Asc &&
-            sortingObj.column === 'is_active'
-          }
-          isActive={sortingObj.column === 'is_active'}
-        />
-      ),
+      // title: (
+      //   <TitleWithSort
+      //     title={t('table:table-item-status')}
+      //     ascending={
+      //       sortingObj.sort === SortOrder.Asc &&
+      //       sortingObj.column === 'is_active'
+      //     }
+      //     isActive={sortingObj.column === 'is_active'}
+      //   />
+      // ),
+      title: t('table:table-item-active'),
       width: 100,
       className: 'cursor-pointer',
       dataIndex: 'is_active',

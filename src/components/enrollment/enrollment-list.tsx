@@ -109,9 +109,9 @@ const EnrollmentList = ({
       render: (course_offering: CourseOffering) => (
         <div
           className="overflow-hidden truncate whitespace-nowrap"
-          title={course_offering?.course?.name}
+          title={course_offering?.subject?.name}
         >
-          {course_offering?.course?.name}
+          {course_offering?.subject?.name}
         </div>
       ),
     },
