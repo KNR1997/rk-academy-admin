@@ -9,6 +9,7 @@ import {
   CourseOffering,
   CourseType,
   GradeLevel,
+  Subject,
   Teacher,
 } from '@/types';
 // utils
@@ -29,6 +30,7 @@ import SelectCourse from '@/components/course/select-course';
 import SelectTeacher from '@/components/teacher/select-teacher';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import SelectGradeLevel from '@/components/grade-level/select-grade-level';
+import SelectSubject from '../subject/select-subject';
 
 type FormValues = {
   name: string;
@@ -37,7 +39,7 @@ type FormValues = {
   batch: number;
   fee: number;
   year: number;
-  course: Course;
+  subject: Subject;
   teacher: Teacher;
   grade_level: GradeLevel;
   course_type: { label: string; value: CourseType };
@@ -83,7 +85,7 @@ export default function CreateOrUpdateCourseOfferingForm({
 
   const onSubmit = async (values: FormValues) => {
     const input = {
-      course: values.course.id,
+      subject: values.subject.id,
       teacher: values.teacher.id,
       grade_level: values.grade_level.id,
       year: values.year,
@@ -123,10 +125,15 @@ export default function CreateOrUpdateCourseOfferingForm({
         <div className="my-5 sm:my-8">
           <Card className="w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <SelectCourse
+              {/* <SelectCourse
                 control={control}
                 errors={errors}
                 disabled={!!initialValues}
+              /> */}
+              <SelectSubject
+                control={control}
+                errors={errors}
+                // disabled={!!initialValues}
               />
               <SelectTeacher
                 control={control}
