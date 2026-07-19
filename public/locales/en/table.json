@@ -5,6 +5,7 @@
   "empty-table-sorry-text": "Sorry we couldn’t found any data",
   "table-item-id": "ID",
   "table-item-grade": "Grade",
+  "table-item-subject": "Subject",
   "table-item-student": "Student",
   "table-item-course": "Course",
   "table-item-year": "Year",
