@@ -165,6 +165,7 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
                 variant="outline"
                 className="mb-4"
                 error={t(errors.video_date?.message!)}
+                required
               />
             </div>
           </Card>

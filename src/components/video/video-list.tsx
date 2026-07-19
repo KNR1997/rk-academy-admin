@@ -84,9 +84,9 @@ const VideoList = ({
         return (
           <div
             className="overflow-hidden truncate whitespace-nowrap"
-            title={courseOffering?.course?.name}
+            title={courseOffering?.subject?.name}
           >
-            {courseOffering?.course?.name} {courseOffering?.grade_level?.name} -
+            {courseOffering?.subject?.name} {courseOffering?.grade_level?.name} -
             B{courseOffering.batch}
           </div>
         );

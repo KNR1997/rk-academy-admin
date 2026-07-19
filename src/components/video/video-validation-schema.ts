@@ -5,4 +5,5 @@ export const videoValidationSchema = yup.object().shape({
   month: yup.object().required('form:error-month-required'),
   title: yup.string().required('form:error-title-required'),
   video_url: yup.string().required('form:error-video-url-required'),
+  video_date: yup.string().required("Video Date is required"),
 });
