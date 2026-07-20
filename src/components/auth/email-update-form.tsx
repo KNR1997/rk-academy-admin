@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
 // utils
 import { handleMutationError } from '@/utils/handle-mutation-error';
+import { adminOnly, getAuthCredentials, hasAccess } from '@/utils/auth-utils';
 // hooks
 import { useUpdateUserEmailMutation } from '@/data/user';
 // components
@@ -19,6 +20,9 @@ type FormValues = {
 
 export default function EmailUpdateForm({ me }: any) {
   const { t } = useTranslation();
+  const { permissions } = getAuthCredentials();
+  let permission = hasAccess(adminOnly, permissions);
+
   // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // mutations
@@ -76,14 +80,17 @@ export default function EmailUpdateForm({ me }: any) {
               error={t(errors.email?.message!)}
               variant="outline"
               className="mb-5"
+              disabled={!permission}
             />
           </Card>
 
-          <div className="text-end w-full">
-            <Button loading={loading} disabled={loading}>
-              {t('form:button-label-save')}
-            </Button>
-          </div>
+          {permission && (
+            <div className="text-end w-full">
+              <Button loading={loading} disabled={loading}>
+                {t('form:button-label-save')}
+              </Button>
+            </div>
+          )}
         </div>
       </form>
     </>
