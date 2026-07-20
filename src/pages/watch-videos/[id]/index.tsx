@@ -6,6 +6,7 @@ import { studentOnly } from '@/utils/auth-utils';
 import { extractYoutubeVideoId } from '@/utils/extract-youtube-video-id';
 // hooks
 import { useMyEnrollmentVideoQuery } from '@/data/user';
+import { useCourseOfferingQuery } from '@/data/course-offering';
 // components
 import Card from '@/components/common/card';
 import Layout from '@/components/layouts/student';
@@ -13,7 +14,6 @@ import Loader from '@/components/ui/loader/loader';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
 import { NoDataFound } from '@/components/icons/no-data-found';
-import { useEnrollmentQuery } from '@/data/enrollment';
 
 export default function WatchVideo() {
   const { query } = useRouter();
@@ -23,8 +23,22 @@ export default function WatchVideo() {
     id: query.id as string,
   });
 
-  if (isLoading) return <Loader text={t('common:text-loading')} />;
+  // Only call the hook when video data is available
+  const courseOfferingId = video?.course_content?.course_offering?.id;
+  const {
+    courseOffering,
+    isLoading: courseOfferingLoading,
+    error: courseOfferingError,
+  } = useCourseOfferingQuery({
+    slug: courseOfferingId as string,
+  });
+
+  if (isLoading || (courseOfferingId && courseOfferingLoading)) {
+    return <Loader text={t('common:text-loading')} />;
+  }
   if (error) return <ErrorMessage message={error.message} />;
+  if (courseOfferingError)
+    return <ErrorMessage message={courseOfferingError.message} />;
 
   // const onPlayerReady = (event: any) => {
   //   // Access the player instance and control playback
@@ -41,7 +55,7 @@ export default function WatchVideo() {
 
   const videoId = extractYoutubeVideoId(video?.video_url);
   const isValidYouTubeId = (id: string) => id && id.length === 11;
-  const title = `${video?.course_content?.course_offering?.course?.name} - ${video?.title}`;
+  const title = `${courseOffering?.subject?.name} - ${video?.title}`;
 
   return (
     <>
