@@ -49,3 +49,8 @@ export { ReportIcon } from '@/components/icons/sidebar/report';
 export { ShiftPendingIcon } from '@/components/icons/sidebar/shifts-pending';
 export { PendingIcon } from '@/components/icons/sidebar/pending';
 export { VideoIcon } from '@/components/icons/sidebar/video';
+export { StudentIcon } from '@/components/icons/sidebar/student';
+export { TeacherIcon } from '@/components/icons/sidebar/teacher';
+export { AdminIcon } from '@/components/icons/sidebar/admin';
+export { EventManagerIcon } from '@/components/icons/sidebar/event-manager';
+export { KeywordIcon } from '@/components/icons/sidebar/keyword';

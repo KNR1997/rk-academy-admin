@@ -219,22 +219,22 @@ export const siteSettings = {
           {
             href: Routes.adminList,
             label: 'text-admin-list',
-            icon: 'AdminListIcon',
+            icon: 'AdminIcon',
           },
           {
             href: Routes.teacher.list,
             label: 'text-teacher-list',
-            icon: 'StaffIcon',
+            icon: 'TeacherIcon',
           },
           {
             href: Routes.coordinator.list,
             label: 'text-coordinator-list',
-            icon: 'CustomersIcon',
+            icon: 'EventManagerIcon',
           },
           {
             href: Routes.student.list,
             label: 'text-student-list',
-            icon: 'CustomersIcon',
+            icon: 'StudentIcon',
           },
         ],
       },
