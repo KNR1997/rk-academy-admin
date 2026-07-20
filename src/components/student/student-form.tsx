@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { useTranslation } from 'next-i18next';
 import Router, { useRouter } from 'next/router';
@@ -25,6 +25,7 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
+import { EditIcon } from '@/components/icons/edit';
 import PasswordInput from '@/components/ui/password-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import SelectExamYear from '@/components/exam-year/select-exam-year';
@@ -64,18 +65,20 @@ type IProps = {
 export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const isEditMode = router?.query?.action === 'edit';
   // states
+  const [isEmailDisable, setIsEmailDisable] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const isNewTranslation = router?.query?.action === 'translate';
 
   // Get the setter for enrollment student atom
   const setEnrollmentStudent = useSetAtom(enrollmentFlowStudentAtom);
-
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     setError,
+    watch,
     formState: { errors },
   } = useForm<FormValues>({
     // shouldUnregister: true,
@@ -89,9 +92,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
           exam_year: initialValues?.exam_year
             ? { label: initialValues.exam_year, value: initialValues.exam_year }
             : {},
-          ...(isNewTranslation && {
-            type: null,
-          }),
         }
       : defaultValues,
     //@ts-ignore
@@ -99,6 +99,21 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
     context: { isEditMode: !!initialValues },
   });
 
+  // Watch first_name and last_name
+  const firstName = watch('first_name');
+  const lastName = watch('last_name');
+
+  // Auto-suggest email when first_name or last_name changes
+  useEffect(() => {
+    if (!isEditMode && firstName && lastName) {
+      const suggestedEmail = `${firstName}.${lastName}@rwict.lk`
+        .toLowerCase()
+        .replace(/\s+/g, '');
+      setValue('email', suggestedEmail);
+    }
+  }, [firstName, lastName, setValue]);
+
+  // mutations
   const { mutate: createStudent, isLoading: creating } =
     useCreateStudentMutation();
   const { mutate: updateStudent, isLoading: updating } =
@@ -179,6 +194,33 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                 //dimension="small"
                 required
               />
+              <Input
+                label={t('form:input-label-date-of-birth')}
+                {...register('date_of_birth')}
+                type="date"
+                error={t(errors.date_of_birth?.message!)}
+                variant="outline"
+                //dimension="small"
+                required
+              />
+              <div className="relative mb-5">
+                <Input
+                  label={t('form:input-label-email')}
+                  {...register('email')}
+                  error={t(errors.email?.message!)}
+                  variant="outline"
+                  disabled={isEmailDisable}
+                  required
+                />
+                <button
+                  className="absolute top-[27px] right-px z-0 flex h-[46px] w-11 items-center justify-center rounded-tr rounded-br border-l border-solid border-border-base bg-white px-2 text-body transition duration-200 hover:text-heading focus:outline-none"
+                  type="button"
+                  title={t('common:text-edit')}
+                  onClick={() => setIsEmailDisable(false)}
+                >
+                  <EditIcon width={14} />
+                </button>
+              </div>
               {!initialValues && (
                 <PasswordInput
                   label={t('form:input-label-password')}
@@ -189,21 +231,6 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                   required
                 />
               )}
-              <Input
-                label={t('form:input-label-email')}
-                {...register('email')}
-                error={t(errors.email?.message!)}
-                variant="outline"
-                //dimension="small"
-              />
-              <Input
-                label={t('form:input-label-date-of-birth')}
-                {...register('date_of_birth')}
-                type="date"
-                error={t(errors.date_of_birth?.message!)}
-                variant="outline"
-                //dimension="small"
-              />
               {initialValues && (
                 <Input
                   label={t('form:input-label-student-number')}
