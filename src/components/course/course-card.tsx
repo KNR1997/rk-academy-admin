@@ -16,7 +16,7 @@ type CourseCardProps = {
 
 const CourseCard: React.FC<CourseCardProps> = ({ enrollment }) => {
   const courseOffering = enrollment?.course_offering;
-  const courseOfferingName = `${courseOffering.course.name} ${courseOffering.year} - ${courseOffering.grade_level.name}`;
+  const courseOfferingName = `${courseOffering.subject?.name} ${courseOffering.year} - ${courseOffering.grade_level.name}`;
 
   return (
     <Link
@@ -55,7 +55,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ enrollment }) => {
         <div className="relative max-w-[calc(100%-104px)] flex-auto pr-4 pt-2">
           {courseOffering && (
             <h3 className="text-base font-medium leading-none text-muted-black">
-              {courseOffering.course.name} {courseOffering.year} -{' '}
+              {courseOffering.subject?.name} {courseOffering.year} -{' '}
               {courseOffering.grade_level.name}
             </h3>
           )}

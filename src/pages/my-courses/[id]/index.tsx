@@ -59,7 +59,7 @@ export default function MyCoursePage() {
         <div className="flex w-full flex-col items-center md:flex-row">
           <div className="mb-4 md:mb-0 md:w-1/4">
             <PageHeading
-              title={`${enrollment?.course_offering.course.name} ${enrollment?.course_offering?.grade_level?.name} - B${enrollment?.course_offering?.batch}`}
+              title={`${enrollment?.course_offering.subject?.name} ${enrollment?.course_offering?.grade_level?.name} - B${enrollment?.course_offering?.batch}`}
             />
           </div>
           <div className="flex w-full flex-col items-center space-y-4 ms-auto md:flex-row md:space-y-0 xl:w-3/4">
