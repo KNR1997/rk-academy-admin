@@ -26,7 +26,7 @@ const Footer: React.FC<IFooterProp> = ({ className }) => {
               {siteTitle}
             </Link>
             . {copyrightText}{' '}
-            {externalText ? (
+            {/* {externalText ? (
               <Link
                 className="font-medium text-heading"
                 href={externalLink ?? Routes?.dashboard}
@@ -35,7 +35,7 @@ const Footer: React.FC<IFooterProp> = ({ className }) => {
               </Link>
             ) : (
               ''
-            )}
+            )} */}
           </span>
           <div className="flex space-x-6 text-sm font-medium text-body sm:justify-center">
             {process.env.NEXT_PUBLIC_VERSION}

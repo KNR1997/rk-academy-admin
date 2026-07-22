@@ -25,22 +25,16 @@ const DashboardTopBar = ({}: IProps) => {
         <VisitStore />
         <SearchBar />
 
-        {options?.pushNotification?.all?.message ? (
+        {options?.pushNotification?.all?.message && (
           <MessageBar user={data} />
-        ) : (
-          ''
         )}
 
-        {options?.pushNotification?.all?.storeNotice ? (
+        {options?.pushNotification?.all?.storeNotice && (
           <StoreNoticeBar user={data} />
-        ) : (
-          ''
         )}
 
-        {options?.pushNotification?.all?.order ? (
+        {options?.pushNotification?.all?.order && (
           <RecentOrderBar user={data} />
-        ) : (
-          ''
         )}
       </div>
     </>

@@ -239,23 +239,23 @@ export const siteSettings = {
         ],
       },
 
-      feature: {
-        href: '',
-        label: 'text-feature-management',
-        icon: 'SettingsIcon',
-        childMenu: [
-          {
-            href: Routes.message.list,
-            label: 'sidebar-nav-item-message',
-            icon: 'ChatIcon',
-          },
-          // {
-          //   href: Routes.storeNotice.list,
-          //   label: 'sidebar-nav-item-store-notice',
-          //   icon: 'StoreNoticeIcon',
-          // },
-        ],
-      },
+      // feature: {
+      //   href: '',
+      //   label: 'text-feature-management',
+      //   icon: 'SettingsIcon',
+      //   childMenu: [
+      //     {
+      //       href: Routes.message.list,
+      //       label: 'sidebar-nav-item-message',
+      //       icon: 'ChatIcon',
+      //     },
+      //     // {
+      //     //   href: Routes.storeNotice.list,
+      //     //   label: 'sidebar-nav-item-store-notice',
+      //     //   icon: 'StoreNoticeIcon',
+      //     // },
+      //   ],
+      // },
 
       report: {
         href: '',
@@ -327,6 +327,12 @@ export const siteSettings = {
         href: Routes.dashboard,
         label: 'sidebar-nav-item-dashboard',
         icon: 'DashboardIcon',
+        permissions: studentOnly,
+      },
+            {
+        href: Routes.profileUpdate,
+        label: 'sidebar-nav-item-profile',
+        icon: 'UserIconSimple',
         permissions: studentOnly,
       },
       {
