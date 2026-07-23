@@ -28,7 +28,11 @@ const changePasswordSchema = yup.object().shape({
     .required('form:error-confirm-password'),
 });
 
-const ChangePasswordForm = () => {
+type ChangePasswordFormProps = {
+  hasPermission?: boolean;
+};
+
+const ChangePasswordForm = ({ hasPermission }: ChangePasswordFormProps) => {
   const { t } = useTranslation();
   // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
