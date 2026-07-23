@@ -34,6 +34,8 @@ type FormValues = {
   year: number;
   course_offering: CourseOffering;
   video_date: string;
+  lesson: number;
+  day: number;
 };
 
 const defaultValues = {
@@ -83,6 +85,8 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
       year: values.course_offering.year,
       course_offering_id: values.course_offering.id,
       video_date: values.video_date,
+      lesson: values.lesson,
+      day: values.day,
     };
     const mutationOptions = {
       onError: (error: any) =>
@@ -166,6 +170,22 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
                 className="mb-4"
                 error={t(errors.video_date?.message!)}
                 required
+              />
+              <Input
+                label="Lesson No."
+                {...register('lesson')}
+                type="number"
+                variant="outline"
+                className="mb-4"
+                error={t(errors.lesson?.message!)}
+              />
+              <Input
+                label="Day"
+                {...register('day')}
+                type="number"
+                variant="outline"
+                className="mb-4"
+                error={t(errors.day?.message!)}
               />
             </div>
           </Card>
