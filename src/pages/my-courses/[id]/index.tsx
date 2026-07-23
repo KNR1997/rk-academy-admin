@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import { useState } from 'react';
 import { GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
@@ -14,14 +15,21 @@ import Search from '@/components/common/search';
 import Layout from '@/components/layouts/student';
 import Loader from '@/components/ui/loader/loader';
 import MyVideoList from '@/components/my/video-list';
+import { ArrowUp } from '@/components/icons/arrow-up';
 import ErrorMessage from '@/components/ui/error-message';
+import { ArrowDown } from '@/components/icons/arrow-down';
+import VideoFilter from '@/components/video/video-filter';
 import PageHeading from '@/components/common/page-heading';
 
 export default function MyCoursePage() {
   const { query } = useRouter();
   const { t } = useTranslation();
   // states
+  const [day, setDay] = useState('');
   const [page, setPage] = useState(1);
+  const [month, setMonth] = useState('');
+  const [lesson, setLesson] = useState('');
+  const [visible, setVisible] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [ordering, setOrdering] = useState('-created_at');
   // query
@@ -36,6 +44,9 @@ export default function MyCoursePage() {
     useMyEnrollmentVideosPaginatedQuery({
       enrollment_id: query.id as string,
       name: searchTerm,
+      course_content__month: month,
+      lesson: lesson,
+      day: day,
       page: page,
       ordering: ordering,
     });
@@ -43,6 +54,10 @@ export default function MyCoursePage() {
   if (loading || enrollmentLoading)
     return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
+
+  const toggleVisible = () => {
+    setVisible((v) => !v);
+  };
 
   function handleSearch({ searchText }: { searchText: string }) {
     setSearchTerm(searchText);
@@ -66,6 +81,44 @@ export default function MyCoursePage() {
             <Search
               onSearch={handleSearch}
               placeholderText={t('form:input-placeholder-search-name')}
+            />
+          </div>
+          <button
+            className="mt-5 flex items-center whitespace-nowrap text-base font-semibold text-accent md:mt-0 md:ms-5"
+            onClick={toggleVisible}
+          >
+            {t('common:text-filter')}
+            {visible ? (
+              <ArrowUp className="ms-2" />
+            ) : (
+              <ArrowDown className="ms-2" />
+            )}
+          </button>
+        </div>
+        <div
+          className={cn('flex w-full transition', {
+            'visible h-auto': visible,
+            'invisible h-0': !visible,
+          })}
+        >
+          <div className="mt-5 flex w-full flex-col border-t border-gray-200 pt-5 md:mt-8 md:flex-row md:items-center md:pt-8">
+            <VideoFilter
+              enableDayFilter
+              enableLessonFilter
+              enableMonthFilter
+              onMonthFilter={(data: { label: string; value: string }) => {
+                setMonth(data?.value);
+                setPage(1);
+              }}
+              onLessonFilter={(data: { label: string; value: string }) => {
+                setLesson(data?.value);
+                setPage(1);
+              }}
+              onDayFilter={(data: { label: string; value: string }) => {
+                setDay(data?.value);
+                setPage(1);
+              }}
+              className="w-full"
             />
           </div>
         </div>
