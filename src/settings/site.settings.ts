@@ -444,17 +444,23 @@ export const siteSettings = {
         permissions: coordinatorOnly,
       },
       {
-        href: Routes.enrollmentPayment.list,
-        label: 'text-all-payments',
+        href: Routes.invoice.list,
+        label: 'sidebar-nav-item-invoices',
         icon: 'TaxesIcon',
         permissions: coordinatorOnly,
       },
-      {
-        href: Routes.enrollmentPayment.pendingPayments,
-        label: 'text-pending-payments',
-        icon: 'PendingIcon',
-        permissions: coordinatorOnly,
-      },
+      // {
+      //   href: Routes.enrollmentPayment.list,
+      //   label: 'text-all-payments',
+      //   icon: 'TaxesIcon',
+      //   permissions: coordinatorOnly,
+      // },
+      // {
+      //   href: Routes.enrollmentPayment.pendingPayments,
+      //   label: 'text-pending-payments',
+      //   icon: 'PendingIcon',
+      //   permissions: coordinatorOnly,
+      // },
     ],
   },
   product: {
