@@ -2,19 +2,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-// config
-import { Config } from '@/config';
-import { Routes } from '@/config/routes';
 // utils
-import { adminOnly } from '@/utils/auth-utils';
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // hooks
 import { useInvoicesQuery } from '@/data/invoice';
 // components
 import Card from '@/components/common/card';
-import Layout from '@/components/layouts/admin';
 import Search from '@/components/common/search';
+import AppLayout from '@/components/layouts/app';
 import Loader from '@/components/ui/loader/loader';
-import LinkButton from '@/components/ui/link-button';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
 import InvoiceList from '@/components/invoice/invoice-list';
@@ -88,9 +84,9 @@ export default function Invoices() {
 }
 
 Invoices.authenticate = {
-  permissions: adminOnly,
+  permissions: adminAndCoordinatorOnly,
 };
-Invoices.Layout = Layout;
+Invoices.Layout = AppLayout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
