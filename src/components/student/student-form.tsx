@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
 import { useSetAtom } from 'jotai';
+import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import Router, { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 // form-validations
 import { studentValidationSchema } from './student-validation-schema';
 // types
@@ -12,6 +12,7 @@ import { AcademicYear, GradeLevel, Student } from '@/types';
 import { Routes } from '@/config/routes';
 // utils
 import { generatePassword } from '@/utils/generate-password';
+import { useCopyToClipboard } from '@/utils/use-copy-to-clipboard';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // stores
 import { enrollmentFlowStudentAtom } from '@/store/enrollment.store';
@@ -25,7 +26,7 @@ import Alert from '@/components/ui/alert';
 import Input from '@/components/ui/input';
 import Button from '@/components/ui/button';
 import Card from '@/components/common/card';
-import { EditIcon } from '@/components/icons/edit';
+import { CopyButton } from '@/components/ui/copy-button';
 import PasswordInput from '@/components/ui/password-input';
 import StickyFooterPanel from '@/components/ui/sticky-footer-panel';
 import SelectExamYear from '@/components/exam-year/select-exam-year';
@@ -62,13 +63,14 @@ const defaultValues = {
 type IProps = {
   initialValues?: Student | undefined;
 };
+
 export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
   const isEditMode = router?.query?.action === 'edit';
   // states
-  const [isEmailDisable, setIsEmailDisable] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { copyToClipboard } = useCopyToClipboard();
 
   // Get the setter for enrollment student atom
   const setEnrollmentStudent = useSetAtom(enrollmentFlowStudentAtom);
@@ -99,9 +101,12 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
     context: { isEditMode: !!initialValues },
   });
 
-  // Watch first_name and last_name
+  // Watch fields
   const firstName = watch('first_name');
   const lastName = watch('last_name');
+  const email = watch('email');
+  const password = watch('password');
+  const studentNumber = watch('student_number');
 
   // Auto-suggest email when first_name or last_name changes
   useEffect(() => {
@@ -112,6 +117,24 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
       setValue('email', suggestedEmail);
     }
   }, [firstName, lastName, setValue]);
+
+  // Copy handlers
+  const handleCopyEmail = () =>
+    copyToClipboard(email, t('common:email-copied'), t('common:copy-failed'));
+
+  const handleCopyPassword = () =>
+    copyToClipboard(
+      password,
+      t('common:password-copied'),
+      t('common:copy-failed'),
+    );
+
+  const handleCopyStudentNumber = () =>
+    copyToClipboard(
+      studentNumber,
+      t('common:student-number-copied'),
+      t('common:copy-failed'),
+    );
 
   // mutations
   const { mutate: createStudent, isLoading: creating } =
@@ -203,42 +226,55 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                 //dimension="small"
                 required
               />
+
+              {/* Email Field with Copy Button */}
               <div className="relative mb-5">
                 <Input
                   label={t('form:input-label-email')}
                   {...register('email')}
                   error={t(errors.email?.message!)}
                   variant="outline"
-                  disabled={isEmailDisable}
+                  disabled={!isEditMode}
                   required
                 />
-                <button
-                  className="absolute top-[27px] right-px z-0 flex h-[46px] w-11 items-center justify-center rounded-tr rounded-br border-l border-solid border-border-base bg-white px-2 text-body transition duration-200 hover:text-heading focus:outline-none"
-                  type="button"
-                  title={t('common:text-edit')}
-                  onClick={() => setIsEmailDisable(false)}
-                >
-                  <EditIcon width={14} />
-                </button>
+                <CopyButton
+                  onClick={handleCopyEmail}
+                  title={t('common:copy-email')}
+                />
               </div>
+
+              {/* Password Field with Copy Button */}
               {!initialValues && (
-                <PasswordInput
-                  label={t('form:input-label-password')}
-                  {...register('password')}
-                  variant="outline"
-                  error={t(errors.password?.message!)}
-                  className="mb-5"
-                  required
-                />
+                <div className="relative mb-5">
+                  <PasswordInput
+                    label={t('form:input-label-password')}
+                    {...register('password')}
+                    variant="outline"
+                    error={t(errors.password?.message!)}
+                    required
+                  />
+                  <CopyButton
+                    onClick={handleCopyPassword}
+                    title={t('common:copy-password')}
+                  />
+                </div>
               )}
+
+              {/* Student Number Field with Copy Button */}
               {initialValues && (
-                <Input
-                  label={t('form:input-label-student-number')}
-                  {...register('student_number')}
-                  error={t(errors.student_number?.message!)}
-                  variant="outline"
-                  disabled
-                />
+                <div className="relative mb-5">
+                  <Input
+                    label={t('form:input-label-student-number')}
+                    {...register('student_number')}
+                    error={t(errors.student_number?.message!)}
+                    variant="outline"
+                    disabled
+                  />
+                  <CopyButton
+                    onClick={handleCopyStudentNumber}
+                    title={t('common:copy-student-number')}
+                  />
+                </div>
               )}
             </div>
           </Card>
