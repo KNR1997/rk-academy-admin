@@ -86,8 +86,8 @@ const VideoList = ({
             className="overflow-hidden truncate whitespace-nowrap"
             title={courseOffering?.subject?.name}
           >
-            {courseOffering?.subject?.name} {courseOffering?.grade_level?.name} -
-            B{courseOffering.batch}
+            {courseOffering?.subject?.name} {courseOffering?.grade_level?.name}{' '}
+            - B{courseOffering.batch}
           </div>
         );
       },
@@ -103,6 +103,27 @@ const VideoList = ({
         return (
           <div className="overflow-hidden truncate whitespace-nowrap">
             {monthName}
+          </div>
+        );
+      },
+    },
+    {
+      title: 'Lesson / Day',
+      dataIndex: 'lesson',
+      key: 'lesson_day',
+      align: alignLeft,
+      width: 120,
+      render: (lesson: number, record: Video) => {
+        const lessonDisplay = lesson ?? '-';
+        const dayDisplay = record.day ?? '-';
+        return (
+          <div className="flex items-center gap-2">
+            <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
+              L{lessonDisplay}
+            </span>
+            <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+              D{dayDisplay}
+            </span>
           </div>
         );
       },

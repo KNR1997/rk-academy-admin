@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 // utils
 import { useIsRTL } from '@/utils/locals';
+import { getMonthNameFromArray } from '@/utils/get-month-name';
 // configs
 import { Routes } from '@/config/routes';
 // types
@@ -12,9 +13,7 @@ import { Table } from '@/components/ui/table';
 import Pagination from '@/components/ui/pagination';
 import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
-import LanguageSwitcher from '@/components/ui/lang-action/action';
-import ActionButtons from '../common/action-buttons';
-import { getMonthNameFromArray } from '@/utils/get-month-name';
+import ActionButtons from '@/components/common/action-buttons';
 
 export type IProps = {
   videos: Video[] | undefined;
@@ -103,6 +102,27 @@ const MyVideoList = ({
         return (
           <div className="overflow-hidden truncate whitespace-nowrap">
             {monthName}
+          </div>
+        );
+      },
+    },
+    {
+      title: 'Lesson / Day',
+      dataIndex: 'lesson',
+      key: 'lesson_day',
+      align: alignLeft,
+      width: 120,
+      render: (lesson: number, record: Video) => {
+        const lessonDisplay = lesson ?? '-';
+        const dayDisplay = record.day ?? '-';
+        return (
+          <div className="flex items-center gap-2">
+            <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800">
+              L{lessonDisplay}
+            </span>
+            <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+              D{dayDisplay}
+            </span>
           </div>
         );
       },
