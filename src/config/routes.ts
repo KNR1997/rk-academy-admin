@@ -66,10 +66,10 @@ export const Routes = {
   enrollment: {
     ...routesFactory('/enrollments'),
   },
-  enrollmentPayment: {
-    ...routesFactory('/enrollment-payments'),
-    pendingPayments: '/enrollment-payments/pending-payments'
-  },
+  // enrollmentPayment: {
+  //   ...routesFactory('/enrollment-payments'),
+  //   pendingPayments: '/enrollment-payments/pending-payments'
+  // },
   invoice: {
     ...routesFactory('/invoices'),
   },
