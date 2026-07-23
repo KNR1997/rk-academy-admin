@@ -1,9 +1,4 @@
 import { useTranslation } from 'next-i18next';
-// icons
-import { CustomersIcon } from '../icons/summary/customers';
-import { BasketIcon } from '@/components/icons/summary/basket';
-import { EaringIcon } from '@/components/icons/summary/earning';
-import { ChecklistIcon } from '@/components/icons/summary/checklist';
 // utils
 import usePrice from '@/utils/use-price';
 // hooks
@@ -12,6 +7,10 @@ import { useAnalyticsQuery } from '@/data/dashboard';
 import Loader from '@/components/ui/loader/loader';
 import StickerCard from '@/components/widgets/sticker-card';
 import ColumnChart from '@/components/widgets/column-chart';
+import { BasketIcon } from '@/components/icons/summary/basket';
+import { EaringIcon } from '@/components/icons/summary/earning';
+import { ChecklistIcon } from '@/components/icons/summary/checklist';
+import { CustomersIcon } from '@/components/icons/summary/customers';
 
 export default function Dashboard() {
   const { t } = useTranslation();
