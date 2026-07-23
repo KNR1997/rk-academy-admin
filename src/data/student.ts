@@ -111,3 +111,12 @@ export const useStudentEnrollmentsQuery = ({
     loading: isLoading,
   };
 };
+
+export const useStudentMeQuery = () => {
+  return useQuery<Student, Error>([`${API_ENDPOINTS.STUDENTS}/me`], studentClient.me, {
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+  });
+};

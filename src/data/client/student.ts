@@ -32,4 +32,7 @@ export const studentClient = {
       },
     );
   },
+  me: () => {
+    return HttpClient.get<Student>(`${API_ENDPOINTS.STUDENTS}/me`);
+  },
 };
