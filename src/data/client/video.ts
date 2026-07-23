@@ -14,7 +14,6 @@ export const videoClient = {
   paginated: ({ name, ...params }: Partial<VideoQueryOptions>) => {
     return HttpClient.get<VideoPaginator>(API_ENDPOINTS.VIDEOS, {
       searchJoin: 'and',
-      self,
       ...params,
       search: HttpClient.formatSearchParams({ name }),
     });
