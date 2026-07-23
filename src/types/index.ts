@@ -227,6 +227,8 @@ export interface Video {
   title: string;
   video_url: string;
   course_content: CourseContent;
+  lesson: number;
+  day: number;
 }
 
 export interface CreateVideo {
@@ -1244,6 +1246,9 @@ export interface InvoiceQueryOptions extends QueryOptions {
 
 export interface VideoQueryOptions extends QueryOptions {
   name: string;
+  course_content__month: string;
+  lesson: string;
+  day: string;
 }
 
 export interface CoordinatorQueryOptions extends QueryOptions {
@@ -1288,6 +1293,9 @@ export interface EnrollmentAnalyticsQueryOptions extends QueryOptions {
 export interface MyEnrollmentVideosQueryOptions extends QueryOptions {
   enrollment_id: string;
   name: string;
+  course_content__month: string;
+  lesson: string;
+  day: string
 }
 
 export interface EnrollmentPaymentQueryOptions extends QueryOptions {
