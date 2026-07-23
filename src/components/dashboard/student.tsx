@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 // hooks
+import { useStudentMeQuery } from '@/data/student';
 import { useMeQuery, useMyEnrollmentsPaginatedQuery } from '@/data/user';
 // components
 import Button from '@/components/ui/button';
+import Badge from '@/components/ui/badge/badge';
 import Loader from '@/components/ui/loader/loader';
 import { AvatarIcon } from '@/components/icons/avatar-icon';
 import { BookOpenIcon } from '@/components/icons/summary/book-open';
@@ -35,7 +37,11 @@ function QuickActionCard({
           <h4 className="text-base font-semibold text-heading">{title}</h4>
           <p className="mt-1 text-sm text-gray-500">{description}</p>
           <Link href={href}>
-            <Button className="mt-3 text-sm font-medium" variant="outline" size='small'>
+            <Button
+              className="mt-3 text-sm font-medium"
+              variant="outline"
+              size="small"
+            >
               Get Started
             </Button>
           </Link>
@@ -48,14 +54,13 @@ function QuickActionCard({
 export default function StudentDashboard() {
   const { t } = useTranslation();
   const { data } = useMeQuery();
-  const user = {
-    name: 'Kethaka Ranasinghe',
-    studentId: 'e42420606',
-  };
   // query
+  const { data: studentMeData, isLoading: studentDetailsLoading } =
+    useStudentMeQuery();
   const { loading } = useMyEnrollmentsPaginatedQuery({});
 
-  if (loading) return <Loader text={t('common:text-loading')} />;
+  if (loading || studentDetailsLoading)
+    return <Loader text={t('common:text-loading')} />;
 
   // Format date
   const today = new Date();
@@ -105,14 +110,15 @@ export default function StudentDashboard() {
               {/* <p className="mt-1 text-lg font-medium text-gray-700">
                 {data?.full_name || 'Hello Student'}
               </p> */}
-                            <p className="text-lg font-medium text-gray-700">
-                Welcome back!
-              </p>
-              <h1 className="text-lg font-bold text-heading md:text-3xl capitalize">
+              <p className="text-lg font-medium text-gray-700">Welcome back!</p>
+              <h1 className="text-lg mb-2 font-bold text-heading md:text-3xl capitalize">
                 {data?.full_name || 'Hello Student'}
               </h1>
-              <p className="text-sm text-gray-500">
-                {user?.studentId || 'e42420606'}
+              <p className="text-md text-gray-500">
+                <Badge
+                  text={studentMeData?.student_number}
+                  color="bg-accent/10 !text-accent"
+                />
               </p>
             </div>
             <div className="mt-2 sm:mt-0">
