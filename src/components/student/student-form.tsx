@@ -265,7 +265,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                   <CopyButton
                     onClick={handleCopyPassword}
                     title={t('common:copy-password')}
-                    className="right-16"
+                    className="right-14"
                   />
                 </div>
               )}
