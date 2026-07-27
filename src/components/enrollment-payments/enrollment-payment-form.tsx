@@ -1,6 +1,7 @@
 import { useSetAtom } from 'jotai';
-import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
+import { animateScroll } from 'react-scroll';
+import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Control,
@@ -10,7 +11,7 @@ import {
   useWatch,
 } from 'react-hook-form';
 // types
-import { Enrollment, EnrollmentCharge, Student } from '@/types';
+import { CreateEnrollmentCharge, Enrollment, Student } from '@/types';
 // utils
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // constants
@@ -184,6 +185,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
 
     const uniqueMonths = new Set(months);
     if (months.length !== uniqueMonths.size) {
+      animateScroll.scrollToTop();
       setErrorMessage('PICKBAZAR_ERROR.DUPLICATE_VALUES_ARE_NOT_ALLOWED');
       return;
     }
@@ -191,7 +193,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
 
     if (!selectedEnrollment) return;
 
-    const charges: EnrollmentCharge[] = values.charges.map((item) => ({
+    const charges: CreateEnrollmentCharge[] = values.charges.map((item) => ({
       description: `${item?.billing_month?.label} ${currentYear} Tuition`,
       billing_month: item.billing_month!.value,
       billing_year: currentYear,
