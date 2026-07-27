@@ -10,11 +10,7 @@ import {
   useWatch,
 } from 'react-hook-form';
 // types
-import {
-  Enrollment,
-  EnrollmentCharge,
-  Student,
-} from '@/types';
+import { Enrollment, EnrollmentCharge, Student } from '@/types';
 // utils
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // constants
@@ -71,20 +67,20 @@ function SelectCourse({
 }
 
 interface PaymentItem {
-  payment_month: { label: string; value: number } | null;
+  billing_month: { label: string; value: number } | null;
   fee: number | null;
 }
 
 type FormValues = {
   student: Student;
   enrollment: Enrollment | null;
-  payments: PaymentItem[];
+  charges: PaymentItem[];
 };
 
 const defaultValues = {
-  payments: [
+  charges: [
     {
-      payment_month: null,
+      billing_month: null,
       fee: null,
     },
   ],
@@ -132,7 +128,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
     remove: removePayment,
   } = useFieldArray({
     control,
-    name: 'payments',
+    name: 'charges',
   });
 
   const selectedStudent = useWatch({
@@ -145,13 +141,13 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
     name: 'enrollment',
   });
 
-  const payments = useWatch({
+  const charges = useWatch({
     control,
-    name: 'payments',
+    name: 'charges',
   });
 
   const totalFee =
-    payments?.reduce((sum, payment) => sum + (Number(payment?.fee) || 0), 0) ??
+    charges?.reduce((sum, payment) => sum + (Number(payment?.fee) || 0), 0) ??
     0;
 
   useEffect(() => {
@@ -159,8 +155,8 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
 
     if (!baseFee) return;
 
-    payments?.forEach((payment, index) => {
-      const month = payment?.payment_month?.value;
+    charges?.forEach((payment, index) => {
+      const month = payment?.billing_month?.value;
       if (!month) return;
 
       const expectedFee =
@@ -168,26 +164,36 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
 
       // Prevent unnecessary setValue calls
       if (payment.fee !== expectedFee) {
-        setValue(`payments.${index}.fee`, expectedFee, {
+        setValue(`charges.${index}.fee`, expectedFee, {
           shouldValidate: false,
           shouldDirty: true,
         });
       }
     });
-  }, [payments, selectedEnrollment, setValue]);
+  }, [charges, selectedEnrollment, setValue]);
 
   // mutations
   const { mutate: createEnrollmentPayment, isLoading: creating } =
     useCreateEnrollmentPaymentMutation();
 
   const onSubmit = async (values: FormValues) => {
+    // Check for duplicates
+    const months = values.charges
+      .map((item) => item.billing_month?.value)
+      .filter((month) => month !== undefined && month !== null);
+
+    const uniqueMonths = new Set(months);
+    if (months.length !== uniqueMonths.size) {
+      setErrorMessage('PICKBAZAR_ERROR.DUPLICATE_VALUES_ARE_NOT_ALLOWED');
+      return;
+    }
     const currentYear = new Date().getFullYear();
 
     if (!selectedEnrollment) return;
 
-    const payments: EnrollmentCharge[] = values.payments.map((item) => ({
-      description: `${item?.payment_month?.label} ${currentYear} Tuition`,
-      billing_month: item.payment_month!.value,
+    const charges: EnrollmentCharge[] = values.charges.map((item) => ({
+      description: `${item?.billing_month?.label} ${currentYear} Tuition`,
+      billing_month: item.billing_month!.value,
       billing_year: currentYear,
       amount: item.fee!,
     }));
@@ -200,7 +206,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
       enrollment_id: selectedEnrollment?.id,
       issue_date: formattedDate,
       due_date: formattedDate,
-      charges: payments,
+      charges: charges,
     };
 
     const mutationOptions = {
@@ -243,7 +249,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
                     <div>
                       <SelectInput
                         label="Payment Month"
-                        name={`payments.${index}.payment_month`}
+                        name={`charges.${index}.billing_month`}
                         control={control}
                         options={monthOptions}
                         required
@@ -251,7 +257,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
                       <ValidationError
                         message={
                           t(
-                            errors?.payments?.[index]?.payment_month
+                            errors?.charges?.[index]?.billing_month
                               ?.message as string,
                           ) || ''
                         }
@@ -260,11 +266,11 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
 
                     <Input
                       label={t('form:input-label-fee')}
-                      {...register(`payments.${index}.fee`)}
+                      {...register(`charges.${index}.fee`)}
                       type="number"
                       variant="outline"
                       error={
-                        t(errors?.payments?.[index]?.fee?.message as string) ||
+                        t(errors?.charges?.[index]?.fee?.message as string) ||
                         ''
                       }
                     />
@@ -288,7 +294,7 @@ export default function CreateOrUpdateEnrollmentPaymentForm({
                   disabled={!selectedEnrollment}
                   onClick={() =>
                     appendPayment({
-                      payment_month: null,
+                      billing_month: null,
                       fee: selectedEnrollment?.course_offering?.fee ?? 0,
                     })
                   }

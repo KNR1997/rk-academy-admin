@@ -38,7 +38,8 @@ type FormValues = {
   email: string;
   student_number: string;
   password: string;
-  date_of_birth: string;
+  // date_of_birth: string;
+  school: string;
   parent_guardian_name: string;
   parent_guardian_phone: string;
   grade_level: GradeLevel;
@@ -55,7 +56,8 @@ const defaultValues = {
   email: '',
   // student_number: '',
   password: generatePassword(),
-  date_of_birth: null,
+  // date_of_birth: null,
+  school: '',
   parent_guardian_name: '',
   parent_guardian_phone: '',
 };
@@ -111,7 +113,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
   // Auto-suggest email when first_name or last_name changes
   useEffect(() => {
     if (!isEditMode && firstName && lastName) {
-      const suggestedEmail = `${firstName}.${lastName}@rwict.lk`
+      const suggestedEmail = `${firstName}.${lastName}@rukshanict.lk`
         .toLowerCase()
         .replace(/\s+/g, '');
       setValue('email', suggestedEmail);
@@ -149,8 +151,9 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
       first_name: values.first_name,
       last_name: values.last_name,
       email: values.email,
-      date_of_birth: values.date_of_birth == '' ? null : values.date_of_birth,
+      // date_of_birth: values.date_of_birth == '' ? null : values.date_of_birth,
       // parent_guardian_name: values.parent_guardian_name,
+      school: values.school,
       parent_guardian_phone: values.parent_guardian_phone,
       current_grade: values.grade_level.id,
       exam_year: values.exam_year.value,
@@ -218,6 +221,12 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                 required
               />
               <Input
+                label={t('form:input-label-school')}
+                {...register('school')}
+                error={t(errors.school?.message!)}
+                variant="outline"
+              />
+              {/* <Input
                 label={t('form:input-label-date-of-birth')}
                 {...register('date_of_birth')}
                 type="date"
@@ -225,7 +234,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                 variant="outline"
                 //dimension="small"
                 required
-              />
+              /> */}
 
               {/* Email Field with Copy Button */}
               <div className="relative mb-5">
@@ -234,7 +243,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                   {...register('email')}
                   error={t(errors.email?.message!)}
                   variant="outline"
-                  disabled={!isEditMode}
+                  // disabled={!isEditMode}
                   required
                 />
                 <CopyButton
@@ -256,6 +265,7 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                   <CopyButton
                     onClick={handleCopyPassword}
                     title={t('common:copy-password')}
+                    className="right-16"
                   />
                 </div>
               )}

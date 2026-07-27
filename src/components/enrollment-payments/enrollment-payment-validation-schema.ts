@@ -5,11 +5,11 @@ export const enrollmentPaymentValidationSchema = yup.object({
 
   enrollment: yup.object().required('form:error-enrollment-required'),
 
-  payments: yup
+  charges: yup
     .array()
     .of(
       yup.object({
-        payment_month: yup
+        billing_month: yup
           .object()
           .nullable()
           .required('form:error-month-required'),

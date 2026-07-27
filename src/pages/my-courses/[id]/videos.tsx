@@ -14,14 +14,15 @@ import Card from '@/components/common/card';
 import Search from '@/components/common/search';
 import Layout from '@/components/layouts/student';
 import Loader from '@/components/ui/loader/loader';
-import MyVideoList from '@/components/my/video-list';
+import MyVideoList from '@/components/my-course/video-list';
 import { ArrowUp } from '@/components/icons/arrow-up';
 import ErrorMessage from '@/components/ui/error-message';
 import { ArrowDown } from '@/components/icons/arrow-down';
 import VideoFilter from '@/components/video/video-filter';
 import PageHeading from '@/components/common/page-heading';
+import MyCoursePageHeader from '@/components/my-course/my-coruse-page-header';
 
-export default function MyCoursePage() {
+export default function MyCourseVideo() {
   const { query } = useRouter();
   const { t } = useTranslation();
   // states
@@ -29,7 +30,7 @@ export default function MyCoursePage() {
   const [page, setPage] = useState(1);
   const [month, setMonth] = useState('');
   const [lesson, setLesson] = useState('');
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [ordering, setOrdering] = useState('-created_at');
   // query
@@ -70,12 +71,15 @@ export default function MyCoursePage() {
 
   return (
     <>
+      <MyCoursePageHeader
+        pageTitle={`${enrollment?.course_offering.subject?.name} ${enrollment?.course_offering?.grade_level?.name} - B${enrollment?.course_offering?.batch}`}
+        enrollmentId={query.id as string}
+      />
+
       <Card className="mb-8 flex flex-col">
         <div className="flex w-full flex-col items-center md:flex-row">
           <div className="mb-4 md:mb-0 md:w-1/4">
-            <PageHeading
-              title={`${enrollment?.course_offering.subject?.name} ${enrollment?.course_offering?.grade_level?.name} - B${enrollment?.course_offering?.batch}`}
-            />
+            <PageHeading title="Course Videos" />
           </div>
           <div className="flex w-full flex-col items-center space-y-4 ms-auto md:flex-row md:space-y-0 xl:w-3/4">
             <Search
@@ -175,10 +179,10 @@ export default function MyCoursePage() {
   );
 }
 
-MyCoursePage.authenticate = {
+MyCourseVideo.authenticate = {
   permissions: studentOnly,
 };
-MyCoursePage.Layout = Layout;
+MyCourseVideo.Layout = Layout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {

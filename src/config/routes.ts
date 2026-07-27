@@ -8,10 +8,15 @@ export const Routes = {
   adminMyShops: '/my-shops',
   myCourses: {
     ...routesFactory('/my-courses'),
+    videos: (enrollmentId: string) => `/my-courses/${enrollmentId}/videos`,
+    payments: (enrollmentId: string) => `/my-courses/${enrollmentId}/payments`,
   },
-  myEnrollmentPayments: {
-    ...routesFactory('/my-enrollment-payments'),
-  },
+  // myEnrollmentPayments: {
+  //   ...routesFactory('/my-enrollment-payments'),
+  // },
+  // myPayments: {
+  //   ...routesFactory('/my-payments'),
+  // },
   profile: '/profile',
   settings: '/settings',
   paymentSettings: '/settings/payment',
@@ -66,10 +71,10 @@ export const Routes = {
   enrollment: {
     ...routesFactory('/enrollments'),
   },
-  // enrollmentPayment: {
-  //   ...routesFactory('/enrollment-payments'),
-  //   pendingPayments: '/enrollment-payments/pending-payments'
-  // },
+  enrollmentPayment: {
+    ...routesFactory('/enrollment-payments'),
+    pendingPayments: '/enrollment-payments/pending-payments'
+  },
   invoice: {
     ...routesFactory('/invoices'),
   },

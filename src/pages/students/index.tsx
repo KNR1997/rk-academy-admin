@@ -58,7 +58,7 @@ export default function Students() {
           <div className="flex w-full flex-col items-center space-y-4 ms-auto md:flex-row md:space-y-0 xl:w-3/4">
             <Search
               onSearch={handleSearch}
-              placeholderText={t('form:input-placeholder-search-name')}
+              placeholderText={t('form:input-placeholder-search-name-or-student-number')}
             />
 
             {locale === Config.defaultLanguage && (

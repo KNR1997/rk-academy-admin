@@ -55,3 +55,4 @@ export { AdminIcon } from '@/components/icons/sidebar/admin';
 export { EventManagerIcon } from '@/components/icons/sidebar/event-manager';
 export { KeywordIcon } from '@/components/icons/sidebar/keyword';
 export { UserIconSimple } from '@/components/icons/sidebar/user';
+export { PaymentCardIcon } from '@/components/icons/sidebar/payment-card';

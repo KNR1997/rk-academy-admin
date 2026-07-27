@@ -21,10 +21,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ enrollment }) => {
   return (
     <Link
       href={{
-        pathname: Routes.myCourses.details(enrollment.id),
-        query: {
-          course: courseOfferingName,
-        },
+        pathname: Routes.myCourses.videos(enrollment.id),
+        // query: {
+        //   course: courseOfferingName,
+        // },
       }}
       className="overflow-hidden rounded-lg bg-white"
     >

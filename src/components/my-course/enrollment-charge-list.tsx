@@ -4,15 +4,15 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { useTranslation } from 'next-i18next';
 // utils
+import usePrice from '@/utils/use-price';
 import { useIsRTL } from '@/utils/locals';
+import { getMonthNameFromArray } from '@/utils/get-month-name';
 // types
-import { MappedPaginatorInfo } from '@/types';
-import { Enrollment, EnrollmentCharge, SortOrder } from '@/types';
+import { SortOrder } from '@/types';
+import { EnrollmentCharge, MappedPaginatorInfo } from '@/types';
 // components
 import { Table } from '@/components/ui/table';
-import Avatar from '@/components/common/avatar';
 import Pagination from '@/components/ui/pagination';
-import TitleWithSort from '@/components/ui/title-with-sort';
 import { NoDataFound } from '@/components/icons/no-data-found';
 
 export type IProps = {
@@ -22,14 +22,14 @@ export type IProps = {
   onOrdering: (current: any) => void;
 };
 
-const MyEnrollmentChargeList = ({
+const EnrollmentChargesList = ({
   enrollmentCharges,
   paginatorInfo,
   onPagination,
   onOrdering,
 }: IProps) => {
   const { t } = useTranslation();
-  const { alignLeft, alignRight } = useIsRTL();
+  const { alignLeft } = useIsRTL();
   const [sortingObj, setSortingObj] = useState<{
     sort: SortOrder;
     column: string | null;
@@ -54,81 +54,40 @@ const MyEnrollmentChargeList = ({
   });
 
   const columns = [
-    // {
-    //   title: t('table:table-item-id'),
-    //   dataIndex: 'id',
-    //   key: 'id',
-    //   align: alignLeft,
-    //   width: 120,
-    //   render: (id: number) => `#${t('table:table-item-id')}: ${id}`,
-    // },
-    // {
-    //   title: (
-    //     <TitleWithSort
-    //       title={t('table:table-item-student')}
-    //       ascending={
-    //         sortingObj.sort === SortOrder.Asc &&
-    //         sortingObj.column === 'enrollment__student__user__first_name'
-    //       }
-    //       isActive={sortingObj.column === 'enrollment__student__user__first_name'}
-    //     />
-    //   ),
-    //   className: 'cursor-pointer',
-    //   dataIndex: 'enrollment',
-    //   key: 'enrollment',
-    //   align: alignLeft,
-    //   width: 250,
-    //   ellipsis: true,
-    //   onHeaderCell: () => onHeaderClick('enrollment__student__user__first_name'),
-    //   render: (
-    //     enrollment: Enrollment,
-    //     { profile, email }: { profile: any; email: string },
-    //   ) => (
-    //     <div className="flex items-center">
-    //       <Avatar name={email} src={profile?.avatar?.thumbnail} />
-    //       <div className="flex flex-col whitespace-nowrap font-medium ms-2">
-    //         {enrollment?.student?.user.first_name}{' '}
-    //         {enrollment?.student?.user.last_name}
-    //         <span className="text-[13px] font-normal text-gray-500/80">
-    //           ST No. {enrollment?.student?.student_number}
-    //         </span>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
     {
-      title: t('table:table-item-course'),
-      dataIndex: 'enrollment',
-      key: 'enrollment',
+      title: t('table:table-item-month'),
+      dataIndex: 'billing_month',
+      key: 'billing_month',
       align: alignLeft,
-      width: 150,
-      render: (enrollment: Enrollment) => {
-        const courseOffering = enrollment?.course_offering;
+      width: 120,
+      render: (billing_month: number) => {
+        const monthName = getMonthNameFromArray(billing_month);
         return (
-          <div
-            className="overflow-hidden truncate whitespace-nowrap"
-            title={courseOffering?.course?.name}
-          >
-            {courseOffering?.course?.name} - {courseOffering?.grade_level.name}{' '}
-            - B{courseOffering?.batch}
+          <div className="overflow-hidden truncate whitespace-nowrap">
+            {monthName}
           </div>
         );
       },
     },
     {
-      title: t('table:table-item-payment-month'),
-      dataIndex: 'billing_month',
-      key: 'billing_month',
+      title: t('table:table-item-amount'),
+      dataIndex: 'amount',
+      key: 'amount',
       align: alignLeft,
       width: 150,
-      render: (billing_month: number, record: EnrollmentCharge) => (
-        <div className="overflow-hidden truncate whitespace-nowrap">
-          {record.billing_year}-{billing_month}
-        </div>
-      ),
+      render: function Render(value: number, record: EnrollmentCharge) {
+        const { price } = usePrice({
+          amount: Number(value),
+        });
+        return (
+          <span className="whitespace-nowrap" title={price}>
+            {price}
+          </span>
+        );
+      },
     },
     {
-      title: t('table:table-item-date'),
+      title: 'Payment Date',
       className: 'cursor-pointer',
       dataIndex: 'created_at',
       key: 'created_at',
@@ -140,7 +99,7 @@ const MyEnrollmentChargeList = ({
         dayjs.extend(timezone);
         return (
           <span className="whitespace-nowrap">
-            {dayjs.utc(date).tz(dayjs.tz.guess()).format('MMM D, YYYY h:mm A')}
+            {dayjs.utc(date).tz(dayjs.tz.guess()).format('MMM D, YYYY')}
           </span>
         );
       },
@@ -182,4 +141,4 @@ const MyEnrollmentChargeList = ({
   );
 };
 
-export default MyEnrollmentChargeList;
+export default EnrollmentChargesList;

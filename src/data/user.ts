@@ -27,6 +27,12 @@ import {
   Video,
   EnrollmentPaymentPaginator,
   EnrollmentChargePaginator,
+  EnrollmentPayment,
+  EnrollmentCharge,
+  Payment,
+  PaymentPaginator,
+  PaymentQueryOptions,
+  EnrollmentChargeQueryOptions,
 } from '@/types';
 
 export const useMeQuery = () => {
@@ -413,18 +419,18 @@ export const useMyEnrollmentsPaginatedQuery = (
 };
 
 export const useMyEnrollmentChargesPaginatedQuery = (
-  params: Partial<EnrollmentQueryOptions>,
+  params: Partial<EnrollmentChargeQueryOptions>,
 ) => {
   const { data, isLoading, error } = useQuery<EnrollmentChargePaginator, Error>(
     [API_ENDPOINTS.MY_ENROLLMENT_PAYMENTS, params],
-    () => userClient.getMyEnrollmentPaymentsPaginated(params),
+    () => userClient.getMyEnrollmentChargesPaginated(params),
     {
       keepPreviousData: true,
     },
   );
 
   return {
-    myEnrollmentCharges: data?.data ?? [],
+    enrollmentCharges: data?.data ?? [],
     paginatorInfo: mapPaginatorData(data as any),
     loading: isLoading,
     error,
@@ -485,6 +491,51 @@ export const useMyEnrollmentVideoQuery = ({ id }: { id: string }) => {
 
   return {
     video: data,
+    error,
+    isLoading,
+  };
+};
+
+export const useMyEnrollmentPaymentQuery = ({ id }: { id: string }) => {
+  const { data, error, isLoading } = useQuery<EnrollmentCharge, Error>(
+    [API_ENDPOINTS.MY_ENROLLMENT_PAYMENTS, { id }],
+    () => userClient.getMyEnrollmentPayment({ id }),
+  );
+
+  return {
+    enrollmentCharge: data,
+    error,
+    isLoading,
+  };
+};
+
+export const useMyPaymentsPaginatedQuery = (
+  params: Partial<PaymentQueryOptions>,
+) => {
+  const { data, isLoading, error } = useQuery<PaymentPaginator, Error>(
+    [API_ENDPOINTS.MY_PAYMENTS, params],
+    () => userClient.getMyPaymentsPaginated(params),
+    {
+      keepPreviousData: true,
+    },
+  );
+
+  return {
+    payments: data?.data ?? [],
+    paginatorInfo: mapPaginatorData(data as any),
+    loading: isLoading,
+    error,
+  };
+};
+
+export const useMyPaymentQuery = ({ id }: { id: string }) => {
+  const { data, error, isLoading } = useQuery<Payment, Error>(
+    [API_ENDPOINTS.MY_PAYMENTS, { id }],
+    () => userClient.getMyPayment({ id }),
+  );
+
+  return {
+    payment: data,
     error,
     isLoading,
   };

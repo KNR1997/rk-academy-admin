@@ -313,6 +313,17 @@ export interface EnrollmentPayment {
   amount: number;
 }
 
+export interface EnrollmentCharge {
+  id: string;
+  enrollment: Enrollment;
+  description: string;
+  amount: number;
+  billing_month: number;
+  billing_year: number;
+  due_date: string;
+  status: EnrollmentChargeStatus;
+}
+
 export interface GradeLevel {
   id: string;
   level: string;
@@ -597,7 +608,8 @@ export interface CreateStudentInput {
   first_name: string;
   last_name: string;
   email: string;
-  date_of_birth: string | null;
+  school: string;
+  // date_of_birth: string | null;
   // parent_guardian_name: string;
   // parent_guardian_phone: string;
   current_grade: string;
@@ -1286,6 +1298,17 @@ export interface EnrollmentQueryOptions extends QueryOptions {
   batch: string;
 }
 
+export interface EnrollmentChargeQueryOptions extends QueryOptions {
+  enrollment_id: string;
+}
+
+export interface PaymentQueryOptions extends QueryOptions {
+  name: string;
+  payment_method: string;
+  payment_date: string;
+  status: PaymentStatus;
+}
+
 export interface EnrollmentAnalyticsQueryOptions extends QueryOptions {
   grade_level: string;
 }
@@ -1471,6 +1494,8 @@ export interface EnrollmentPaymentPaginator extends PaginatorInfo<EnrollmentPaym
 
 export interface EnrollmentChargePaginator extends PaginatorInfo<EnrollmentCharge> {}
 
+export interface PaymentPaginator extends PaginatorInfo<Payment> {}
+
 export interface EnrollmentWithMonthsPaginator
   extends PaginatorInfo<EnrollmentWithMonth> {}
 
@@ -1547,6 +1572,13 @@ export enum OwnerShipTransferStatus {
   PROCESSING = 'processing',
   APPROVED = 'approved',
   REJECTED = 'rejected',
+}
+
+export enum EnrollmentChargeStatus {
+  PENDING = 'Pending',
+  INVOICED = 'Invoiced',
+  PAID = 'Paid',
+  CANCELLED = 'Cancelled',
 }
 
 export enum OrderStatus {

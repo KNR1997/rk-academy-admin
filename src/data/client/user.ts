@@ -9,18 +9,9 @@ import {
   ResetPasswordInput,
   MakeAdminInput,
   BlockUserInput,
-  WalletPointsInput,
   UpdateUser,
-  QueryOptionsType,
   UserPaginator,
   UserQueryOptions,
-  VendorQueryOptionsType,
-  KeyInput,
-  LicensedDomainPaginator,
-  LicenseAdditionalData,
-  CoursePaginator,
-  CourseQueryOptions,
-  Course,
   Enrollment,
   EnrollmentQueryOptions,
   EnrollmentPaginator,
@@ -29,6 +20,13 @@ import {
   Video,
   ResetTeacherPassword,
   ResetUserPasswordInput,
+  EnrollmentPaymentPaginator,
+  EnrollmentCharge,
+  EnrollmentChargePaginator,
+  PaymentPaginator,
+  PaymentQueryOptions,
+  Payment,
+  EnrollmentChargeQueryOptions,
 } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
@@ -165,16 +163,16 @@ export const userClient = {
       },
     );
   },
-  getMyEnrollmentPaymentsPaginated: ({
-    name,
+  getMyEnrollmentChargesPaginated: ({
+    enrollment_id,
     ...params
-  }: Partial<EnrollmentQueryOptions>) => {
-    return HttpClient.get<EnrollmentPaymentPaginator>(
-      `${API_ENDPOINTS.MY_ENROLLMENT_PAYMENTS}/`,
+  }: Partial<EnrollmentChargeQueryOptions>) => {
+    return HttpClient.get<EnrollmentChargePaginator>(
+      `${API_ENDPOINTS.MY_ENROLLMENTS}/${enrollment_id}/charges`,
       {
         searchJoin: 'and',
         ...params,
-        search: HttpClient.formatSearchParams({ name }),
+        // search: HttpClient.formatSearchParams({ name }),
       },
     );
   },
@@ -197,5 +195,24 @@ export const userClient = {
   },
   getMyEnrollmentVideo: ({ id }: { id: string }) => {
     return HttpClient.get<Video>(`${API_ENDPOINTS.STUDENT_WATCH_VIDEO}/${id}`);
+  },
+  getMyEnrollmentPayment: ({ id }: { id: string }) => {
+    return HttpClient.get<EnrollmentCharge>(`${API_ENDPOINTS.MY_ENROLLMENT_PAYMENTS}/${id}`);
+  },
+  getMyPaymentsPaginated: ({
+    name,
+    ...params
+  }: Partial<PaymentQueryOptions>) => {
+    return HttpClient.get<PaymentPaginator>(
+      `${API_ENDPOINTS.MY_PAYMENTS}/`,
+      {
+        searchJoin: 'and',
+        ...params,
+        search: HttpClient.formatSearchParams({ name }),
+      },
+    );
+  },
+  getMyPayment: ({ id }: { id: string }) => {
+    return HttpClient.get<Payment>(`${API_ENDPOINTS.MY_PAYMENTS}/${id}`);
   },
 };

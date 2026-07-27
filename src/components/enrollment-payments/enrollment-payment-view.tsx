@@ -147,7 +147,7 @@ const EnrollmentPaymentView = () => {
       const { amount: monthAmount } = calculateMonthFee(month.value, data.fee);
 
       return {
-        description: `${month.label} ${currentYear} Tuition`,
+        description: `Rs.{month.label} Rs.{currentYear} Tuition`,
         billing_month: month.value,
         billing_year: currentYear,
         amount: monthAmount,
@@ -207,14 +207,14 @@ const EnrollmentPaymentView = () => {
                       <span className="font-medium text-gray-700">
                         {item.monthName}
                       </span>
-                      <span className="text-gray-900">${item.amount}</span>
+                      <span className="text-gray-900">Rs.{item.amount}</span>
                     </div>
                     <div className="mt-1 text-xs text-gray-500">
                       {item.reason}
                       {item.discount > 0 && (
                         <span className="text-green-600">
                           {' '}
-                          (Saved ${item.discount})
+                          (Saved Rs.{item.discount})
                         </span>
                       )}
                     </div>
@@ -226,20 +226,20 @@ const EnrollmentPaymentView = () => {
               {totalDiscount && totalDiscount > 0 && (
                 <div className="mb-2 flex justify-between text-sm text-green-600">
                   <span>Total savings:</span>
-                  <span>-${totalDiscount}</span>
+                  <span>-Rs.{totalDiscount}</span>
                 </div>
               )}
 
               <div className="flex justify-between border-t border-gray-300 pt-2 font-bold">
                 <span>Total to pay:</span>
-                <span className="text-lg text-primary">${totalFee}</span>
+                <span className="text-lg text-primary">Rs.{totalFee}</span>
               </div>
 
               {/* Info note */}
               <div className="mt-3 text-xs text-gray-500">
-                <p>* Current & upcoming months: Full fee (${data?.fee})</p>
+                <p>* Current & upcoming months: Full fee (Rs.{data?.fee})</p>
                 <p>
-                  * Past months: ${data?.fee - 500} (${500} discount)
+                  * Past months: Rs.{data?.fee - 500} (Rs.{500} discount)
                 </p>
               </div>
             </div>
@@ -256,7 +256,7 @@ const EnrollmentPaymentView = () => {
           />
           {errorMessage ? (
             <Alert
-              message={t(`common:${errorMessage}`)}
+              message={t(`common:Rs.{errorMessage}`)}
               variant="error"
               closeable={true}
               className="flex mb-2"

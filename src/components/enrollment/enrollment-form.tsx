@@ -35,11 +35,11 @@ import SelectCourseOffering from '@/components/course-offering/select-course-off
 type FormValues = {
   student: Student;
   course_offering: CourseOffering;
-  is_active: { label: string; value: boolean };
+  // is_active: { label: string; value: boolean };
 };
 
 const defaultValues = {
-  is_active: activeInactiveStatusOptions.find((option) => option.value == true),
+  // is_active: activeInactiveStatusOptions.find((option) => option.value == true),
 };
 
 type IProps = {
@@ -47,7 +47,7 @@ type IProps = {
     id?: string | null;
     student?: Student | null;
     course_offering?: CourseOffering | null;
-    is_active?: boolean | null;
+    // is_active?: boolean | null;
   } | null;
 };
 
@@ -73,9 +73,9 @@ export default function CreateOrUpdateEnrollmentForm({
     defaultValues: initialValues
       ? {
           ...initialValues,
-          is_active: activeInactiveStatusOptions.find(
-            (option) => option.value == initialValues.is_active,
-          ),
+          // is_active: activeInactiveStatusOptions.find(
+          //   (option) => option.value == initialValues.is_active,
+          // ),
         }
       : defaultValues,
     //@ts-ignore
@@ -92,7 +92,7 @@ export default function CreateOrUpdateEnrollmentForm({
     const input = {
       student: values.student.id,
       course_offering: values.course_offering.id,
-      is_active: values.is_active.value,
+      // is_active: values.is_active.value,
     };
     const mutationOptions = {
       onSuccess: (data: Enrollment) => {
@@ -107,7 +107,7 @@ export default function CreateOrUpdateEnrollmentForm({
     if (initialValues?.id) {
       updateEnrollment(
         {
-          is_active: values.is_active.value,
+          // is_active: values.is_active.value,
           id: initialValues.id,
         },
         mutationOptions,
@@ -142,7 +142,7 @@ export default function CreateOrUpdateEnrollmentForm({
                 errors={errors}
                 // gradeLevel={student?.current_grade?.name}
               />
-              <div className="mb-5">
+              {/* <div className="mb-5">
                 <SelectInput
                   label={t('form:input-label-status')}
                   name="is_active"
@@ -152,7 +152,7 @@ export default function CreateOrUpdateEnrollmentForm({
                   required
                 />
                 <ValidationError message={t(errors.is_active?.message)} />
-              </div>
+              </div> */}
             </div>
           </Card>
         </div>

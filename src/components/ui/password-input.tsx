@@ -26,6 +26,7 @@ const classes = {
   outline: 'border border-border-base focus:border-accent',
   shadow: 'focus:shadow',
 };
+
 const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
   (
     {
@@ -43,7 +44,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
       required,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const [show, setShow] = useState(false);
 
@@ -55,7 +56,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
         [classes.outline]: variant === 'outline',
       },
       shadow == true && classes.shadow,
-      inputClassName
+      inputClassName,
     );
 
     return (
@@ -93,7 +94,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
           />
           <label
             htmlFor={name}
-            className="absolute top-5 -mt-2 text-body end-4"
+            className="absolute top-0 -mt-0 h-[46px] flex h-6 items-center border-l border-solid border-border-base pl-3 text-body end-4"
             onClick={() => setShow((prev) => !prev)}
           >
             {show ? (
@@ -108,7 +109,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
         )}
       </div>
     );
-  }
+  },
 );
 
 PasswordInput.displayName = 'PasswordInput';

@@ -62,159 +62,15 @@ export const siteSettings = {
         ],
       },
 
-      content: {
-        href: '',
-        label: 'text-content-management',
-        icon: 'ShopIcon',
-        childMenu: [
-          {
-            href: '',
-            label: 'sidebar-nav-item-subjects',
-            icon: 'ProductsIcon',
-            childMenu: [
-              {
-                href: Routes.subject.list,
-                label: 'text-all-subjects',
-                icon: 'ProductsIcon',
-              },
-              {
-                href: Routes.subject.create,
-                label: 'text-add-all-subjects',
-                icon: 'ProductsIcon',
-              },
-            ],
-          },
-          // {
-          //   href: '',
-          //   label: 'sidebar-nav-item-courses',
-          //   icon: 'InventoryIcon',
-          //   childMenu: [
-          //     {
-          //       href: Routes.course.list,
-          //       label: 'text-all-courses',
-          //       icon: 'InventoryIcon',
-          //     },
-          //     {
-          //       href: Routes.course.create,
-          //       label: 'text-add-all-courses',
-          //       icon: 'InventoryIcon',
-          //     },
-          //   ],
-          // },
-          {
-            href: '',
-            label: 'sidebar-nav-item-course-offerings',
-            icon: 'OrdersIcon',
-            childMenu: [
-              {
-                href: Routes.courseOffering.list,
-                label: 'text-all-course-offerings',
-                icon: 'OrdersIcon',
-              },
-              {
-                href: Routes.courseOffering.create,
-                label: 'text-add-all-course-offerings',
-                icon: 'OrdersIcon',
-              },
-            ],
-          },
-          {
-            href: '',
-            label: 'sidebar-nav-item-course-videos',
-            icon: 'VideoIcon',
-            childMenu: [
-              {
-                href: Routes.video.list,
-                label: 'text-all-videos',
-                icon: 'VideoIcon',
-              },
-              {
-                href: Routes.video.create,
-                label: 'text-add-all-video',
-                icon: 'VideoIcon',
-              },
-            ],
-          },
-          // {
-          //   href: '',
-          //   label: 'sidebar-nav-item-grade-levels',
-          //   icon: 'InformationIcon',
-          //   childMenu: [
-          //     {
-          //       href: Routes.gradeLevel.list,
-          //       label: 'text-all-grade-levels',
-          //       icon: 'InformationIcon',
-          //     },
-          //     {
-          //       href: Routes.gradeLevel.create,
-          //       label: 'text-add-all-grade-levels',
-          //       icon: 'InformationIcon',
-          //     },
-          //   ],
-          // },
-          {
-            href: '',
-            label: 'sidebar-nav-item-enrollments',
-            icon: 'TagIcon',
-            childMenu: [
-              {
-                href: Routes.enrollment.list,
-                label: 'text-all-enrollments',
-                icon: 'TagIcon',
-              },
-              {
-                href: Routes.enrollment.create,
-                label: 'text-add-all-enrollments',
-                icon: 'TagIcon',
-              },
-            ],
-          },
-          // {
-          //   href: '',
-          //   label: 'sidebar-nav-item-enrollment-payments',
-          //   icon: 'TaxesIcon',
-          //   childMenu: [
-          //     {
-          //       href: Routes.enrollmentPayment.list,
-          //       label: 'text-all-payments',
-          //       icon: 'TaxesIcon',
-          //     },
-          //     {
-          //       href: Routes.enrollmentPayment.create,
-          //       label: 'text-add-payments',
-          //       icon: 'TaxesIcon',
-          //     },
-          //     {
-          //       href: Routes.enrollmentPayment.pendingPayments,
-          //       label: 'text-pending-payments',
-          //       icon: 'PendingIcon',
-          //     },
-          //   ],
-          // },
-          {
-            href: '',
-            label: 'sidebar-nav-item-invoices',
-            icon: 'TaxesIcon',
-            childMenu: [
-              {
-                href: Routes.invoice.list,
-                label: 'text-all-invoices',
-                icon: 'TagIcon',
-              },
-            ],
-          },
-        ],
-      },
-
       user: {
         href: '',
         label: 'text-user-control',
         icon: 'SettingsIcon',
         childMenu: [
           {
-            href: Routes.user.list,
-            label: 'text-all-users',
-            icon: 'UsersIcon',
+            href: Routes.student.list,
+            label: 'text-student-list',
+            icon: 'StudentIcon',
           },
           {
             href: Routes.adminList,
@@ -232,9 +88,55 @@ export const siteSettings = {
             icon: 'EventManagerIcon',
           },
           {
-            href: Routes.student.list,
-            label: 'text-student-list',
-            icon: 'StudentIcon',
+            href: Routes.user.list,
+            label: 'text-all-users',
+            icon: 'UsersIcon',
+          },
+        ],
+      },
+
+      enrollment: {
+        href: '',
+        label: 'text-enrollment-management',
+        icon: 'ReportIcon',
+        childMenu: [
+          {
+            href: Routes.enrollment.list,
+            label: 'text-all-enrollments',
+            icon: 'TagIcon',
+          },
+          {
+            href: Routes.enrollmentPayment.list,
+            label: 'sidebar-nav-item-enrollment-payments',
+            icon: 'PaymentCardIcon',
+          },
+          {
+            href: Routes.invoice.list,
+            label: 'text-all-invoices',
+            icon: 'TaxesIcon',
+          },
+        ],
+      },
+
+      content: {
+        href: '',
+        label: 'text-content-management',
+        icon: 'ShopIcon',
+        childMenu: [
+          {
+            href: Routes.subject.list,
+            label: 'text-all-subjects',
+            icon: 'ProductsIcon',
+          },
+          {
+            href: Routes.courseOffering.list,
+            label: 'text-all-course-offerings',
+            icon: 'OrdersIcon',
+          },
+          {
+            href: Routes.video.list,
+            label: 'text-all-videos',
+            icon: 'VideoIcon',
           },
         ],
       },
@@ -257,23 +159,23 @@ export const siteSettings = {
       //   ],
       // },
 
-      report: {
-        href: '',
-        label: 'text-reports',
-        icon: 'ReportIcon',
-        childMenu: [
-          {
-            href: Routes.reports.incomeReport,
-            label: 'text-income-report',
-            icon: 'ReportIcon',
-          },
-          // {
-          //   href: Routes.reports.pendingPayments,
-          //   label: 'text-pending-payments',
-          //   icon: 'ShiftPendingIcon',
-          // },
-        ],
-      },
+      // report: {
+      //   href: '',
+      //   label: 'text-reports',
+      //   icon: 'ReportIcon',
+      //   childMenu: [
+      //     {
+      //       href: Routes.reports.incomeReport,
+      //       label: 'text-income-report',
+      //       icon: 'ReportIcon',
+      //     },
+      //     // {
+      //     //   href: Routes.reports.pendingPayments,
+      //     //   label: 'text-pending-payments',
+      //     //   icon: 'ShiftPendingIcon',
+      //     // },
+      //   ],
+      // },
     },
 
     teacher: {
@@ -329,7 +231,7 @@ export const siteSettings = {
         icon: 'DashboardIcon',
         permissions: studentOnly,
       },
-            {
+      {
         href: Routes.profileUpdate,
         label: 'sidebar-nav-item-profile',
         icon: 'UserIconSimple',
@@ -341,12 +243,18 @@ export const siteSettings = {
         icon: 'DiaryIcon',
         permissions: studentOnly,
       },
-      {
-        href: Routes.myEnrollmentPayments.list,
-        label: 'sidebar-nav-item-my-payments',
-        icon: 'TransactionsIcon',
-        permissions: studentOnly,
-      },
+      // {
+      //   href: Routes.myEnrollmentPayments.list,
+      //   label: 'sidebar-nav-item-my-payments',
+      //   icon: 'TransactionsIcon',
+      //   permissions: studentOnly,
+      // },
+      // {
+      //   href: Routes.myPayments.list,
+      //   label: 'sidebar-nav-item-my-payments',
+      //   icon: 'TransactionsIcon',
+      //   permissions: studentOnly,
+      // },
     ],
 
     // shop: {

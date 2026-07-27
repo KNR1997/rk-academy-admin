@@ -8,6 +8,7 @@ import usePrice from '@/utils/use-price';
 import { useIsRTL } from '@/utils/locals';
 import { formatString } from '@/utils/format-string';
 import { ORDER_STATUS } from '@/utils/order-status';
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // types
 import { InvoiceLineItem, OrderStatus, PaymentStatus } from '@/types';
 // client
@@ -19,7 +20,7 @@ import { useInvoiceQuery, useUpdateInvoiceMutation } from '@/data/invoice';
 import Card from '@/components/common/card';
 import Button from '@/components/ui/button';
 import { Table } from '@/components/ui/table';
-import Layout from '@/components/layouts/admin';
+import Layout from '@/components/layouts/app';
 import Loader from '@/components/ui/loader/loader';
 import { PayIcon } from '@/components/icons/pay-icon';
 import SelectInput from '@/components/ui/select-input';
@@ -137,22 +138,6 @@ export default function InvoiceDetailsPage() {
   }
 
   const columns = [
-    // {
-    //   dataIndex: 'image',
-    //   key: 'image',
-    //   width: 70,
-    //   render: (image: Attachment) => (
-    //     <div className="relative h-[50px] w-[50px]">
-    //       <Image
-    //         src={image?.thumbnail ?? siteSettings.product.placeholder}
-    //         alt="alt text"
-    //         fill
-    //         sizes="(max-width: 768px) 100vw"
-    //         className="object-fill"
-    //       />
-    //     </div>
-    //   ),
-    // },
     {
       title: t('table:table-item-products'),
       dataIndex: 'description',
@@ -297,7 +282,7 @@ export default function InvoiceDetailsPage() {
           </div>
         </div>
 
-        {invoice?.notes ? (
+        {invoice?.notes && (
           <div>
             <h2 className="mt-12 mb-5 text-xl font-bold text-heading">
               Purchase Note
@@ -306,8 +291,6 @@ export default function InvoiceDetailsPage() {
               {invoice?.notes}
             </div>
           </div>
-        ) : (
-          ''
         )}
 
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
@@ -322,11 +305,36 @@ export default function InvoiceDetailsPage() {
               </span>
             </div>
           </div>
+
+          <div className="mb-10 w-full sm:mb-0 sm:w-1/2 sm:pe-8">
+            <h3 className="mb-3 border-b border-border-200 pb-2 font-semibold text-heading">
+              Student Details
+            </h3>
+
+            <div className="flex flex-col items-start space-y-1 text-sm text-body">
+              <span>
+                {invoice?.enrollment?.student?.user?.first_name}{' '}
+                {invoice?.enrollment?.student?.user?.last_name}
+              </span>
+              {invoice?.enrollment?.student?.parent_guardian_phone && (
+                <span>
+                  {invoice?.enrollment?.student?.parent_guardian_phone}
+                </span>
+              )}
+              {/* {invoice?.customer_contact && (
+                <span>{order?.customer_contact}</span>
+              )} */}
+            </div>
+          </div>
         </div>
       </Card>
     </>
   );
 }
+
+InvoiceDetailsPage.authenticate = {
+  permissions: adminAndCoordinatorOnly,
+};
 InvoiceDetailsPage.Layout = Layout;
 
 export const getServerSideProps = async ({ locale }: any) => ({
