@@ -324,6 +324,13 @@ export interface EnrollmentCharge {
   status: EnrollmentChargeStatus;
 }
 
+export interface CreateEnrollmentCharge {
+  description: string;
+  amount: number;
+  billing_month: number;
+  billing_year: number;
+}
+
 export interface GradeLevel {
   id: string;
   level: string;
@@ -663,7 +670,7 @@ export interface CreateEnrollmentPaymentInput {
   enrollment_id: string;
   issue_date: string;
   due_date: string;
-  charges: EnrollmentCharge[];
+  charges: CreateEnrollmentCharge[];
 }
 
 export interface CreateWithdrawInput {
