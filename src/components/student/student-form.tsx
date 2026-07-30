@@ -245,10 +245,8 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                   variant="outline"
                   // disabled={!isEditMode}
                   required
-                />
-                <CopyButton
-                  onClick={handleCopyEmail}
-                  title={t('common:copy-email')}
+                  showCopyToClipboard
+                  onCopyToClipboard={handleCopyEmail}
                 />
               </div>
 
@@ -257,15 +255,13 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                 <div className="relative mb-5">
                   <PasswordInput
                     label={t('form:input-label-password')}
+                    className="mb-4"
                     {...register('password')}
                     variant="outline"
                     error={t(errors.password?.message!)}
                     required
-                  />
-                  <CopyButton
-                    onClick={handleCopyPassword}
-                    title={t('common:copy-password')}
-                    className="right-14"
+                    showCopyToClipboard
+                    onCopyToClipboard={handleCopyPassword}
                   />
                 </div>
               )}
@@ -279,11 +275,13 @@ export default function CreateOrUpdateStudentForm({ initialValues }: IProps) {
                     error={t(errors.student_number?.message!)}
                     variant="outline"
                     disabled
+                    showCopyToClipboard
+                    onCopyToClipboard={handleCopyStudentNumber}
                   />
-                  <CopyButton
+                  {/* <CopyButton
                     onClick={handleCopyStudentNumber}
                     title={t('common:copy-student-number')}
-                  />
+                  /> */}
                 </div>
               )}
             </div>
