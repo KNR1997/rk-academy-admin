@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 // utils
+import { useCopyToClipboard } from '@/utils/use-copy-to-clipboard';
 import { handleMutationError } from '@/utils/handle-mutation-error';
 // form-validations
 import { videoValidationSchema } from './video-validation-schema';
@@ -48,12 +49,15 @@ type IProps = {
 export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const { copyToClipboard } = useCopyToClipboard();
+  // states
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     setError,
+    watch,
     control,
     formState: { errors },
   } = useForm<FormValues>({
@@ -72,6 +76,17 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
     //@ts-ignore
     resolver: yupResolver(videoValidationSchema),
   });
+
+    // Watch fields
+  const videoUrl = watch('video_url');
+
+
+  const handleCopyVideoUrl = () =>
+    copyToClipboard(
+      videoUrl,
+      t('common:video-url-copied'),
+      t('common:copy-failed'),
+    );
 
   // mutations
   const { mutate: createVideo, isLoading: creating } = useCreateVideoMutation();
@@ -160,6 +175,8 @@ export default function CreateOrUpdateVideoForm({ initialValues }: IProps) {
                 variant="outline"
                 className="mb-4"
                 error={t(errors.video_url?.message!)}
+                showCopyToClipboard
+                onCopyToClipboard={handleCopyVideoUrl}
                 required
               />
               <Input
