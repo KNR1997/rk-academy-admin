@@ -147,18 +147,16 @@ const EnrollmentPaymentView = () => {
       const { amount: monthAmount } = calculateMonthFee(month.value, data.fee);
 
       return {
-        description: `Rs.{month.label} Rs.{currentYear} Tuition`,
+        description: `${month.label} ${currentYear} Tuition`,
         billing_month: month.value,
         billing_year: currentYear,
         amount: monthAmount,
-        // payment_month: month.value,
-        // payment_year: currentYear,
       };
     });
 
     const today = new Date();
     const formattedDate = today.toISOString().split('T')[0];
-  
+
     const input = {
       student: data.studentId,
       enrollment_id: data.enrollmentId,
@@ -256,7 +254,7 @@ const EnrollmentPaymentView = () => {
           />
           {errorMessage ? (
             <Alert
-              message={t(`common:Rs.{errorMessage}`)}
+              message={t(`common:${errorMessage}`)}
               variant="error"
               closeable={true}
               className="flex mb-2"
