@@ -1,8 +1,9 @@
-import { Eye } from '@/components/icons/eye-icon';
-import { EyeOff } from '@/components/icons/eye-off-icon';
+import Link from './link';
 import cn from 'classnames';
 import React, { InputHTMLAttributes, useState } from 'react';
-import Link from './link';
+import { Eye } from '@/components/icons/eye-icon';
+import { CopyIcon } from '@/components/icons/copy';
+import { EyeOff } from '@/components/icons/eye-off-icon';
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -15,6 +16,8 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   variant?: 'normal' | 'solid' | 'outline';
   error: string | undefined;
   required?: boolean;
+  showCopyToClipboard?: boolean;
+  onCopyToClipboard?: any;
 }
 
 const classes = {
@@ -42,6 +45,8 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
       type = 'text',
       forgotPageLink = '',
       required,
+      showCopyToClipboard = false,
+      onCopyToClipboard,
       ...rest
     },
     ref,
@@ -92,9 +97,18 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             spellCheck="false"
             {...rest}
           />
+          {showCopyToClipboard && onCopyToClipboard && (
+            <button
+              type="button"
+              className="absolute top-5 -mt-2 text-body end-12"
+              onClick={() => onCopyToClipboard()}
+            >
+              <CopyIcon className="h-5 w-5" />
+            </button>
+          )}
           <label
             htmlFor={name}
-            className="absolute top-0 -mt-0 h-[46px] flex h-6 items-center border-l border-solid border-border-base pl-3 text-body end-4"
+            className="absolute top-5 -mt-2 text-body end-4"
             onClick={() => setShow((prev) => !prev)}
           >
             {show ? (

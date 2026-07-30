@@ -1,7 +1,8 @@
-import TooltipLabel from '@/components/ui/tooltip-label';
 import cn from 'classnames';
-import React, { InputHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
+import React, { InputHTMLAttributes } from 'react';
+import { CopyIcon } from '@/components/icons/copy';
+import TooltipLabel from '@/components/ui/tooltip-label';
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -17,6 +18,8 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   variant?: 'normal' | 'solid' | 'outline';
   dimension?: 'small' | 'medium' | 'big';
   showLabel?: boolean;
+  showCopyToClipboard?: boolean;
+  onCopyToClipboard?: any;
   required?: boolean;
 }
 
@@ -50,6 +53,8 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       inputClassName,
       disabled,
       showLabel = true,
+      showCopyToClipboard = false,
+      onCopyToClipboard,
       required,
       toolTipText,
       labelClassName,
@@ -84,27 +89,38 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
         ) : (
           ''
         )}
-        <input
-          id={name}
-          name={name}
-          type={type}
-          ref={ref}
-          className={twMerge(
-            cn(
-              disabled
-                ? `cursor-not-allowed border-[#D4D8DD] bg-[#EEF1F4] ${numberDisable} select-none`
-                : '',
-              rootClassName,
-            ),
+        <div className="relative">
+          <input
+            id={name}
+            name={name}
+            type={type}
+            ref={ref}
+            className={twMerge(
+              cn(
+                disabled
+                  ? `cursor-not-allowed border-[#D4D8DD] bg-[#EEF1F4] ${numberDisable} select-none`
+                  : '',
+                rootClassName,
+              ),
+            )}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+            disabled={disabled}
+            aria-invalid={error ? 'true' : 'false'}
+            {...rest}
+          />
+          {showCopyToClipboard && onCopyToClipboard && (
+            <button
+              type="button"
+              className="absolute top-5 -mt-2 text-body end-4"
+              onClick={() => onCopyToClipboard()}
+            >
+              <CopyIcon className="h-5 w-5" />
+            </button>
           )}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
-          disabled={disabled}
-          aria-invalid={error ? 'true' : 'false'}
-          {...rest}
-        />
+        </div>
         {note && <p className="mt-2 text-xs text-body">{note}</p>}
         {error && (
           <p className="my-2 text-xs text-red-500 text-start">{error}</p>
