@@ -352,9 +352,21 @@ export const siteSettings = {
         permissions: coordinatorOnly,
       },
       {
+        href: Routes.enrollmentPayment.list,
+        label: 'sidebar-nav-item-enrollment-payments',
+        icon: 'PaymentCardIcon',
+        permissions: coordinatorOnly,
+      },
+      {
         href: Routes.invoice.list,
         label: 'sidebar-nav-item-invoices',
         icon: 'TaxesIcon',
+        permissions: coordinatorOnly,
+      },
+      {
+        href: Routes.video.list,
+        label: 'text-course-videos',
+        icon: 'VideoIcon',
         permissions: coordinatorOnly,
       },
       // {
