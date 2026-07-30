@@ -542,6 +542,7 @@
   "text-all-courses": "All Courses",
   "text-all-course-offerings": "All Course Offerings",
   "text-all-videos": "All Videos",
+  "text-course-videos": "Course Videos",
   "text-all-grade-levels": "All Grade Levels",
   "text-all-enrollments": "All Enrollments",
   "text-all-payments": "All Payments",
@@ -637,6 +638,7 @@
   "email-copied": "Email copied to clipboard!",
   "password-copied": "Password copied to clipboard!",
   "student-number-copied": "Student number copied to clipboard!",
+  "video-url-copied": "Video url copied to clipboard!",
   "copy-failed": "Failed to copy to clipboard",
   "text-pixel-dot": "pixel."
 }
