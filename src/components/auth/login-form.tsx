@@ -76,12 +76,12 @@ const LoginForm = () => {
             />
             <PasswordInput
               label={t('form:input-label-password')}
-              forgotPassHelpText={t('form:input-forgot-password-label')}
+              // forgotPassHelpText={t('form:input-forgot-password-label')}
               {...register('password')}
               error={t(errors?.password?.message!)}
               variant="outline"
               className="mb-4"
-              forgotPageLink={Routes.forgotPassword}
+              // forgotPageLink={Routes.forgotPassword}
             />
             <Button className="w-full" loading={isLoading} disabled={isLoading}>
               {t('form:button-label-login')}
