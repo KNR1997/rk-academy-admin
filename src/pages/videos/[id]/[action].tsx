@@ -4,11 +4,11 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // configs
 import { Config } from '@/config';
 // utils
-import { adminOnly } from '@/utils/auth-utils';
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // hooks
 import { useVideoQuery } from '@/data/video';
 // components
-import Layout from '@/components/layouts/admin';
+import AppLayout from '@/components/layouts/app';
 import Loader from '@/components/ui/loader/loader';
 import ErrorMessage from '@/components/ui/error-message';
 import CreateOrUpdateVideoForm from '@/components/video/video-form';
@@ -44,9 +44,9 @@ export default function UpdateVideoPage() {
 }
 
 UpdateVideoPage.authenticate = {
-  permissions: adminOnly,
+  permissions: adminAndCoordinatorOnly,
 };
-UpdateVideoPage.Layout = Layout;
+UpdateVideoPage.Layout = AppLayout;
 
 export const getServerSideProps = async ({ locale }: any) => ({
   props: {

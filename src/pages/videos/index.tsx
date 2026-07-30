@@ -7,12 +7,12 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Config } from '@/config';
 import { Routes } from '@/config/routes';
 // utils
-import { adminOnly } from '@/utils/auth-utils';
+import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
 // hooks
 import { useVideosQuery } from '@/data/video';
 // components
 import Card from '@/components/common/card';
-import Layout from '@/components/layouts/admin';
+import AppLayout from '@/components/layouts/app';
 import Search from '@/components/common/search';
 import Loader from '@/components/ui/loader/loader';
 import LinkButton from '@/components/ui/link-button';
@@ -142,9 +142,9 @@ export default function Videos() {
 }
 
 Videos.authenticate = {
-  permissions: adminOnly,
+  permissions: adminAndCoordinatorOnly,
 };
-Videos.Layout = Layout;
+Videos.Layout = AppLayout;
 
 export const getStaticProps = async ({ locale }: any) => ({
   props: {
