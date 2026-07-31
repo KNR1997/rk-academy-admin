@@ -1241,6 +1241,7 @@ export interface GradeLevelQueryOptions extends QueryOptions {
 
 export interface StudentQueryOptions extends QueryOptions {
   name: string;
+  current_grade__level: string;
 }
 
 export interface StudentEnrollmentQueryOptions extends QueryOptions {
