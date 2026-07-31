@@ -54,7 +54,7 @@ export default function Invoices() {
           <div className="flex w-full flex-col items-center space-y-4 ms-auto md:flex-row md:space-y-0 xl:w-3/4">
             <Search
               onSearch={handleSearch}
-              placeholderText={t('form:input-placeholder-search-invoice-number')}
+              placeholderText="Search by Invoice number, Student name / student number"
             />
 
             {/* {locale === Config.defaultLanguage && (
