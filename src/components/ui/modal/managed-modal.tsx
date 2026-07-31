@@ -14,6 +14,9 @@ const PaymentView = dynamic(
 const ResetTeacherPasswordView = dynamic(
   () => import('@/components/user/reset-teacher-password-view'),
 );
+const ResetStudentPasswordView = dynamic(
+  () => import('@/components/student/reset-student-password-view'),
+);
 const ResetPasswordView = dynamic(
   () => import('@/components/user/reset-password-view'),
 );
@@ -81,6 +84,8 @@ function renderModal(view: MODAL_VIEWS | undefined, data: any) {
   switch (view) {
     case 'RESET_TEACHER_PASSWORD':
       return <ResetTeacherPasswordView />;
+    case 'RESET_STUDENT_PASSWORD':
+      return <ResetStudentPasswordView />;
     case 'RESET_PASSWORD':
       return <ResetPasswordView />;
     case 'DELETE_SUBJECT':

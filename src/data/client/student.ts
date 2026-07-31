@@ -3,6 +3,8 @@ import {
   Enrollment,
   EnrollmentPaginator,
   QueryOptions,
+  ResetStudentPassword,
+  ResetTeacherPassword,
   Student,
   StudentPaginator,
   StudentQueryOptions,
@@ -33,5 +35,11 @@ export const studentClient = {
   },
   me: () => {
     return HttpClient.get<Student>(`${API_ENDPOINTS.STUDENTS}/me`);
+  },
+  resetStudentPassword: (variables: ResetStudentPassword) => {
+    return HttpClient.post<any>(
+      `${API_ENDPOINTS.STUDENTS}/${variables.student_id}/reset-password`,
+      variables,
+    );
   },
 };

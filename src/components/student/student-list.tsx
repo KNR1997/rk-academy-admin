@@ -13,6 +13,7 @@ import Avatar from '@/components/common/avatar';
 import Badge from '@/components/ui/badge/badge';
 import Pagination from '@/components/ui/pagination';
 import TitleWithSort from '@/components/ui/title-with-sort';
+import ActionButtons from '@/components/common/action-buttons';
 import { NoDataFound } from '@/components/icons/no-data-found';
 import LanguageSwitcher from '@/components/ui/lang-action/action';
 
@@ -164,12 +165,11 @@ const StudentList = ({
       align: alignRight,
       width: 120,
       render: (id: string, record: Student) => (
-        <LanguageSwitcher
-          slug={id}
-          record={record}
-          // deleteModalView="DELETE_SUBJECT"
+        <ActionButtons
+          id={id}
+          editUrl={Routes.student.editWithoutLang(record.id)}
           deleteBySlug={record.id}
-          routes={Routes?.student}
+          resetStudentPasswordButton={true}
         />
       ),
     },

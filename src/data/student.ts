@@ -120,3 +120,13 @@ export const useStudentMeQuery = () => {
     refetchOnMount: false,
   });
 };
+
+export const useResetStudentPasswordMutation = () => {
+  const { t } = useTranslation();
+
+  return useMutation(studentClient.resetStudentPassword, {
+    onSuccess: () => {
+      toast.success(t('common:successfully-updated'));
+    },
+  });
+};

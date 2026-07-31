@@ -44,6 +44,7 @@ type Props = {
   changeRefundStatus?: boolean;
   showMakeAdminButton?: boolean;
   resetPasswordButton?: boolean;
+  resetStudentPasswordButton?: boolean;
   resetTeacherPasswordButton?: boolean;
   showReplyQuestion?: boolean;
   customLocale?: string;
@@ -77,6 +78,7 @@ const ActionButtons = ({
   changeRefundStatus = false,
   showMakeAdminButton = false,
   resetPasswordButton = false,
+  resetStudentPasswordButton = false,
   resetTeacherPasswordButton = false,
   showReplyQuestion = false,
   customLocale,
@@ -129,6 +131,10 @@ const ActionButtons = ({
 
   function handleResetTeacherPassword() {
     openModal('RESET_TEACHER_PASSWORD', id);
+  }
+
+  function handleResetStudentPassword() {
+    openModal('RESET_STUDENT_PASSWORD', id);
   }
 
   function handleResetPassword() {
@@ -207,6 +213,15 @@ const ActionButtons = ({
       {resetTeacherPasswordButton && (
         <button
           onClick={handleResetTeacherPassword}
+          className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
+          title={t('common:text-reset-password')}
+        >
+          <ResetIcon width={17} />
+        </button>
+      )}
+      {resetStudentPasswordButton && (
+        <button
+          onClick={handleResetStudentPassword}
           className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
           title={t('common:text-reset-password')}
         >
