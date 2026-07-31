@@ -18,7 +18,6 @@ export const studentClient = {
   paginated: ({ name, ...params }: Partial<StudentQueryOptions>) => {
     return HttpClient.get<StudentPaginator>(API_ENDPOINTS.STUDENTS, {
       searchJoin: 'and',
-      self,
       ...params,
       search: HttpClient.formatSearchParams({ name }),
     });
