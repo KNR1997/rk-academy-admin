@@ -31,7 +31,7 @@ export default function Videos() {
   const [page, setPage] = useState(1);
   const [month, setMonth] = useState('');
   const [lesson, setLesson] = useState('');
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [ordering, setOrdering] = useState('-created_at');
   // query
