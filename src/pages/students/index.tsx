@@ -7,6 +7,8 @@ import { Config } from '@/config';
 import { Routes } from '@/config/routes';
 // utils
 import { adminAndCoordinatorOnly } from '@/utils/auth-utils';
+// types
+import { GradeLevel } from '@/types';
 // hooks
 import { useStudentsQuery } from '@/data/student';
 // components
@@ -18,12 +20,14 @@ import LinkButton from '@/components/ui/link-button';
 import ErrorMessage from '@/components/ui/error-message';
 import PageHeading from '@/components/common/page-heading';
 import StudentList from '@/components/student/student-list';
+import GradeFilter from '@/components/enrollment/grade-filter';
 
 export default function Students() {
   const { locale } = useRouter();
   const { t } = useTranslation();
   // states
   const [page, setPage] = useState(1);
+  const [grade, setGrade] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [ordering, setOrdering] = useState('-created_at');
   // queries
@@ -31,6 +35,7 @@ export default function Students() {
     limit: 20,
     page,
     name: searchTerm,
+    current_grade__level: grade,
     ordering,
     language: locale,
   });
@@ -59,6 +64,14 @@ export default function Students() {
             <Search
               onSearch={handleSearch}
               placeholderText={t('form:input-placeholder-search-name-or-student-number')}
+            />
+
+            <GradeFilter
+              className="md:ms-6"
+              onGradeFilter={(grade_level: GradeLevel) => {
+                setGrade(grade_level?.level!);
+                setPage(1);
+              }}
             />
 
             {locale === Config.defaultLanguage && (
